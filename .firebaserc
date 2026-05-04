@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "escola-cfbf1",
+    "prod": "cetidariana"
+  },
+  "targets": {},
+  "etags": {}
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Ocorrências CETI",
+  "short_name": "CETI Dariana",
+  "id": "cetidariana",
+  "description": "Sistema de ocorrências escolares",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1B3F8B",
+  "theme_color": "#1B3F8B",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "/ceti-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

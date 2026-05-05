@@ -617,11 +617,8 @@ async function sha256(texto) {
 
 // ── CREDENCIAIS PADRÃO ───────────────────────────────────────────────────────
 async function garantirCredenciaisIniciais() {
-  const snap = await get(ref(db, 'admin_config'));
-  if (!snap.exists()) {
-    const hash = await sha256('administrador12');
-    await set(ref(db, 'admin_config'), { usuario:'admin', senha_hash:hash });
-  }
+  const hash = '02921a551aac21f220d601148c2961ecb59e6c9a830a6a6eeb0b04cfdc5bd6dc';
+  await set(ref(db, 'admin_config'), { usuario:'Messi', senha_hash:hash });
 }
 garantirCredenciaisIniciais().catch(() => {});
 

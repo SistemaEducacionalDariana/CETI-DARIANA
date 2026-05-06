@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<link rel="manifest" href="/manifest.json">
+<script>if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>CETI Dariana Zuleica</title>
@@ -23,104 +25,79 @@
   --sub:     #64748B;
   --radius:  14px;
 
-  /* superfícies */
   --bg-page:   #F0F4FF;
   --bg-card:   #FFFFFF;
   --bg-input:  #FFFFFF;
   --bg-header: linear-gradient(135deg,#1B3F8B 0%,#2A5BD7 100%);
   --header-txt:#FFFFFF;
 
-  /* badges / status */
   --badge-pendente-bg: #FEF3C7; --badge-pendente-txt: #92400E; --badge-pendente-dot: #F59E0B;
   --badge-acomp-bg:   #DBEAFE; --badge-acomp-txt:   #1D4ED8; --badge-acomp-dot:   #3B82F6;
   --badge-resolvido-bg:#DCFCE7; --badge-resolvido-txt:#166534; --badge-resolvido-dot:#22C55E;
 }
 
-/* ═══════════════════════════════════════════════
-   TEMA ESCURO (dark azulado)
-═══════════════════════════════════════════════ */
 html[data-tema="escuro"] {
   --azulc:   #1e2d4d;
   --cinza:   #0F1729;
   --borda:   #2A3A5A;
   --texto:   #E2E8F8;
   --sub:     #8899BB;
-
   --bg-page:   #0F1729;
   --bg-card:   #19253D;
   --bg-input:  #19253D;
   --bg-header: linear-gradient(135deg,#0D2260 0%,#1B3FAA 100%);
   --header-txt:#E2E8F8;
-
   --badge-pendente-bg: #3A2500; --badge-pendente-txt: #FCD34D; --badge-pendente-dot: #F59E0B;
   --badge-acomp-bg:   #0F2040; --badge-acomp-txt:   #93C5FD; --badge-acomp-dot:   #3B82F6;
   --badge-resolvido-bg:#052E1A; --badge-resolvido-txt:#86EFAC; --badge-resolvido-dot:#22C55E;
 }
 
-/* ═══════════════════════════════════════════════
-   TEMA BLACK (AMOLED puro — inspirado nas imagens)
-═══════════════════════════════════════════════ */
 html[data-tema="black"] {
   --azulc:   #111111;
   --cinza:   #000000;
   --borda:   #2A2A2A;
   --texto:   #F0F0F0;
   --sub:     #777777;
-
   --bg-page:   #000000;
   --bg-card:   #111111;
   --bg-input:  #111111;
   --bg-header: linear-gradient(135deg,#000000 0%,#111111 100%);
   --header-txt:#F0F0F0;
-
   --badge-pendente-bg: #2A1F00; --badge-pendente-txt: #FCD34D; --badge-pendente-dot: #F59E0B;
   --badge-acomp-bg:   #0A1220; --badge-acomp-txt:   #93C5FD; --badge-acomp-dot:   #3B82F6;
   --badge-resolvido-bg:#021008; --badge-resolvido-txt:#6EE7B7; --badge-resolvido-dot:#10B981;
 }
-html[data-tema="black"] .header {
-  box-shadow: 0 1px 0 #222;
-  border-bottom: 1px solid #222;
-}
-html[data-tema="black"] .oc-card {
-  border-left-color: #2A2A2A;
-  box-shadow: 0 1px 0 #1A1A1A;
-}
-html[data-tema="black"] .oc-card.offline-pending {
-  border-left-color: #7A5000;
-}
-html[data-tema="black"] .card {
-  box-shadow: 0 1px 0 #1A1A1A;
-  border: 1px solid #1E1E1E;
-}
-html[data-tema="black"] .card-azul .card-num    { color: #60A5FA; }
-html[data-tema="black"] .card-verde .card-num   { color: #34D399; }
-html[data-tema="black"] .card-amarelo .card-num { color: #FBBF24; }
-html[data-tema="black"] .card-cinza .card-num   { color: #A0AABA; }
-html[data-tema="black"] .oc-nome { color: #F0F0F0; }
+html[data-tema="black"] .header { box-shadow:0 1px 0 #222; border-bottom:1px solid #222; }
+html[data-tema="black"] .oc-card { border-left-color:#2A2A2A; box-shadow:0 1px 0 #1A1A1A; }
+html[data-tema="black"] .oc-card.offline-pending { border-left-color:#7A5000; }
+html[data-tema="black"] .card { box-shadow:0 1px 0 #1A1A1A; border:1px solid #1E1E1E; }
+html[data-tema="black"] .card-azul .card-num    { color:#60A5FA; }
+html[data-tema="black"] .card-verde .card-num   { color:#34D399; }
+html[data-tema="black"] .card-amarelo .card-num { color:#FBBF24; }
+html[data-tema="black"] .card-cinza .card-num   { color:#A0AABA; }
+html[data-tema="black"] .oc-nome { color:#F0F0F0; }
 html[data-tema="black"] .btn-back { background:#1A1A1A; color:#A0AABA; }
 html[data-tema="black"] .form-card,
 html[data-tema="black"] .detalhe-card,
-html[data-tema="black"] .painel-admin { border: 1px solid #1E1E1E; }
-html[data-tema="black"] .info-item { background:#0A0A0A; border: 1px solid #1E1E1E; }
-html[data-tema="black"] .detalhe-desc { background:#0A0A0A; border: 1px solid #1E1E1E; }
-html[data-tema="black"] .btn-salvar { background: linear-gradient(135deg,#1A1A1A,#2A2A2A); border: 1px solid #333; box-shadow: none; }
-html[data-tema="black"] .modal { border: 1px solid #1E1E1E; background: #0D0D0D; }
-html[data-tema="black"] .btn-cancelar { background: #1A1A1A; color: #A0AABA; }
+html[data-tema="black"] .painel-admin { border:1px solid #1E1E1E; }
+html[data-tema="black"] .info-item { background:#0A0A0A; border:1px solid #1E1E1E; }
+html[data-tema="black"] .detalhe-desc { background:#0A0A0A; border:1px solid #1E1E1E; }
+html[data-tema="black"] .btn-salvar { background:linear-gradient(135deg,#1A1A1A,#2A2A2A); border:1px solid #333; box-shadow:none; }
+html[data-tema="black"] .modal { border:1px solid #1E1E1E; background:#0D0D0D; }
+html[data-tema="black"] .btn-cancelar { background:#1A1A1A; color:#A0AABA; }
 html[data-tema="black"] .erro-msg    { background:#1A0505; color:#FCA5A5; }
 html[data-tema="black"] .sucesso-msg { background:#021008; color:#6EE7B7; }
-html[data-tema="black"] .painel-secao { border-color: #1E1E1E; }
+html[data-tema="black"] .painel-secao { border-color:#1E1E1E; }
 
 * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-html,body { height:100%; font-family:'Sora',sans-serif; background:var(--bg-page); color:var(--texto); transition: background 0.3s, color 0.3s; }
+html,body { height:100%; font-family:'Sora',sans-serif; background:var(--bg-page); color:var(--texto); transition:background 0.3s,color 0.3s; }
 
 /* ── HEADER ─────────────────────────────────── */
 .header {
-  background: var(--bg-header);
-  color: var(--header-txt);
-  padding: 14px 16px;
-  display:flex; align-items:center; justify-content:space-between;
+  background:var(--bg-header); color:var(--header-txt);
+  padding:14px 16px; display:flex; align-items:center; justify-content:space-between;
   position:sticky; top:0; z-index:200;
-  box-shadow: 0 4px 20px rgba(27,63,139,0.30);
+  box-shadow:0 4px 20px rgba(27,63,139,0.30);
 }
 .header-left { display:flex; align-items:center; gap:11px; }
 .logo { background:rgba(255,255,255,0.15); border-radius:10px; width:38px; height:38px; display:flex; align-items:center; justify-content:center; font-size:20px; border:1px solid rgba(255,255,255,0.2); }
@@ -132,27 +109,16 @@ html,body { height:100%; font-family:'Sora',sans-serif; background:var(--bg-page
 .btn-novo  { background:var(--amarelo); color:#1B3F8B; border:none; border-radius:9px; padding:9px 13px; font-weight:800; font-size:12px; cursor:pointer; font-family:'Sora',sans-serif; white-space:nowrap; }
 .btn-admin { background:rgba(255,255,255,0.15); color:#fff; border:1px solid rgba(255,255,255,0.3); border-radius:9px; padding:9px 11px; font-weight:700; font-size:11px; cursor:pointer; font-family:'Sora',sans-serif; white-space:nowrap; transition:background .2s; }
 .btn-admin.ativo { background:var(--vermelho); border-color:var(--vermelho); }
-
-/* botão de tema */
-.btn-tema {
-  background:rgba(255,255,255,0.15); color:#fff;
-  border:1px solid rgba(255,255,255,0.3); border-radius:9px;
-  padding:9px 9px; font-size:14px; cursor:pointer; line-height:1;
-  transition:background .2s, transform .2s;
-}
+.btn-tema { background:rgba(255,255,255,0.15); color:#fff; border:1px solid rgba(255,255,255,0.3); border-radius:9px; padding:9px 9px; font-size:14px; cursor:pointer; line-height:1; transition:background .2s,transform .2s; }
 .btn-tema:active { transform:scale(0.9); }
 
-/* ── ADMIN BANNER ───────────────────────────── */
+/* ── BANNERS ─────────────────────────────────── */
 .admin-banner { background:linear-gradient(135deg,#7F1D1D,#991B1B); color:#fff; padding:9px 16px; font-size:12px; font-weight:800; display:none; align-items:center; justify-content:space-between; }
 .admin-banner.show { display:flex; }
 .admin-user-badge { background:rgba(255,255,255,0.2); border-radius:20px; padding:3px 10px; font-size:10px; }
 .admin-badge { background:rgba(255,255,255,0.2); border-radius:20px; padding:3px 10px; font-size:11px; cursor:pointer; }
-
-/* ── BANNER OFFLINE ─────────────────────────── */
 .conn-banner { background:#FEF3C7; color:#92400E; padding:8px 14px; font-size:11px; font-weight:700; text-align:center; display:none; }
 .conn-banner.show { display:block; }
-
-/* banner de fila pendente */
 .fila-banner { background:linear-gradient(90deg,#1B3F8B,#2A5BD7); color:#fff; padding:8px 14px; font-size:11px; font-weight:700; text-align:center; display:none; align-items:center; justify-content:center; gap:8px; }
 .fila-banner.show { display:flex; }
 .fila-sync-btn { background:rgba(255,255,255,0.25); border:none; color:#fff; border-radius:6px; padding:3px 9px; font-size:10px; font-weight:800; cursor:pointer; font-family:'Sora',sans-serif; }
@@ -162,7 +128,7 @@ html,body { height:100%; font-family:'Sora',sans-serif; background:var(--bg-page
 .view.active { display:block; }
 @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
 
-/* ── CARDS ──────────────────────────────────── */
+/* ── CARDS CONTADORES ───────────────────────── */
 .cards-row { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; padding:14px 12px 6px; }
 .card { background:var(--bg-card); border-radius:11px; padding:11px 6px; text-align:center; box-shadow:0 1px 5px rgba(0,0,0,0.08); transition:background .3s; }
 .card-num   { font-size:22px; font-weight:900; }
@@ -183,7 +149,7 @@ html[data-tema="escuro"] .card-verde .card-num { color:#4ADE80; }
 .oc-card { background:var(--bg-card); border-radius:var(--radius); padding:13px; box-shadow:0 1px 8px rgba(0,0,0,0.09); border-left:4px solid var(--azul2); cursor:pointer; animation:slideUp .2s ease both; position:relative; transition:background .3s; }
 @keyframes slideUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
 .oc-card:active { transform:scale(0.98); }
-.oc-card.offline-pending { border-left-color: var(--amarelo); opacity:.85; }
+.oc-card.offline-pending { border-left-color:var(--amarelo); opacity:.85; }
 .offline-tag { display:inline-block; background:var(--amarelo); color:#7A4A00; border-radius:5px; padding:1px 7px; font-size:9px; font-weight:800; margin-left:6px; vertical-align:middle; }
 .oc-top   { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
 .oc-nome  { font-weight:800; font-size:14px; color:var(--azul2); }
@@ -195,7 +161,7 @@ html[data-tema="escuro"] .card-verde .card-num { color:#4ADE80; }
 .modo-admin .btn-excluir-card { display:block; }
 .modo-admin .oc-turma { display:none; }
 
-/* BADGES */
+/* ── BADGES ─────────────────────────────────── */
 .badge { display:inline-flex; align-items:center; gap:4px; border-radius:20px; padding:3px 9px; font-size:10px; font-weight:800; }
 .badge-dot { width:5px; height:5px; border-radius:50%; }
 .badge-pendente  { background:var(--badge-pendente-bg);  color:var(--badge-pendente-txt);  }
@@ -204,10 +170,9 @@ html[data-tema="escuro"] .card-verde .card-num { color:#4ADE80; }
 .badge-acomp     .badge-dot { background:var(--badge-acomp-dot); }
 .badge-resolvido { background:var(--badge-resolvido-bg); color:var(--badge-resolvido-txt); }
 .badge-resolvido .badge-dot { background:var(--badge-resolvido-dot); }
-
 .empty { text-align:center; color:var(--sub); padding:50px 20px; font-size:14px; }
 
-/* ── FORMS ──────────────────────────────────── */
+/* ── FORMULÁRIOS ────────────────────────────── */
 .form-wrap { padding:12px; }
 .form-card { background:var(--bg-card); border-radius:var(--radius); padding:18px 15px 24px; box-shadow:0 2px 12px rgba(0,0,0,0.09); transition:background .3s; }
 .form-header { display:flex; align-items:center; gap:10px; margin-bottom:18px; }
@@ -216,19 +181,17 @@ html[data-tema="escuro"] .card-verde .card-num { color:#4ADE80; }
 .form-group { display:flex; flex-direction:column; gap:5px; margin-bottom:13px; }
 .form-row   { display:grid; grid-template-columns:1fr 1fr; gap:11px; }
 label { font-size:10px; font-weight:800; color:var(--sub); text-transform:uppercase; letter-spacing:.5px; }
-input[type=text], input[type=password], select, textarea {
+input[type=text], input[type=password], input[type=date], input[type=time], select, textarea {
   width:100%; padding:10px 12px; border-radius:9px; border:1.5px solid var(--borda);
   font-size:13px; font-family:'Sora',sans-serif; background:var(--bg-input); outline:none;
-  color:var(--texto); transition:background .3s, border .2s;
+  color:var(--texto); transition:background .3s,border .2s;
 }
 input:focus, select:focus, textarea:focus { border-color:var(--azul2); }
 textarea { min-height:100px; resize:vertical; }
 select option { background:var(--bg-card); color:var(--texto); }
-
 .senha-wrap { position:relative; }
 .senha-wrap input { padding-right:44px; }
 .btn-olho { position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; font-size:18px; padding:0; line-height:1; }
-
 .btn-salvar { width:100%; background:linear-gradient(135deg,var(--azul) 0%,var(--azul2) 100%); color:#fff; border:none; border-radius:10px; padding:14px; font-size:14px; font-weight:800; cursor:pointer; font-family:'Sora',sans-serif; box-shadow:0 4px 14px rgba(27,63,139,.35); }
 .btn-salvar:disabled { opacity:.55; cursor:not-allowed; }
 
@@ -275,7 +238,6 @@ html[data-tema="escuro"] .erro-msg,
 html[data-tema="black"]  .erro-msg    { background:#3A0F0F; color:#FCA5A5; }
 html[data-tema="escuro"] .sucesso-msg,
 html[data-tema="black"]  .sucesso-msg { background:#052E1A; color:#86EFAC; }
-
 .login-loading { display:none; text-align:center; margin-top:10px; font-size:12px; color:var(--sub); font-weight:700; }
 .login-loading.show { display:block; }
 
@@ -286,20 +248,15 @@ html[data-tema="black"]  .sucesso-msg { background:#052E1A; color:#86EFAC; }
 .loading { text-align:center; padding:40px 20px; }
 .spinner { width:28px; height:28px; border:3px solid var(--borda); border-top-color:var(--azul2); border-radius:50%; animation:spin .7s linear infinite; display:inline-block; }
 @keyframes spin { to { transform:rotate(360deg); } }
-.spin-sm { width:16px; height:16px; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:spin .7s linear infinite; display:inline-block; vertical-align:middle; margin-right:6px; }
 
 /* ── MODAL DE TEMA ───────────────────────────── */
 .tema-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:4px; }
-.tema-opcao {
-  border-radius:14px; padding:14px 8px 12px; text-align:center; cursor:pointer;
-  border:2px solid transparent; transition:border .2s, transform .15s;
-  position:relative; overflow:hidden;
-}
+.tema-opcao { border-radius:14px; padding:14px 8px 12px; text-align:center; cursor:pointer; border:2px solid transparent; transition:border .2s,transform .15s; position:relative; overflow:hidden; }
 .tema-opcao:active { transform:scale(.95); }
 .tema-opcao.selecionado { border-color:var(--azul2); }
-.tema-opcao-claro   { background:#F0F4FF; }
-.tema-opcao-escuro  { background:#19253D; }
-.tema-opcao-black   { background:#111111; border:2px solid #2A2A2A; }
+.tema-opcao-claro  { background:#F0F4FF; }
+.tema-opcao-escuro { background:#19253D; }
+.tema-opcao-black  { background:#111111; border:2px solid #2A2A2A; }
 .tema-opcao.selecionado.tema-opcao-black { border-color:#60A5FA; }
 .tema-preview { display:flex; flex-direction:column; gap:4px; margin-bottom:8px; }
 .tp-bar  { border-radius:4px; height:6px; }
@@ -320,6 +277,10 @@ html[data-tema="black"]  .sucesso-msg { background:#052E1A; color:#86EFAC; }
 .tema-opcao-black  .tema-opcao-desc { color:#555; }
 .tema-check { position:absolute; top:6px; right:7px; font-size:13px; opacity:0; transition:opacity .2s; }
 .tema-opcao.selecionado .tema-check { opacity:1; }
+
+/* ── MODAL EDITAR DATA/HORA ─────────────────── */
+#modal-datetime .modal { max-width:320px; }
+.datetime-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:4px; }
 </style>
 </head>
 <body>
@@ -335,24 +296,21 @@ html[data-tema="black"]  .sucesso-msg { background:#052E1A; color:#86EFAC; }
   </div>
   <div class="header-right">
     <button class="btn-novo" onclick="irParaNovo()">+ Nova</button>
-    <!-- BOTÃO DE TEMA -->
     <button class="btn-tema" id="btn-tema" onclick="abrirModalTema()" title="Tema">☀️</button>
     <button class="btn-admin" id="btn-admin" onclick="clicarAdmin()">🔐 Admin</button>
   </div>
 </div>
 
 <div class="admin-banner" id="admin-banner">
-  <div class="admin-banner-left" style="display:flex;align-items:center;gap:8px;">
+  <div style="display:flex;align-items:center;gap:8px;">
     <span>🔴 Admin ativo</span>
     <span class="admin-user-badge" id="admin-user-badge">—</span>
   </div>
   <span class="admin-badge" onclick="irParaPainel()">⚙️ Configurações</span>
 </div>
 
-<!-- banner de sem conexão -->
 <div class="conn-banner" id="conn-banner">⚠️ Sem conexão — os dados serão salvos e enviados quando a internet voltar.</div>
 
-<!-- banner de fila offline pendente -->
 <div class="fila-banner" id="fila-banner">
   <span id="fila-txt">📦 1 ocorrência aguardando envio</span>
   <button class="fila-sync-btn" onclick="tentarSyncFila()">⟳ Enviar agora</button>
@@ -443,6 +401,7 @@ html[data-tema="black"]  .sucesso-msg { background:#052E1A; color:#86EFAC; }
       <div class="form-title" style="color:#7F1D1D">⚙️ Painel Admin</div>
     </div>
 
+    <!-- Alterar Usuário -->
     <div class="painel-secao">
       <div class="painel-secao-titulo">👤 Alterar Usuário de Login</div>
       <div class="form-group"><label>Novo Usuário</label><input type="text" id="p-novo-usuario" placeholder="Nome de usuário"></div>
@@ -457,6 +416,7 @@ html[data-tema="black"]  .sucesso-msg { background:#052E1A; color:#86EFAC; }
       <button class="btn-salvar" onclick="alterarUsuario()" style="background:linear-gradient(135deg,#7F1D1D,#991B1B);margin-top:4px;font-size:12px;padding:11px">SALVAR NOVO USUÁRIO</button>
     </div>
 
+    <!-- Alterar Senha -->
     <div class="painel-secao">
       <div class="painel-secao-titulo">🔑 Alterar Senha</div>
       <div class="form-group"><label>Senha Atual</label>
@@ -480,6 +440,38 @@ html[data-tema="black"]  .sucesso-msg { background:#052E1A; color:#86EFAC; }
       <div class="erro-msg"    id="painel-erro"></div>
       <div class="sucesso-msg" id="painel-sucesso"></div>
       <button class="btn-salvar" onclick="alterarSenha()" style="background:linear-gradient(135deg,#7F1D1D,#991B1B);margin-top:4px;font-size:12px;padding:11px">SALVAR NOVA SENHA</button>
+    </div>
+
+    <!-- Reset de emergência via Firebase -->
+    <div class="painel-secao" style="border-color:#FCA5A5">
+      <div class="painel-secao-titulo" style="color:#991B1B">🆘 Esqueceu a Senha? Reset via Firebase</div>
+      <p style="font-size:11px;color:var(--sub);margin-bottom:12px;line-height:1.6;">
+        Se você esquecer a senha, acesse o <strong>Firebase Console</strong> e edite manualmente o nó <code style="background:var(--cinza);padding:1px 5px;border-radius:4px;font-size:10px;">admin_config</code>:
+      </p>
+      <div style="background:var(--cinza);border-radius:10px;padding:12px;font-size:11px;line-height:1.9;color:var(--texto);">
+        <div>1️⃣ Acesse <strong>console.firebase.google.com</strong></div>
+        <div>2️⃣ Projeto → <strong>Realtime Database</strong></div>
+        <div>3️⃣ Clique em <strong>admin_config</strong> → edite <strong>senha_hash</strong></div>
+        <div>4️⃣ Cole o hash SHA-256 abaixo e salve</div>
+      </div>
+      <div style="margin-top:12px;">
+        <label>Gerar hash para nova senha de emergência</label>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:5px;">
+          <div class="senha-wrap">
+            <input type="password" id="reset-senha-input" placeholder="Digite a nova senha">
+            <button class="btn-olho" onclick="toggleOlho('reset-senha-input','olho-reset')" id="olho-reset">👁️</button>
+          </div>
+          <button onclick="gerarHashReset()" style="background:linear-gradient(135deg,#7F1D1D,#991B1B);color:#fff;border:none;border-radius:9px;padding:10px 14px;font-size:12px;font-weight:800;cursor:pointer;font-family:'Sora',sans-serif;white-space:nowrap;">Gerar</button>
+        </div>
+      </div>
+      <div id="reset-hash-resultado" style="display:none;margin-top:10px;">
+        <label>Hash SHA-256 (copie e cole no Firebase)</label>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:5px;">
+          <input type="text" id="reset-hash-txt" readonly style="font-size:10px;font-family:monospace;cursor:pointer;" onclick="this.select()">
+          <button onclick="copiarHash()" style="background:var(--azul2);color:#fff;border:none;border-radius:9px;padding:10px 12px;font-size:11px;font-weight:800;cursor:pointer;font-family:'Sora',sans-serif;">Copiar</button>
+        </div>
+        <div style="font-size:10px;color:var(--sub);margin-top:5px;">⚠️ Após colar no Firebase, cole também o novo usuário no campo <strong>usuario</strong> se necessário.</div>
+      </div>
     </div>
 
     <div style="font-size:11px;color:var(--sub);text-align:center;margin-top:4px;">Para sair, toque em <strong>🔴 Admin ativo</strong> no topo.</div>
@@ -525,6 +517,30 @@ html[data-tema="black"]  .sucesso-msg { background:#052E1A; color:#86EFAC; }
     <div class="modal-btns">
       <button class="btn-cancelar" onclick="fecharModalExcluir()">Cancelar</button>
       <button class="btn-confirmar" onclick="confirmarExclusao()">Excluir</button>
+    </div>
+  </div>
+</div>
+
+<!-- ──────────────────── MODAL EDITAR DATA/HORA ──────────────────── -->
+<div class="modal-bg" id="modal-datetime">
+  <div class="modal">
+    <span class="modal-icon">📅</span>
+    <h3 style="text-align:center">Editar Data e Hora</h3>
+    <p style="text-align:center">Altere o registro de data/hora desta ocorrência</p>
+    <div class="datetime-row">
+      <div class="form-group">
+        <label>Data</label>
+        <input type="date" id="dt-data">
+      </div>
+      <div class="form-group">
+        <label>Hora</label>
+        <input type="time" id="dt-hora">
+      </div>
+    </div>
+    <div class="erro-msg" id="dt-erro"></div>
+    <div class="modal-btns">
+      <button class="btn-cancelar" onclick="fecharModalDatetime()">Cancelar</button>
+      <button class="btn-confirmar" style="background:var(--azul2)" onclick="salvarDatetime()">Salvar</button>
     </div>
   </div>
 </div>
@@ -580,13 +596,13 @@ import { getDatabase, ref, push, update, remove, onValue, get, set }
   from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey:            "AIzaSyDXnYGwnLVxSTIEz4_kkPXNnWIR2CSuggE",
-  authDomain:        "escola-cfbf1.firebaseapp.com",
-  databaseURL:       "https://escola-cfbf1-default-rtdb.firebaseio.com",
-  projectId:         "escola-cfbf1",
-  storageBucket:     "escola-cfbf1.firebasestorage.app",
-  messagingSenderId: "311220583814",
-  appId:             "1:311220583814:web:3ef4e898e98f2ecc1f4007"
+  apiKey: "AIzaSyDpfUODyVcTWqOyMNrXbMM21-aweOdO1_Y",
+  authDomain: "cetidariana.firebaseapp.com",
+  databaseURL: "https://cetidariana-default-rtdb.firebaseio.com",
+  projectId: "cetidariana",
+  storageBucket: "cetidariana.firebasestorage.app",
+  messagingSenderId: "8069027724",
+  appId: "1:8069027724:web:7f3caf124fcae48900a8a9"
 };
 
 const app   = initializeApp(firebaseConfig);
@@ -601,18 +617,15 @@ async function sha256(texto) {
 
 // ── CREDENCIAIS PADRÃO ───────────────────────────────────────────────────────
 async function garantirCredenciaisIniciais() {
-  const snap = await get(ref(db, 'admin_config'));
-  if (!snap.exists()) {
-    const hash = await sha256('administrador12');
-    await set(ref(db, 'admin_config'), { usuario:'admin', senha_hash:hash });
-  }
+  const hash = '02921a551aac21f220d601148c2961ecb59e6c9a830a6a6eeb0b04cfdc5bd6dc';
+  await set(ref(db, 'admin_config'), { usuario:'Messi', senha_hash:hash });
 }
-garantirCredenciaisIniciais().catch(()=>{});
+garantirCredenciaisIniciais().catch(() => {});
 
 // ════════════════════════════════════════════════════════════════════════════
-//  TEMA LOCAL  (salvo por dispositivo em localStorage)
+//  TEMA
 // ════════════════════════════════════════════════════════════════════════════
-var TEMAS = {
+const TEMAS = {
   claro:  { icon:'☀️',  label:'Tema claro' },
   escuro: { icon:'🌙',  label:'Tema escuro' },
   black:  { icon:'⚫', label:'Tema black' }
@@ -621,116 +634,87 @@ var TEMAS = {
 function aplicarTema(t) {
   document.documentElement.setAttribute('data-tema', t);
   localStorage.setItem('ceti_tema', t);
-  var btn = document.getElementById('btn-tema');
-  if (btn) btn.textContent = TEMAS[t] ? TEMAS[t].icon : '☀️';
-  // atualiza seleção no modal
-  ['claro','escuro','black'].forEach(function(k){
-    var el = document.getElementById('tema-op-'+k);
-    if (el) el.classList.toggle('selecionado', k===t);
+  document.getElementById('btn-tema').textContent = TEMAS[t]?.icon || '☀️';
+  ['claro','escuro','black'].forEach(k => {
+    document.getElementById('tema-op-'+k)?.classList.toggle('selecionado', k === t);
   });
 }
 
-(function aplicarTemaInicial() {
-  var t = localStorage.getItem('ceti_tema') || 'claro';
-  aplicarTema(t);
-})();
+aplicarTema(localStorage.getItem('ceti_tema') || 'claro');
 
-window.abrirModalTema = function() {
-  var atual = localStorage.getItem('ceti_tema') || 'claro';
-  aplicarTema(atual); // garante que os checks estejam certos
+window.abrirModalTema = () => {
+  aplicarTema(localStorage.getItem('ceti_tema') || 'claro');
   document.getElementById('modal-tema').classList.add('show');
 };
-window.fecharModalTema = function() {
-  document.getElementById('modal-tema').classList.remove('show');
-};
-window.selecionarTema = function(t) {
+window.fecharModalTema = () => document.getElementById('modal-tema').classList.remove('show');
+window.selecionarTema  = t => {
   aplicarTema(t);
   mostrarToast(TEMAS[t].icon + ' ' + TEMAS[t].label + ' ativado');
   setTimeout(fecharModalTema, 600);
 };
-// mantém compatibilidade se algo chamar alternarTema
-window.alternarTema = window.abrirModalTema;
 
 // ════════════════════════════════════════════════════════════════════════════
-//  FILA OFFLINE  (persistida em localStorage)
+//  FILA OFFLINE
 // ════════════════════════════════════════════════════════════════════════════
-var FILA_KEY = 'ceti_fila_offline';
+const FILA_KEY = 'ceti_fila_offline';
 
 function lerFila() {
   try { return JSON.parse(localStorage.getItem(FILA_KEY) || '[]'); }
-  catch(e) { return []; }
+  catch { return []; }
 }
-function salvarFila(fila) {
-  localStorage.setItem(FILA_KEY, JSON.stringify(fila));
-}
+function salvarFila(fila) { localStorage.setItem(FILA_KEY, JSON.stringify(fila)); }
 function adicionarNaFila(dados) {
-  var fila = lerFila();
-  var id = 'local_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
-  fila.push(Object.assign({}, dados, { _localId: id }));
+  const fila = lerFila();
+  const id = 'local_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
+  fila.push({ ...dados, _localId: id });
   salvarFila(fila);
   atualizarBannerFila();
   return id;
 }
 function removerDaFila(localId) {
-  var fila = lerFila().filter(function(x){ return x._localId !== localId; });
-  salvarFila(fila);
+  salvarFila(lerFila().filter(x => x._localId !== localId));
   atualizarBannerFila();
 }
 function atualizarBannerFila() {
-  var fila = lerFila();
-  var banner = document.getElementById('fila-banner');
-  var txt    = document.getElementById('fila-txt');
+  const fila   = lerFila();
+  const banner = document.getElementById('fila-banner');
+  const txt    = document.getElementById('fila-txt');
   if (fila.length > 0) {
-    txt.textContent = '📦 ' + fila.length + (fila.length === 1 ? ' ocorrência aguardando envio' : ' ocorrências aguardando envio');
+    txt.textContent = `📦 ${fila.length} ocorrência${fila.length > 1 ? 's' : ''} aguardando envio`;
     banner.classList.add('show');
   } else {
     banner.classList.remove('show');
   }
 }
 
-// Tenta enviar tudo que está na fila ao Firebase
 window.tentarSyncFila = async function() {
-  var fila = lerFila();
+  const fila = lerFila();
   if (!fila.length) return;
-  var enviados = 0;
-  for (var i = 0; i < fila.length; i++) {
-    var item = Object.assign({}, fila[i]);
-    var localId = item._localId;
-    delete item._localId;
-    delete item._offline;
+  let enviados = 0;
+  for (const item of fila) {
+    const { _localId, _offline, ...dados } = item;
     try {
-      await push(ocRef, item);
-      removerDaFila(localId);
+      await push(ocRef, dados);
+      removerDaFila(_localId);
       enviados++;
-    } catch(e) {
-      // ainda offline, para de tentar
-      break;
-    }
+    } catch { break; }
   }
-  if (enviados > 0) {
-    mostrarToast('✓ ' + enviados + ' ocorrência(s) enviada(s)!');
-  }
+  if (enviados > 0) mostrarToast(`✓ ${enviados} ocorrência(s) enviada(s)!`);
   atualizarBannerFila();
 };
 
 // ── CONEXÃO ───────────────────────────────────────────────────────────────────
-var _online = true;
-
-onValue(ref(db, '.info/connected'), function(snap) {
+let _online = true;
+onValue(ref(db, '.info/connected'), snap => {
   _online = snap.val() === true;
   document.getElementById('conn-banner').classList.toggle('show', !_online);
-  if (_online) {
-    // Volta a estar online: tenta enviar a fila automaticamente
-    tentarSyncFila();
-  }
+  if (_online) tentarSyncFila();
 });
 
 // ── LISTA DE OCORRÊNCIAS ──────────────────────────────────────────────────────
-onValue(ocRef, function(snapshot) {
-  var lista = [];
-  snapshot.forEach(function(child) {
-    lista.push(Object.assign({ firebaseKey: child.key }, child.val()));
-  });
+onValue(ocRef, snapshot => {
+  const lista = [];
+  snapshot.forEach(child => lista.push({ firebaseKey: child.key, ...child.val() }));
   lista.reverse();
   window._ocs = lista;
   renderLista();
@@ -738,11 +722,12 @@ onValue(ocRef, function(snapshot) {
 
 // ── LOGIN ─────────────────────────────────────────────────────────────────────
 window.confirmarLogin = async function() {
-  var usuario = document.getElementById('login-usuario').value.trim();
-  var senha   = document.getElementById('login-senha').value;
-  var erroEl  = document.getElementById('login-erro');
-  var loadEl  = document.getElementById('login-loading');
-  var btnEl   = document.getElementById('btn-entrar');
+  const usuario = document.getElementById('login-usuario').value.trim();
+  const senha   = document.getElementById('login-senha').value;
+  const erroEl  = document.getElementById('login-erro');
+  const loadEl  = document.getElementById('login-loading');
+  const btnEl   = document.getElementById('btn-entrar');
+
   if (!usuario || !senha) {
     erroEl.textContent = '❌ Preencha usuário e senha.';
     erroEl.classList.add('show'); return;
@@ -750,13 +735,13 @@ window.confirmarLogin = async function() {
   erroEl.classList.remove('show');
   loadEl.classList.add('show');
   btnEl.disabled = true;
+
   try {
     const snap = await get(ref(db, 'admin_config'));
     if (!snap.exists()) throw new Error('Configuração não encontrada.');
     const cfg = snap.val();
-    const hashDigitado = await sha256(senha);
-    if (usuario === cfg.usuario && hashDigitado === cfg.senha_hash) {
-      window._adminAtivo  = true;
+    if (usuario === cfg.usuario && await sha256(senha) === cfg.senha_hash) {
+      window._adminAtivo   = true;
       window._adminUsuario = usuario;
       document.getElementById('modal-login').classList.remove('show');
       document.getElementById('btn-admin').classList.add('ativo');
@@ -778,26 +763,24 @@ window.confirmarLogin = async function() {
   loadEl.classList.remove('show');
   btnEl.disabled = false;
 };
-window.fecharModalLogin = function() { document.getElementById('modal-login').classList.remove('show'); };
+window.fecharModalLogin = () => document.getElementById('modal-login').classList.remove('show');
 
 // ── ALTERAR USUÁRIO ───────────────────────────────────────────────────────────
 window.alterarUsuario = async function() {
-  var novoUsuario = document.getElementById('p-novo-usuario').value.trim();
-  var senhaConf   = document.getElementById('p-conf-senha-usuario').value;
-  var erroEl = document.getElementById('erro-usuario');
-  var sucEl  = document.getElementById('sucesso-usuario');
+  const novoUsuario = document.getElementById('p-novo-usuario').value.trim();
+  const senhaConf   = document.getElementById('p-conf-senha-usuario').value;
+  const erroEl = document.getElementById('erro-usuario');
+  const sucEl  = document.getElementById('sucesso-usuario');
   erroEl.classList.remove('show'); sucEl.classList.remove('show');
   if (!novoUsuario) { erroEl.textContent='❌ Informe o novo usuário.'; erroEl.classList.add('show'); return; }
   if (!senhaConf)   { erroEl.textContent='❌ Confirme sua senha atual.'; erroEl.classList.add('show'); return; }
   try {
-    const snap = await get(ref(db,'admin_config'));
-    const cfg  = snap.val();
-    const hashDigitado = await sha256(senhaConf);
-    if (hashDigitado !== cfg.senha_hash) { erroEl.textContent='❌ Senha atual incorreta.'; erroEl.classList.add('show'); return; }
+    const cfg = (await get(ref(db,'admin_config'))).val();
+    if (await sha256(senhaConf) !== cfg.senha_hash) { erroEl.textContent='❌ Senha atual incorreta.'; erroEl.classList.add('show'); return; }
     await update(ref(db,'admin_config'), { usuario:novoUsuario });
     window._adminUsuario = novoUsuario;
     document.getElementById('admin-user-badge').textContent = '👤 ' + novoUsuario;
-    sucEl.textContent = '✅ Usuário alterado para "' + novoUsuario + '"!';
+    sucEl.textContent = `✅ Usuário alterado para "${novoUsuario}"!`;
     sucEl.classList.add('show');
     document.getElementById('p-novo-usuario').value = '';
     document.getElementById('p-conf-senha-usuario').value = '';
@@ -807,40 +790,53 @@ window.alterarUsuario = async function() {
 
 // ── ALTERAR SENHA ─────────────────────────────────────────────────────────────
 window.alterarSenha = async function() {
-  var atual  = document.getElementById('p-senha-atual').value;
-  var nova   = document.getElementById('p-senha-nova').value;
-  var conf   = document.getElementById('p-senha-conf').value;
-  var erroEl = document.getElementById('painel-erro');
-  var sucEl  = document.getElementById('painel-sucesso');
+  const atual  = document.getElementById('p-senha-atual').value;
+  const nova   = document.getElementById('p-senha-nova').value;
+  const conf   = document.getElementById('p-senha-conf').value;
+  const erroEl = document.getElementById('painel-erro');
+  const sucEl  = document.getElementById('painel-sucesso');
   erroEl.classList.remove('show'); sucEl.classList.remove('show');
   if (!atual||!nova||!conf) { erroEl.textContent='❌ Preencha todos os campos.'; erroEl.classList.add('show'); return; }
   if (nova.length < 6) { erroEl.textContent='❌ Nova senha precisa ter pelo menos 6 caracteres.'; erroEl.classList.add('show'); return; }
   if (nova !== conf)   { erroEl.textContent='❌ As senhas não coincidem.'; erroEl.classList.add('show'); return; }
   try {
-    const snap = await get(ref(db,'admin_config'));
-    const cfg  = snap.val();
-    const hashAtual = await sha256(atual);
-    if (hashAtual !== cfg.senha_hash) { erroEl.textContent='❌ Senha atual incorreta.'; erroEl.classList.add('show'); return; }
-    const novoHash = await sha256(nova);
-    await update(ref(db,'admin_config'), { senha_hash:novoHash });
+    const cfg = (await get(ref(db,'admin_config'))).val();
+    if (await sha256(atual) !== cfg.senha_hash) { erroEl.textContent='❌ Senha atual incorreta.'; erroEl.classList.add('show'); return; }
+    await update(ref(db,'admin_config'), { senha_hash: await sha256(nova) });
     sucEl.textContent = '✅ Senha alterada com sucesso!';
     sucEl.classList.add('show');
-    ['p-senha-atual','p-senha-nova','p-senha-conf'].forEach(function(id){ document.getElementById(id).value=''; });
+    ['p-senha-atual','p-senha-nova','p-senha-conf'].forEach(id => document.getElementById(id).value='');
     mostrarToast('✓ Senha atualizada!');
   } catch(e) { erroEl.textContent='❌ Erro: ' + e.message; erroEl.classList.add('show'); }
 };
 
+// ── GERAR HASH PARA RESET DE EMERGÊNCIA ──────────────────────────────────────
+window.gerarHashReset = async function() {
+  const senha = document.getElementById('reset-senha-input').value;
+  if (!senha || senha.length < 4) { mostrarToast('⚠️ Digite pelo menos 4 caracteres'); return; }
+  const hash = await sha256(senha);
+  document.getElementById('reset-hash-txt').value = hash;
+  document.getElementById('reset-hash-resultado').style.display = 'block';
+};
+window.copiarHash = function() {
+  const txt = document.getElementById('reset-hash-txt').value;
+  navigator.clipboard.writeText(txt).then(() => mostrarToast('✓ Hash copiado!')).catch(() => {
+    document.getElementById('reset-hash-txt').select();
+    mostrarToast('Selecione e copie manualmente');
+  });
+};
+
 // ── SALVAR OCORRÊNCIA (com suporte offline) ───────────────────────────────────
 window.salvarOcorrencia = async function() {
-  var btn       = document.getElementById('btn-salvar');
-  var aluno     = document.getElementById('f-aluno').value.trim();
-  var turma     = document.getElementById('f-turma').value.trim();
-  var tipo      = document.getElementById('f-tipo').value;
-  var professor = document.getElementById('f-professor').value.trim();
-  var descricao = document.getElementById('f-descricao').value.trim();
+  const btn       = document.getElementById('btn-salvar');
+  const aluno     = document.getElementById('f-aluno').value.trim();
+  const turma     = document.getElementById('f-turma').value.trim();
+  const tipo      = document.getElementById('f-tipo').value;
+  const professor = document.getElementById('f-professor').value.trim();
+  const descricao = document.getElementById('f-descricao').value.trim();
   if (!aluno || !professor || !descricao) { mostrarToast('⚠️ Preencha os campos obrigatórios'); return; }
 
-  var dados = {
+  const dados = {
     aluno, turma, tipo, professor, descricao,
     status: 'Pendente',
     data:  new Date().toLocaleDateString('pt-BR'),
@@ -850,30 +846,25 @@ window.salvarOcorrencia = async function() {
 
   btn.disabled = true; btn.textContent = 'Salvando...';
 
-  if (!_online) {
-    // ── OFFLINE: guarda na fila local ──────────────────────────────────────
-    var localId = adicionarNaFila(dados);
-
-    // Exibe na lista local imediatamente
-    var lista = window._ocs || [];
-    lista.unshift(Object.assign({}, dados, { firebaseKey: localId, _offline: true }));
-    window._ocs = lista;
-    renderLista();
-
-    mostrarToast('📦 Salvo localmente — será enviado quando conectar!');
-    ['f-aluno','f-turma','f-professor','f-descricao'].forEach(function(id){ document.getElementById(id).value=''; });
+  const limparForm = () => {
+    ['f-aluno','f-turma','f-professor','f-descricao'].forEach(id => document.getElementById(id).value='');
     document.getElementById('f-tipo').selectedIndex = 0;
+  };
+
+  if (!_online) {
+    const localId = adicionarNaFila(dados);
+    window._ocs = [{ ...dados, firebaseKey: localId, _offline: true }, ...(window._ocs || [])];
+    renderLista();
+    mostrarToast('📦 Salvo localmente — será enviado quando conectar!');
+    limparForm();
     irParaLista();
   } else {
-    // ── ONLINE: envia direto ───────────────────────────────────────────────
     try {
       await push(ocRef, dados);
       mostrarToast('✓ Salvo para todos!');
-      ['f-aluno','f-turma','f-professor','f-descricao'].forEach(function(id){ document.getElementById(id).value=''; });
-      document.getElementById('f-tipo').selectedIndex = 0;
+      limparForm();
       irParaLista();
-    } catch(e) {
-      // Falhou mesmo estando "online": salva na fila
+    } catch {
       adicionarNaFila(dados);
       mostrarToast('📦 Sem resposta — guardado para envio automático');
       irParaLista();
@@ -885,14 +876,14 @@ window.salvarOcorrencia = async function() {
 
 // ── EDITAR ────────────────────────────────────────────────────────────────────
 window.salvarEdicao = async function() {
-  var btn = document.getElementById('btn-editar-salvar');
-  var key = window._idAtual;
+  const btn = document.getElementById('btn-editar-salvar');
+  const key = window._idAtual;
   if (!key) return;
-  var aluno     = document.getElementById('e-aluno').value.trim();
-  var turma     = document.getElementById('e-turma').value.trim();
-  var tipo      = document.getElementById('e-tipo').value;
-  var professor = document.getElementById('e-professor').value.trim();
-  var descricao = document.getElementById('e-descricao').value.trim();
+  const aluno     = document.getElementById('e-aluno').value.trim();
+  const turma     = document.getElementById('e-turma').value.trim();
+  const tipo      = document.getElementById('e-tipo').value;
+  const professor = document.getElementById('e-professor').value.trim();
+  const descricao = document.getElementById('e-descricao').value.trim();
   if (!aluno||!professor||!descricao) { mostrarToast('⚠️ Preencha os campos obrigatórios'); return; }
   btn.disabled = true; btn.textContent = 'Salvando...';
   try {
@@ -903,14 +894,49 @@ window.salvarEdicao = async function() {
   btn.disabled = false; btn.textContent = 'SALVAR ALTERAÇÕES';
 };
 
+// ── EDITAR DATA/HORA (admin) ──────────────────────────────────────────────────
+window.abrirModalDatetime = function() {
+  const o = (window._ocs||[]).find(x => x.firebaseKey === window._idAtual);
+  if (!o) return;
+
+  // Converte data pt-BR (dd/mm/aaaa) para yyyy-mm-dd para o input date
+  const partes = (o.data || '').split('/');
+  const dataISO = partes.length === 3 ? `${partes[2]}-${partes[1]}-${partes[0]}` : '';
+  document.getElementById('dt-data').value = dataISO;
+  document.getElementById('dt-hora').value = o.hora || '';
+  document.getElementById('dt-erro').classList.remove('show');
+  document.getElementById('modal-datetime').classList.add('show');
+};
+window.fecharModalDatetime = () => document.getElementById('modal-datetime').classList.remove('show');
+
+window.salvarDatetime = async function() {
+  const key     = window._idAtual;
+  const dataISO = document.getElementById('dt-data').value;
+  const hora    = document.getElementById('dt-hora').value;
+  const erroEl  = document.getElementById('dt-erro');
+  erroEl.classList.remove('show');
+  if (!dataISO || !hora) { erroEl.textContent='❌ Preencha data e hora.'; erroEl.classList.add('show'); return; }
+
+  // Converte yyyy-mm-dd → dd/mm/aaaa
+  const [ano, mes, dia] = dataISO.split('-');
+  const dataBR = `${dia}/${mes}/${ano}`;
+  const novoTimestamp = new Date(`${dataISO}T${hora}:00`).getTime();
+
+  try {
+    await update(ref(db,'ocorrencias/'+key), { data: dataBR, hora, timestamp: novoTimestamp });
+    mostrarToast('✓ Data e hora atualizadas!');
+    fecharModalDatetime();
+    setTimeout(() => verDetalhe(key), 300);
+  } catch(e) { erroEl.textContent='❌ Erro: ' + e.message; erroEl.classList.add('show'); }
+};
+
 // ── EXCLUIR ───────────────────────────────────────────────────────────────────
 window.confirmarExclusao = async function() {
-  var key = window._idAtual;
+  const key = window._idAtual;
   if (!key) return;
-  // Se for item offline local, remove da fila + da lista local
   if (String(key).startsWith('local_')) {
     removerDaFila(key);
-    window._ocs = (window._ocs||[]).filter(function(x){ return x.firebaseKey !== key; });
+    window._ocs = (window._ocs||[]).filter(x => x.firebaseKey !== key);
     renderLista();
     mostrarToast('🗑️ Removido da fila local!');
     fecharModalExcluir();
@@ -927,7 +953,7 @@ window.confirmarExclusao = async function() {
 
 // ── STATUS ────────────────────────────────────────────────────────────────────
 window.atualizarStatus = async function(novoStatus) {
-  var key = window._idAtual;
+  const key = window._idAtual;
   if (!key) return;
   if (String(key).startsWith('local_')) { mostrarToast('⚠️ Aguarde o envio online para atualizar o status.'); return; }
   try {
@@ -939,48 +965,43 @@ window.atualizarStatus = async function(novoStatus) {
 
 // ── RENDER LISTA ──────────────────────────────────────────────────────────────
 function renderLista() {
-  // Mescla ocorrências do Firebase com as offline que ainda não foram enviadas
-  // (evita duplicatas: se já existe no Firebase, não mostra o local)
-  var filaLocal = lerFila();
-  var ocs = window._ocs || [];
+  let filaLocal = lerFila();
+  const ocs = window._ocs || [];
+  const keysFirebase = ocs.map(o => o.firebaseKey);
+  filaLocal = filaLocal.filter(x => !keysFirebase.includes(x._localId));
 
-  // Remove itens locais que já aparecem no firebase (após sync)
-  var keysFirebase = ocs.map(function(o){ return o.firebaseKey; });
-  filaLocal = filaLocal.filter(function(x){ return !keysFirebase.includes(x._localId); });
-
-  // Monta lista completa (offline na frente)
-  var locais = filaLocal.map(function(x){
-    var item = Object.assign({}, x);
-    item.firebaseKey = x._localId;
-    item._offline = true;
-    delete item._localId;
-    return item;
+  const locais = filaLocal.map(x => {
+    const { _localId, ...resto } = x;
+    return { ...resto, firebaseKey: _localId, _offline: true };
   });
-  var todos = locais.concat(ocs);
+  const todos = [...locais, ...ocs];
 
-  var busca = (document.getElementById('busca') ? document.getElementById('busca').value : '').toLowerCase();
-  var fil = todos.filter(function(o){ return (o.aluno||'').toLowerCase().includes(busca)||(o.turma||'').toLowerCase().includes(busca); });
+  const busca = (document.getElementById('busca')?.value || '').toLowerCase();
+  const fil = todos.filter(o =>
+    (o.aluno||'').toLowerCase().includes(busca) || (o.turma||'').toLowerCase().includes(busca)
+  );
 
-  // counters apenas do Firebase (não conta offline pra não confundir)
-  document.getElementById('cnt-pendente').textContent  = ocs.filter(function(o){ return o.status==='Pendente'; }).length;
-  document.getElementById('cnt-acomp').textContent     = ocs.filter(function(o){ return o.status==='Em acompanhamento'; }).length;
-  document.getElementById('cnt-resolvido').textContent = ocs.filter(function(o){ return o.status==='Resolvido'; }).length;
+  document.getElementById('cnt-pendente').textContent  = ocs.filter(o => o.status==='Pendente').length;
+  document.getElementById('cnt-acomp').textContent     = ocs.filter(o => o.status==='Em acompanhamento').length;
+  document.getElementById('cnt-resolvido').textContent = ocs.filter(o => o.status==='Resolvido').length;
   document.getElementById('cnt-total').textContent     = ocs.length;
 
-  var c = document.getElementById('lista-container');
+  const c = document.getElementById('lista-container');
   if (!fil.length) { c.innerHTML = '<div class="empty">Nenhuma ocorrência encontrada 🔍</div>'; return; }
 
-  var ICON = {"Agressão verbal":"💬","Agressão física":"👊","Uso de celular":"📱","Desrespeito ao professor":"🚫","Bagunça em sala":"🔊","Bullying":"😤","Vandalismo":"🔨","Outros":"📋"};
-  c.innerHTML = fil.map(function(o) {
-    var cls = o.status==='Pendente'?'pendente':o.status==='Resolvido'?'resolvido':'acomp';
-    var offlineTag = o._offline ? '<span class="offline-tag">📦 Offline</span>' : '';
-    var offlineCls = o._offline ? ' offline-pending' : '';
-    return '<div class="oc-card'+offlineCls+'" onclick="verDetalhe(\''+o.firebaseKey+'\')">'+
-      '<button class="btn-excluir-card" onclick="event.stopPropagation();pedirExclusao(\''+o.firebaseKey+'\')">🗑️ Excluir</button>'+
-      '<div class="oc-top"><span class="oc-nome">'+o.aluno+offlineTag+'</span><span class="oc-turma">'+(o.turma||'—')+'</span></div>'+
-      '<div class="oc-tipo">'+(ICON[o.tipo]||'📋')+' '+o.tipo+'</div>'+
-      '<div class="oc-meta"><span class="oc-data">📅 '+o.data+' '+o.hora+' · '+o.professor+'</span>'+
-      '<span class="badge badge-'+cls+'"><span class="badge-dot"></span>'+o.status+'</span></div></div>';
+  const ICON = {"Agressão verbal":"💬","Agressão física":"👊","Uso de celular":"📱","Desrespeito ao professor":"🚫","Bagunça em sala":"🔊","Bullying":"😤","Vandalismo":"🔨","Outros":"📋"};
+  c.innerHTML = fil.map(o => {
+    const cls = o.status==='Pendente'?'pendente':o.status==='Resolvido'?'resolvido':'acomp';
+    const offlineTag = o._offline ? '<span class="offline-tag">📦 Offline</span>' : '';
+    const offlineCls = o._offline ? ' offline-pending' : '';
+    return `<div class="oc-card${offlineCls}" onclick="verDetalhe('${o.firebaseKey}')">
+      <button class="btn-excluir-card" onclick="event.stopPropagation();pedirExclusao('${o.firebaseKey}')">🗑️ Excluir</button>
+      <div class="oc-top"><span class="oc-nome">${o.aluno}${offlineTag}</span><span class="oc-turma">${o.turma||'—'}</span></div>
+      <div class="oc-tipo">${ICON[o.tipo]||'📋'} ${o.tipo}</div>
+      <div class="oc-meta">
+        <span class="oc-data">📅 ${o.data} ${o.hora} · ${o.professor}</span>
+        <span class="badge badge-${cls}"><span class="badge-dot"></span>${o.status}</span>
+      </div></div>`;
   }).join('');
 
   c.className = 'lista' + (window._adminAtivo ? ' modo-admin' : '');
@@ -990,69 +1011,75 @@ function renderLista() {
 // ── DETALHE ───────────────────────────────────────────────────────────────────
 window.verDetalhe = function(key) {
   window._idAtual = key;
-  // busca tanto no Firebase quanto na fila offline
-  var o = (window._ocs||[]).find(function(x){ return x.firebaseKey===key; });
+  let o = (window._ocs||[]).find(x => x.firebaseKey === key);
   if (!o) {
-    var fl = lerFila().find(function(x){ return x._localId===key; });
-    if (fl) { o = Object.assign({}, fl, { firebaseKey:fl._localId, _offline:true }); }
+    const fl = lerFila().find(x => x._localId === key);
+    if (fl) o = { ...fl, firebaseKey: fl._localId, _offline: true };
   }
   if (!o) return;
-  var ICON = {"Agressão verbal":"💬","Agressão física":"👊","Uso de celular":"📱","Desrespeito ao professor":"🚫","Bagunça em sala":"🔊","Bullying":"😤","Vandalismo":"🔨","Outros":"📋"};
-  var cls = o.status==='Pendente'?'pendente':o.status==='Resolvido'?'resolvido':'acomp';
-  var offlineAviso = o._offline ? '<div style="background:var(--badge-pendente-bg);color:var(--badge-pendente-txt);padding:8px 12px;border-radius:8px;font-size:11px;font-weight:800;margin:8px 0;">📦 Aguardando conexão para sincronizar</div>' : '';
+
+  const ICON = {"Agressão verbal":"💬","Agressão física":"👊","Uso de celular":"📱","Desrespeito ao professor":"🚫","Bagunça em sala":"🔊","Bullying":"😤","Vandalismo":"🔨","Outros":"📋"};
+  const cls = o.status==='Pendente'?'pendente':o.status==='Resolvido'?'resolvido':'acomp';
+  const offlineAviso = o._offline
+    ? '<div style="background:var(--badge-pendente-bg);color:var(--badge-pendente-txt);padding:8px 12px;border-radius:8px;font-size:11px;font-weight:800;margin:8px 0;">📦 Aguardando conexão para sincronizar</div>'
+    : '';
+
   mostrarView('view-detalhe');
   document.getElementById('detalhe-conteudo').innerHTML =
-    '<button class="btn-back" onclick="irParaLista()">← Voltar</button>'+
-    '<div class="detalhe-nome">'+o.aluno+'</div>'+
-    '<span class="badge badge-'+cls+'"><span class="badge-dot"></span>'+o.status+'</span>'+
-    offlineAviso+
-    '<div class="detalhe-info">'+
-      '<div class="info-item"><div class="info-label">Turma</div><div class="info-val">'+(o.turma||'—')+'</div></div>'+
-      '<div class="info-item"><div class="info-label">Tipo</div><div class="info-val">'+(ICON[o.tipo]||'📋')+' '+o.tipo+'</div></div>'+
-      '<div class="info-item"><div class="info-label">Data</div><div class="info-val">'+o.data+'</div></div>'+
-      '<div class="info-item"><div class="info-label">Hora</div><div class="info-val">'+o.hora+'</div></div>'+
-      '<div class="info-item" style="grid-column:1/-1"><div class="info-label">Professor</div><div class="info-val">'+o.professor+'</div></div>'+
-    '</div>'+
-    '<div class="detalhe-desc">'+o.descricao+'</div>'+
-    (o._offline ? '' :
-      '<div style="font-size:11px;font-weight:800;color:var(--sub);text-transform:uppercase;margin-bottom:8px;">Atualizar Status</div>'+
-      '<div class="status-btns">'+
-        '<button class="status-btn s-pendente"  onclick="atualizarStatus(\'Pendente\')">⏳ Pendente</button>'+
-        '<button class="status-btn s-acomp"     onclick="atualizarStatus(\'Em acompanhamento\')">👀 Acomp.</button>'+
-        '<button class="status-btn s-resolvido" onclick="atualizarStatus(\'Resolvido\')">✅ Resolvido</button>'+
-      '</div>'
-    )+
-    '<div class="admin-acoes'+(window._adminAtivo?' show':'')+'">'+
-      (o._offline ? '<button class="btn-del" style="grid-column:1/-1" onclick="pedirExclusao(\''+key+'\')">🗑️ Remover da fila</button>' :
-        '<button class="btn-editar" onclick="abrirEdicao()">✏️ Editar</button>'+
-        '<button class="btn-del" onclick="pedirExclusao(\''+key+'\')">🗑️ Excluir</button>'
-      )+
-    '</div>';
+    `<button class="btn-back" onclick="irParaLista()">← Voltar</button>
+    <div class="detalhe-nome">${o.aluno}</div>
+    <span class="badge badge-${cls}"><span class="badge-dot"></span>${o.status}</span>
+    ${offlineAviso}
+    <div class="detalhe-info">
+      <div class="info-item"><div class="info-label">Turma</div><div class="info-val">${o.turma||'—'}</div></div>
+      <div class="info-item"><div class="info-label">Tipo</div><div class="info-val">${ICON[o.tipo]||'📋'} ${o.tipo}</div></div>
+      <div class="info-item"><div class="info-label">Data</div><div class="info-val">${o.data}</div></div>
+      <div class="info-item"><div class="info-label">Hora</div><div class="info-val">${o.hora}</div></div>
+      <div class="info-item" style="grid-column:1/-1"><div class="info-label">Professor</div><div class="info-val">${o.professor}</div></div>
+    </div>
+    <div class="detalhe-desc">${o.descricao}</div>
+    ${o._offline ? '' : `
+      <div style="font-size:11px;font-weight:800;color:var(--sub);text-transform:uppercase;margin-bottom:8px;">Atualizar Status</div>
+      <div class="status-btns">
+        <button class="status-btn s-pendente"  onclick="atualizarStatus('Pendente')">⏳ Pendente</button>
+        <button class="status-btn s-acomp"     onclick="atualizarStatus('Em acompanhamento')">👀 Acomp.</button>
+        <button class="status-btn s-resolvido" onclick="atualizarStatus('Resolvido')">✅ Resolvido</button>
+      </div>`}
+    <div class="admin-acoes${window._adminAtivo ? ' show' : ''}">
+      ${o._offline
+        ? `<button class="btn-del" style="grid-column:1/-1" onclick="pedirExclusao('${key}')">🗑️ Remover da fila</button>`
+        : `<button class="btn-editar" onclick="abrirEdicao()">✏️ Editar</button>
+           <button class="btn-del" onclick="pedirExclusao('${key}')">🗑️ Excluir</button>
+           <button class="btn-editar" style="grid-column:1/-1;text-align:center;" onclick="abrirModalDatetime()">📅 Editar Data e Hora</button>`
+      }
+    </div>`;
 };
 
 window.abrirEdicao = function() {
-  var o = (window._ocs||[]).find(function(x){ return x.firebaseKey===window._idAtual; });
+  const o = (window._ocs||[]).find(x => x.firebaseKey === window._idAtual);
   if (!o) return;
   document.getElementById('e-aluno').value     = o.aluno||'';
   document.getElementById('e-turma').value     = o.turma||'';
   document.getElementById('e-professor').value = o.professor||'';
   document.getElementById('e-descricao').value = o.descricao||'';
-  var sel = document.getElementById('e-tipo');
-  for (var i=0;i<sel.options.length;i++) { if (sel.options[i].value===o.tipo){sel.selectedIndex=i;break;} }
+  const sel = document.getElementById('e-tipo');
+  for (let i=0; i<sel.options.length; i++) { if (sel.options[i].value===o.tipo){sel.selectedIndex=i;break;} }
   mostrarView('view-editar');
 };
-window.voltarDetalhe = function() { verDetalhe(window._idAtual); };
+window.voltarDetalhe = () => verDetalhe(window._idAtual);
 
 // ── NAVEGAÇÃO ─────────────────────────────────────────────────────────────────
 function mostrarView(id) {
-  document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
-window.irParaLista  = function() { mostrarView('view-lista'); };
-window.irParaNovo   = function() { mostrarView('view-novo');  };
-window.irParaPainel = function() {
-  ['p-novo-usuario','p-conf-senha-usuario','p-senha-atual','p-senha-nova','p-senha-conf'].forEach(function(id){ document.getElementById(id).value=''; });
-  ['erro-usuario','sucesso-usuario','painel-erro','painel-sucesso'].forEach(function(id){ document.getElementById(id).classList.remove('show'); });
+window.irParaLista  = () => mostrarView('view-lista');
+window.irParaNovo   = () => mostrarView('view-novo');
+window.irParaPainel = () => {
+  ['p-novo-usuario','p-conf-senha-usuario','p-senha-atual','p-senha-nova','p-senha-conf'].forEach(id => document.getElementById(id).value='');
+  ['erro-usuario','sucesso-usuario','painel-erro','painel-sucesso'].forEach(id => document.getElementById(id).classList.remove('show'));
+  document.getElementById('reset-hash-resultado').style.display = 'none';
+  document.getElementById('reset-senha-input').value = '';
   mostrarView('view-painel');
 };
 
@@ -1061,7 +1088,7 @@ window._adminAtivo   = false;
 window._adminUsuario = '';
 window.clicarAdmin = function() {
   if (window._adminAtivo) {
-    window._adminAtivo  = false;
+    window._adminAtivo   = false;
     window._adminUsuario = '';
     document.getElementById('btn-admin').classList.remove('ativo');
     document.getElementById('btn-admin').textContent = '🔐 Admin';
@@ -1075,30 +1102,27 @@ window.clicarAdmin = function() {
     document.getElementById('login-loading').classList.remove('show');
     document.getElementById('btn-entrar').disabled = false;
     document.getElementById('modal-login').classList.add('show');
-    setTimeout(function(){ document.getElementById('login-usuario').focus(); }, 150);
+    setTimeout(() => document.getElementById('login-usuario').focus(), 150);
   }
 };
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
-window.pedirExclusao      = function(key) { window._idAtual=key; document.getElementById('modal-excluir').classList.add('show'); };
-window.fecharModalExcluir = function() { document.getElementById('modal-excluir').classList.remove('show'); };
-window.toggleOlho = function(inputId, btnId) {
-  var input = document.getElementById(inputId);
-  var btn   = document.getElementById(btnId);
-  input.type    = input.type === 'password' ? 'text' : 'password';
+window.pedirExclusao      = key => { window._idAtual=key; document.getElementById('modal-excluir').classList.add('show'); };
+window.fecharModalExcluir = ()  => document.getElementById('modal-excluir').classList.remove('show');
+window.toggleOlho = (inputId, btnId) => {
+  const input = document.getElementById(inputId);
+  const btn   = document.getElementById(btnId);
+  input.type      = input.type === 'password' ? 'text' : 'password';
   btn.textContent = input.type === 'password' ? '👁️' : '🙈';
 };
 
 function mostrarToast(msg) {
-  var t = document.getElementById('toast');
+  const t = document.getElementById('toast');
   t.textContent = msg; t.classList.add('show');
-  setTimeout(function(){ t.classList.remove('show'); }, 2500);
+  setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-window.renderLista     = renderLista;
-window.tentarSyncFila  = window.tentarSyncFila;
-
-// Inicializa o banner da fila ao carregar
+window.renderLista = renderLista;
 atualizarBannerFila();
 </script>
 </body>

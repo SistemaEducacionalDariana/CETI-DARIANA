@@ -728,7 +728,7 @@ window._adminNodeKey  = '';   // ex: "principal"
 
 // ─── Nome da instituição ──────────────────────────────────────────────────────
 onValue(ref(db, 'admin_config/nome_instituicao'), function(snap) {
-  var nome = snap.val() || 'Minha Instituição';
+  var nome = snap.val() || 'CETI Dariana';
   document.getElementById('header-nome-inst').textContent = nome;
   document.title = nome;
 });

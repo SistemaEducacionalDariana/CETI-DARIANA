@@ -197,7 +197,7 @@ html[data-tema="escuro"] .btn-nova,html[data-tema="black"] .btn-nova { backgroun
 .form-group { display:flex; flex-direction:column; gap:4px; margin-bottom:12px; }
 .form-row   { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 label { font-size:10px; font-weight:600; color:var(--sub); text-transform:uppercase; letter-spacing:.5px; }
-input[type=text],input[type=password],input[type=datetime-local],select,textarea {
+input[type=text],input[type=email],input[type=password],input[type=datetime-local],select,textarea {
   width:100%; padding:9px 12px; border-radius:8px; border:1px solid var(--borda);
   font-size:13px; font-family:'DM Sans',sans-serif; background:var(--bg-input);
   outline:none; color:var(--texto); transition:border .2s;
@@ -562,19 +562,27 @@ html[data-tema="black"] .toast { background:#222; }
         </div>
       </div>
 
-      <!-- LOGIN ADMIN -->
+      <!-- LOGIN ADMIN via Firebase Auth -->
       <div id="config-admin-deslogado" class="admin-login-area">
         <div class="admin-login-titulo">🔐 Acesso Admin</div>
-        <div class="admin-login-sub">Entre para acessar configurações avançadas</div>
-        <div class="form-group"><label>Usuário</label><input type="text" id="cfg-usuario" placeholder="usuário" autocomplete="off" onkeydown="if(event.key==='Enter')document.getElementById('cfg-senha').focus()"></div>
-        <div class="form-group"><label>Senha</label>
+        <div class="admin-login-sub">Entre com seu e-mail e senha de administrador</div>
+        <div class="form-group">
+          <label>E-mail</label>
+          <input type="email" id="cfg-email" placeholder="admin@exemplo.com" autocomplete="off"
+            onkeydown="if(event.key==='Enter')document.getElementById('cfg-senha').focus()">
+        </div>
+        <div class="form-group">
+          <label>Senha</label>
           <div class="senha-wrap">
-            <input type="password" id="cfg-senha" placeholder="••••••" onkeydown="if(event.key==='Enter')fazerLoginConfig()">
+            <input type="password" id="cfg-senha" placeholder="••••••"
+              onkeydown="if(event.key==='Enter')fazerLoginConfig()">
             <button class="btn-olho" onclick="toggleOlho('cfg-senha','olho-cfg')" id="olho-cfg">👁️</button>
           </div>
         </div>
         <div class="erro-msg" id="cfg-login-erro"></div>
-        <div class="login-loading" id="cfg-login-loading"><div class="spinner" style="width:18px;height:18px;border-width:2px;display:inline-block"></div> Verificando...</div>
+        <div class="login-loading" id="cfg-login-loading">
+          <div class="spinner" style="width:18px;height:18px;border-width:2px;display:inline-block"></div> Verificando...
+        </div>
         <button class="btn-salvar" style="margin-top:4px;" onclick="fazerLoginConfig()">Entrar</button>
       </div>
 
@@ -599,42 +607,25 @@ html[data-tema="black"] .toast { background:#222; }
           <div class="sucesso-msg" id="sucesso-icone" style="margin-top:8px"></div>
         </div>
 
-        <!-- ALTERAR USUÁRIO -->
-        <div class="painel-secao">
-          <div class="painel-secao-titulo">👤 Alterar Usuário</div>
-          <div class="form-group"><label>Novo Usuário</label><input type="text" id="p-novo-usuario" placeholder="Nome de usuário"></div>
-          <div class="form-group"><label>Senha Atual (confirmação)</label>
-            <div class="senha-wrap">
-              <input type="password" id="p-conf-senha-usuario" placeholder="••••••">
-              <button class="btn-olho" onclick="toggleOlho('p-conf-senha-usuario','olho-cu')" id="olho-cu">👁️</button>
-            </div>
-          </div>
-          <div class="erro-msg" id="erro-usuario"></div><div class="sucesso-msg" id="sucesso-usuario"></div>
-          <button class="btn-salvar btn-vermelho" onclick="alterarUsuario()" style="font-size:12px;padding:10px">Salvar Usuário</button>
-        </div>
-
-        <!-- ALTERAR SENHA -->
+        <!-- ALTERAR SENHA via Firebase Auth -->
         <div class="painel-secao">
           <div class="painel-secao-titulo">🔑 Alterar Senha</div>
-          <div class="form-group"><label>Senha Atual</label>
-            <div class="senha-wrap">
-              <input type="password" id="p-senha-atual" placeholder="••••••">
-              <button class="btn-olho" onclick="toggleOlho('p-senha-atual','olho-atual')" id="olho-atual">👁️</button>
-            </div>
-          </div>
-          <div class="form-group"><label>Nova Senha</label>
+          <div class="form-group">
+            <label>Nova Senha</label>
             <div class="senha-wrap">
               <input type="password" id="p-senha-nova" placeholder="Mínimo 6 caracteres">
               <button class="btn-olho" onclick="toggleOlho('p-senha-nova','olho-nova')" id="olho-nova">👁️</button>
             </div>
           </div>
-          <div class="form-group"><label>Confirmar Nova Senha</label>
+          <div class="form-group">
+            <label>Confirmar Nova Senha</label>
             <div class="senha-wrap">
               <input type="password" id="p-senha-conf" placeholder="Repita">
               <button class="btn-olho" onclick="toggleOlho('p-senha-conf','olho-conf')" id="olho-conf">👁️</button>
             </div>
           </div>
-          <div class="erro-msg" id="painel-erro"></div><div class="sucesso-msg" id="painel-sucesso"></div>
+          <div class="erro-msg" id="painel-erro"></div>
+          <div class="sucesso-msg" id="painel-sucesso"></div>
           <button class="btn-salvar btn-vermelho" onclick="alterarSenha()" style="font-size:12px;padding:10px">Salvar Senha</button>
         </div>
 
@@ -689,6 +680,13 @@ html[data-tema="black"] .toast { background:#222; }
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
 import { getDatabase, ref, push, update, remove, onValue, get, set }
   from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  updatePassword
+} from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDpfUODyVcTWqOyMNrXbMM21-aweOdO1_Y",
@@ -698,33 +696,32 @@ const firebaseConfig = {
   storageBucket: "cetidariana.firebasestorage.app",
   messagingSenderId: "8069027724",
   appId: "1:8069027724:web:7f3caf124fcae48900a8a9"
-
 };
 
 const app   = initializeApp(firebaseConfig);
 const db    = getDatabase(app);
+const auth  = getAuth(app);
 const ocRef = ref(db, 'ocorrencias');
 
-// ─── Referências do Firebase ──────────────────────────────────────────────────
-// Estrutura esperada:
-//   administradores/
-//     principal/
-//       usuario: "seu_usuario"
-//       senha:   "sua_senha"     ← texto puro
-//       tipo:    "principal"
-//       criadoEm: "..."
-//
-//   admin_config/
-//     nome_instituicao: "Nome da Escola"
-//     icone_logo: "🏫"
+// ─── Estado global do admin ───────────────────────────────────────────────────
+window._adminAtivo   = false;
+window._adminUsuario = '';  // email do usuário logado
 
-const ADM_REF = ref(db, 'administradores');
-
-// Variável que guarda a chave do nó do admin logado (ex: "principal")
-// e os dados dele, para podermos atualizar depois
-window._adminAtivo    = false;
-window._adminUsuario  = '';
-window._adminNodeKey  = '';   // ex: "principal"
+// ─── Observa mudanças de autenticação ────────────────────────────────────────
+// Se o usuário já estava logado (sessão persistida pelo Firebase), restaura o estado.
+onAuthStateChanged(auth, function(user) {
+  if (user) {
+    window._adminAtivo   = true;
+    window._adminUsuario = user.email;
+    renderLista();
+    atualizarUiAdminConfig();
+  } else {
+    window._adminAtivo   = false;
+    window._adminUsuario = '';
+    renderLista();
+    atualizarUiAdminConfig();
+  }
+});
 
 // ─── Nome da instituição ──────────────────────────────────────────────────────
 onValue(ref(db, 'admin_config/nome_instituicao'), function(snap) {
@@ -777,7 +774,7 @@ function popularEmojiGrid(containerId) {
 }
 
 window._iconeAtual = '🏫';
-window.abrirModalIcone = function() { popularEmojiGrid('emoji-grid-modal'); document.getElementById('modal-icone').classList.add('show'); };
+window.abrirModalIcone  = function() { popularEmojiGrid('emoji-grid-modal'); document.getElementById('modal-icone').classList.add('show'); };
 window.fecharModalIcone = function() { document.getElementById('modal-icone').classList.remove('show'); };
 
 window.selecionarIcone = async function(emoji) {
@@ -881,12 +878,12 @@ function mostrarViewSemTabs(id) {
 }
 
 // ═══════════════════════════════════
-//  LOGIN ADMIN — usa administradores/
+//  LOGIN ADMIN — Firebase Auth
 // ═══════════════════════════════════
 function atualizarUiAdminConfig() {
   var logado = window._adminAtivo || false;
   document.getElementById('config-admin-deslogado').style.display = logado ? 'none' : 'block';
-  document.getElementById('config-admin-logado').style.display = logado ? 'block' : 'none';
+  document.getElementById('config-admin-logado').style.display    = logado ? 'block' : 'none';
   if (logado) {
     document.getElementById('cfg-admin-nome').textContent = window._adminUsuario || '—';
     popularEmojiGrid('emoji-grid-painel');
@@ -897,14 +894,15 @@ function atualizarUiAdminConfig() {
   if (logado) document.getElementById('admin-user-badge').textContent = window._adminUsuario || '—';
 }
 
+// Login via Firebase Authentication (email + senha)
 window.fazerLoginConfig = async function() {
-  var usuario  = document.getElementById('cfg-usuario').value.trim();
-  var senha    = document.getElementById('cfg-senha').value;
-  var erroEl   = document.getElementById('cfg-login-erro');
-  var loadEl   = document.getElementById('cfg-login-loading');
+  var email  = document.getElementById('cfg-email').value.trim();
+  var senha  = document.getElementById('cfg-senha').value;
+  var erroEl = document.getElementById('cfg-login-erro');
+  var loadEl = document.getElementById('cfg-login-loading');
 
-  if (!usuario || !senha) {
-    erroEl.textContent = '❌ Preencha usuário e senha.';
+  if (!email || !senha) {
+    erroEl.textContent = '❌ Preencha e-mail e senha.';
     erroEl.classList.add('show');
     return;
   }
@@ -912,113 +910,68 @@ window.fazerLoginConfig = async function() {
   loadEl.classList.add('show');
 
   try {
-    // Busca o nó inteiro de administradores e itera os filhos
-    const snap = await get(ADM_REF);
-    if (!snap.exists()) throw new Error('Nenhum administrador cadastrado no Firebase.');
-
-    var encontrado  = false;
-    var nodeKeyEncontrado = '';
-
-    snap.forEach(function(child) {
-      var dados = child.val();
-      // Compara usuario e senha em texto puro (estrutura do seu Firebase)
-      if (dados.usuario === usuario && dados.senha === senha) {
-        encontrado = true;
-        nodeKeyEncontrado = child.key; // ex: "principal"
-      }
-    });
-
-    if (encontrado) {
-      window._adminAtivo    = true;
-      window._adminUsuario  = usuario;
-      window._adminNodeKey  = nodeKeyEncontrado;
-      document.getElementById('cfg-usuario').value = '';
-      document.getElementById('cfg-senha').value   = '';
-      document.getElementById('logo-btn').title = 'Clique para alterar ícone';
-      renderLista();
-      mostrarToast('✓ Bem-vindo, ' + usuario + '!');
-      atualizarUiAdminConfig();
-    } else {
-      erroEl.textContent = '❌ Usuário ou senha incorretos.';
-      erroEl.classList.add('show');
-      document.getElementById('cfg-senha').value = '';
-    }
+    const cred = await signInWithEmailAndPassword(auth, email, senha);
+    // onAuthStateChanged cuida de atualizar window._adminAtivo e a UI
+    document.getElementById('cfg-email').value = '';
+    document.getElementById('cfg-senha').value = '';
+    document.getElementById('logo-btn').title  = 'Clique para alterar ícone';
+    mostrarToast('✓ Bem-vindo, ' + cred.user.email + '!');
   } catch(e) {
-    erroEl.textContent = '❌ Erro: ' + e.message;
+    var msg = '❌ E-mail ou senha incorretos.';
+    // Mensagens mais amigáveis para erros comuns
+    if (e.code === 'auth/user-not-found')    msg = '❌ Usuário não encontrado.';
+    if (e.code === 'auth/wrong-password')    msg = '❌ Senha incorreta.';
+    if (e.code === 'auth/invalid-email')     msg = '❌ E-mail inválido.';
+    if (e.code === 'auth/too-many-requests') msg = '❌ Muitas tentativas. Tente mais tarde.';
+    if (e.code === 'auth/network-request-failed') msg = '❌ Sem conexão.';
+    erroEl.textContent = msg;
     erroEl.classList.add('show');
+    document.getElementById('cfg-senha').value = '';
   }
   loadEl.classList.remove('show');
 };
 
-window.sairAdminConfig = function() {
-  window._adminAtivo   = false;
-  window._adminUsuario = '';
-  window._adminNodeKey = '';
-  document.getElementById('logo-btn').title = 'Ícone da escola';
-  renderLista();
-  mostrarToast('Modo admin desativado');
-  atualizarUiAdminConfig();
-};
-
-// ─── Alterar Usuário ──────────────────────────────────────────────────────────
-// Atualiza o campo "usuario" dentro de administradores/<nodeKey>
-window.alterarUsuario = async function() {
-  var novoUsuario = document.getElementById('p-novo-usuario').value.trim();
-  var senhaConf   = document.getElementById('p-conf-senha-usuario').value;
-  var erroEl  = document.getElementById('erro-usuario');
-  var sucEl   = document.getElementById('sucesso-usuario');
-  erroEl.classList.remove('show'); sucEl.classList.remove('show');
-
-  if (!novoUsuario) { erroEl.textContent = '❌ Informe o novo usuário.'; erroEl.classList.add('show'); return; }
-  if (!senhaConf)   { erroEl.textContent = '❌ Confirme sua senha atual.'; erroEl.classList.add('show'); return; }
-
+// Logout via Firebase Authentication
+window.sairAdminConfig = async function() {
   try {
-    // Verifica a senha atual no Firebase antes de alterar
-    const snap = await get(ref(db, 'administradores/' + window._adminNodeKey));
-    if (!snap.exists()) throw new Error('Admin não encontrado.');
-    var dados = snap.val();
-    if (dados.senha !== senhaConf) {
-      erroEl.textContent = '❌ Senha incorreta.'; erroEl.classList.add('show'); return;
-    }
-    // Salva o novo usuário
-    await update(ref(db, 'administradores/' + window._adminNodeKey), { usuario: novoUsuario });
-    window._adminUsuario = novoUsuario;
-    document.getElementById('cfg-admin-nome').textContent = novoUsuario;
-    document.getElementById('admin-user-badge').textContent = novoUsuario;
-    sucEl.textContent = '✅ Usuário alterado!'; sucEl.classList.add('show');
-    document.getElementById('p-novo-usuario').value      = '';
-    document.getElementById('p-conf-senha-usuario').value = '';
-    mostrarToast('✓ Usuário atualizado!');
-  } catch(e) { erroEl.textContent = '❌ ' + e.message; erroEl.classList.add('show'); }
+    await signOut(auth);
+    // onAuthStateChanged cuida do restante
+    document.getElementById('logo-btn').title = 'Ícone da escola';
+    mostrarToast('Modo admin desativado');
+  } catch(e) {
+    mostrarToast('Erro ao sair: ' + e.message);
+  }
 };
 
-// ─── Alterar Senha ────────────────────────────────────────────────────────────
-// Atualiza o campo "senha" dentro de administradores/<nodeKey>
+// ─── Alterar Senha via Firebase Auth ─────────────────────────────────────────
 window.alterarSenha = async function() {
-  var atual = document.getElementById('p-senha-atual').value;
   var nova  = document.getElementById('p-senha-nova').value;
   var conf  = document.getElementById('p-senha-conf').value;
   var erroEl = document.getElementById('painel-erro');
   var sucEl  = document.getElementById('painel-sucesso');
   erroEl.classList.remove('show'); sucEl.classList.remove('show');
 
-  if (!atual || !nova || !conf) { erroEl.textContent = '❌ Preencha todos os campos.'; erroEl.classList.add('show'); return; }
-  if (nova.length < 6)          { erroEl.textContent = '❌ Mínimo 6 caracteres.';     erroEl.classList.add('show'); return; }
-  if (nova !== conf)            { erroEl.textContent = '❌ Senhas não coincidem.';    erroEl.classList.add('show'); return; }
+  if (!nova || !conf)  { erroEl.textContent = '❌ Preencha os dois campos.'; erroEl.classList.add('show'); return; }
+  if (nova.length < 6) { erroEl.textContent = '❌ Mínimo 6 caracteres.';    erroEl.classList.add('show'); return; }
+  if (nova !== conf)   { erroEl.textContent = '❌ Senhas não coincidem.';   erroEl.classList.add('show'); return; }
+
+  var user = auth.currentUser;
+  if (!user) { erroEl.textContent = '❌ Nenhum usuário autenticado.'; erroEl.classList.add('show'); return; }
 
   try {
-    const snap = await get(ref(db, 'administradores/' + window._adminNodeKey));
-    if (!snap.exists()) throw new Error('Admin não encontrado.');
-    var dados = snap.val();
-    if (dados.senha !== atual) {
-      erroEl.textContent = '❌ Senha atual incorreta.'; erroEl.classList.add('show'); return;
-    }
-    // Salva a nova senha em texto puro (mesma estrutura do seu banco)
-    await update(ref(db, 'administradores/' + window._adminNodeKey), { senha: nova });
-    sucEl.textContent = '✅ Senha alterada!'; sucEl.classList.add('show');
-    ['p-senha-atual','p-senha-nova','p-senha-conf'].forEach(function(id) { document.getElementById(id).value = ''; });
+    await updatePassword(user, nova);
+    sucEl.textContent = '✅ Senha alterada com sucesso!'; sucEl.classList.add('show');
+    document.getElementById('p-senha-nova').value = '';
+    document.getElementById('p-senha-conf').value = '';
     mostrarToast('✓ Senha atualizada!');
-  } catch(e) { erroEl.textContent = '❌ ' + e.message; erroEl.classList.add('show'); }
+  } catch(e) {
+    var msg = '❌ ' + e.message;
+    // Se o token expirou, o Firebase exige re-autenticação
+    if (e.code === 'auth/requires-recent-login') {
+      msg = '❌ Sessão expirada. Saia e entre novamente para alterar a senha.';
+    }
+    erroEl.textContent = msg; erroEl.classList.add('show');
+  }
 };
 
 // ═══════════════════════════════════
@@ -1226,7 +1179,7 @@ window.irParaPainel = function() {
   atualizarUiAdminConfig();
 };
 
-window.pedirExclusao    = function(key) { window._idAtual = key; document.getElementById('modal-excluir').classList.add('show'); };
+window.pedirExclusao      = function(key) { window._idAtual = key; document.getElementById('modal-excluir').classList.add('show'); };
 window.fecharModalExcluir = function() { document.getElementById('modal-excluir').classList.remove('show'); };
 window.toggleOlho = function(inputId, btnId) {
   var input = document.getElementById(inputId), btn = document.getElementById(btnId);

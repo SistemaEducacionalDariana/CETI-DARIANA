@@ -199,7 +199,7 @@ html[data-tema="escuro"] .btn-nova,html[data-tema="black"] .btn-nova { backgroun
 .form-group { display:flex; flex-direction:column; gap:4px; margin-bottom:12px; }
 .form-row   { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 label { font-size:10px; font-weight:600; color:var(--sub); text-transform:uppercase; letter-spacing:.5px; }
-input[type=text],input[type=email],input[type=password],input[type=datetime-local],select,textarea {
+input[type=text],input[type=email],input[type=password],input[type=datetime-local],input[type=date],input[type=time],select,textarea {
   width:100%; padding:9px 12px; border-radius:8px; border:1px solid var(--borda);
   font-size:13px; font-family:'DM Sans',sans-serif; background:var(--bg-input);
   outline:none; color:var(--texto); transition:border .2s;
@@ -237,13 +237,65 @@ html[data-tema="escuro"] .btn-vermelho,html[data-tema="black"] .btn-vermelho { b
 .btn-editar { padding:11px; border:1px solid var(--borda); border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; background:var(--cinza); color:var(--sub); }
 .btn-del    { padding:11px; border:none; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; background:#FEE2E2; color:#991B1B; }
 
-/* PAINEL CONFIG */
-.painel-secao { border:1px solid var(--borda); border-radius:10px; padding:14px; margin-bottom:12px; }
-.painel-secao-titulo { font-size:11px; font-weight:700; color:var(--sub); text-transform:uppercase; letter-spacing:.5px; margin-bottom:12px; }
+/* ═══════════════════════════════════════
+   ACCORDION CONFIG — novo estilo
+   ═══════════════════════════════════════ */
 .config-wrap { padding:16px; }
 
-/* TEMA */
-.tema-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:4px; }
+.accordion-item {
+  background:var(--bg-card);
+  border:1px solid var(--borda);
+  border-radius:var(--radius);
+  margin-bottom:10px;
+  overflow:hidden;
+  transition:box-shadow .2s;
+}
+.accordion-item.open {
+  box-shadow:0 4px 20px rgba(42,91,215,0.08);
+  border-color:var(--azul2);
+}
+
+.accordion-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:15px 16px; cursor:pointer; user-select:none;
+  transition:background .15s;
+}
+.accordion-header:active { background:var(--cinza); }
+
+.accordion-header-left { display:flex; align-items:center; gap:12px; }
+.accordion-icon {
+  width:36px; height:36px; border-radius:9px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:17px; flex-shrink:0;
+  background:var(--cinza); border:1px solid var(--borda);
+}
+.accordion-item.open .accordion-icon { background:var(--azulc); border-color:var(--azul2); }
+.accordion-title { font-size:13px; font-weight:700; color:var(--texto); }
+.accordion-desc  { font-size:11px; color:var(--sub); margin-top:2px; }
+
+.accordion-chevron {
+  font-size:12px; color:var(--sub); transition:transform .25s ease;
+  flex-shrink:0; width:20px; height:20px;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--cinza); border:1px solid var(--borda); border-radius:6px;
+}
+.accordion-item.open .accordion-chevron { transform:rotate(180deg); background:var(--azulc); border-color:var(--azul2); color:var(--azul2); }
+
+.accordion-body {
+  max-height:0; overflow:hidden;
+  transition:max-height .3s ease, padding .3s ease;
+  padding:0 16px;
+}
+.accordion-item.open .accordion-body {
+  max-height:800px;
+  padding:0 16px 16px;
+}
+.accordion-divider { height:1px; background:var(--borda); margin:0 16px 0; }
+.accordion-item.open .accordion-divider { display:block; }
+.accordion-item:not(.open) .accordion-divider { display:none; }
+
+/* TEMA dentro do accordion */
+.tema-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px; }
 .tema-opcao { border-radius:12px; padding:12px 8px 10px; text-align:center; cursor:pointer; border:1.5px solid var(--borda); transition:border .2s; position:relative; }
 .tema-opcao.selecionado { border-color:var(--azul2); }
 .tema-opcao-claro  { background:#F5F6FA; }
@@ -265,27 +317,8 @@ html[data-tema="escuro"] .btn-vermelho,html[data-tema="black"] .btn-vermelho { b
 .tema-check { position:absolute; top:5px; right:6px; font-size:11px; opacity:0; transition:opacity .2s; }
 .tema-opcao.selecionado .tema-check { opacity:1; }
 
-/* ADMIN */
-.admin-login-area { background:var(--bg-card); border-radius:var(--radius); padding:18px; border:1px solid var(--borda); margin-bottom:12px; }
-.admin-login-titulo { font-size:13px; font-weight:700; color:var(--texto); margin-bottom:4px; }
-.admin-login-sub { font-size:11px; color:var(--sub); margin-bottom:14px; }
-.admin-logado-area { background:var(--bg-card); border-radius:var(--radius); padding:18px; border:1px solid var(--borda); margin-bottom:12px; }
+/* ADMIN dentro do accordion */
 .admin-logado-badge { display:inline-flex; align-items:center; gap:8px; background:#FEE2E2; color:#991B1B; border-radius:8px; padding:8px 12px; font-size:12px; font-weight:600; margin-bottom:14px; }
-
-/* TAB BAR */
-.tab-bar {
-  display:flex; background:var(--tab-bg); border-top:1px solid var(--tab-borda);
-  flex-shrink:0; padding-bottom:env(safe-area-inset-bottom);
-}
-.tab-btn {
-  flex:1; padding:10px 0 8px; border:none; background:transparent; font-family:'DM Sans',sans-serif;
-  font-size:10px; font-weight:600; color:var(--sub); cursor:pointer;
-  display:flex; flex-direction:column; align-items:center; gap:3px; transition:color .2s;
-  letter-spacing:.3px; text-transform:uppercase;
-}
-.tab-btn-icon { font-size:18px; line-height:1; transition:transform .2s; }
-.tab-btn.ativo { color:var(--azul2); }
-.tab-btn.ativo .tab-btn-icon { transform:translateY(-1px); }
 
 /* ANALYTICS */
 .analytics-wrap { padding:12px 16px 16px; display:flex; flex-direction:column; gap:12px; }
@@ -313,10 +346,14 @@ html[data-tema="escuro"] .cal-dia.selecionado,html[data-tema="black"] .cal-dia.s
 .cal-bolinha { width:4px; height:4px; border-radius:50%; background:var(--amarelo); flex-shrink:0; }
 .cal-dia.selecionado .cal-bolinha { background:rgba(255,255,255,0.7); }
 .cal-dia.tem-oc.resolvido-dia .cal-bolinha { background:var(--verde); }
+.cal-dia.tem-evento .cal-bolinha-evento { width:4px; height:4px; border-radius:50%; background:var(--azul2); flex-shrink:0; }
+
 .cal-ocs-dia { border-top:1px solid var(--borda); }
-.cal-ocs-titulo { padding:12px 16px 8px; display:flex; align-items:center; justify-content:space-between; }
+.cal-ocs-titulo { padding:12px 16px 8px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px; }
 .cal-ocs-titulo-txt { font-size:12px; font-weight:600; color:var(--sub); }
+.cal-ocs-acoes { display:flex; gap:6px; }
 .btn-dl-rel { background:var(--cinza); border:1px solid var(--borda); color:var(--sub); border-radius:7px; padding:5px 10px; font-size:10px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; }
+.btn-add-evento { background:var(--azul2); border:none; color:#fff; border-radius:7px; padding:5px 10px; font-size:10px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; display:none; }
 .cal-ocs-lista { padding:0 16px 14px; display:flex; flex-direction:column; gap:6px; }
 .cal-oc-item { background:var(--cinza); border-radius:8px; padding:9px 12px; border-left:3px solid var(--azul2); cursor:pointer; border:1px solid var(--borda); border-left:3px solid var(--azul2); }
 .cal-oc-item-nome { font-size:12px; font-weight:600; }
@@ -324,6 +361,20 @@ html[data-tema="escuro"] .cal-dia.selecionado,html[data-tema="black"] .cal-dia.s
 .cal-oc-item.s-pendente  { border-left-color:var(--badge-pendente-dot); }
 .cal-oc-item.s-acomp     { border-left-color:var(--badge-acomp-dot); }
 .cal-oc-item.s-resolvido { border-left-color:var(--badge-resolvido-dot); }
+
+/* Evento no calendário */
+.cal-evento-item {
+  background:var(--cinza); border-radius:8px; padding:9px 12px;
+  border:1px solid var(--borda); border-left:3px solid var(--azul2);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.cal-evento-item-left { display:flex; align-items:center; gap:8px; }
+.cal-evento-dot { width:8px; height:8px; border-radius:50%; background:var(--azul2); flex-shrink:0; }
+.cal-evento-nome { font-size:12px; font-weight:600; color:var(--texto); }
+.cal-evento-hora { font-size:11px; color:var(--sub); margin-top:1px; }
+.btn-del-evento { background:none; border:none; color:var(--sub); cursor:pointer; font-size:14px; padding:2px 4px; border-radius:4px; }
+.btn-del-evento:hover { background:#FEE2E2; color:var(--vermelho); }
+.evento-tag { display:inline-block; background:var(--azulc); color:var(--azul2); border-radius:4px; padding:1px 6px; font-size:9px; font-weight:700; margin-right:4px; }
 
 /* GRÁFICO */
 .chart-controls { padding:14px 16px 10px; display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; }
@@ -352,6 +403,7 @@ html[data-tema="escuro"] .cal-dia.selecionado,html[data-tema="black"] .cal-dia.s
 .modal-btns { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px; }
 .btn-confirmar { padding:12px; border:none; border-radius:9px; font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; background:var(--vermelho); color:#fff; }
 .btn-cancelar  { padding:12px; border:1px solid var(--borda); border-radius:9px; font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; background:var(--cinza); color:var(--sub); }
+.btn-confirmar-azul { padding:12px; border:none; border-radius:9px; font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; background:var(--azul2); color:#fff; }
 .erro-msg    { color:var(--vermelho); font-size:12px; font-weight:600; margin-top:8px; display:none; background:#FEE2E2; padding:8px 12px; border-radius:7px; }
 .erro-msg.show { display:block; }
 .sucesso-msg { color:#166534; font-size:12px; font-weight:600; margin-top:8px; display:none; background:#DCFCE7; padding:8px 12px; border-radius:7px; }
@@ -371,6 +423,21 @@ html[data-tema="black"] .toast { background:#222; }
 .emoji-op { font-size:22px; border:1.5px solid var(--borda); border-radius:8px; padding:6px; cursor:pointer; text-align:center; background:var(--cinza); transition:border-color .15s; }
 .emoji-op.selecionado { border-color:var(--azul2); }
 .emoji-op:active { opacity:.6; }
+
+/* TAB BAR */
+.tab-bar {
+  display:flex; background:var(--tab-bg); border-top:1px solid var(--tab-borda);
+  flex-shrink:0; padding-bottom:env(safe-area-inset-bottom);
+}
+.tab-btn {
+  flex:1; padding:10px 0 8px; border:none; background:transparent; font-family:'DM Sans',sans-serif;
+  font-size:10px; font-weight:600; color:var(--sub); cursor:pointer;
+  display:flex; flex-direction:column; align-items:center; gap:3px; transition:color .2s;
+  letter-spacing:.3px; text-transform:uppercase;
+}
+.tab-btn-icon { font-size:18px; line-height:1; transition:transform .2s; }
+.tab-btn.ativo { color:var(--azul2); }
+.tab-btn.ativo .tab-btn-icon { transform:translateY(-1px); }
 </style>
 </head>
 <body>
@@ -442,7 +509,10 @@ html[data-tema="black"] .toast { background:#222; }
         <div class="cal-ocs-dia">
           <div class="cal-ocs-titulo">
             <span class="cal-ocs-titulo-txt" id="cal-dia-titulo">Selecione um dia</span>
-            <button class="btn-dl-rel" id="btn-dl-rel" onclick="baixarRelatorio()" style="display:none">⬇️ Relatório</button>
+            <div class="cal-ocs-acoes">
+              <button class="btn-add-evento" id="btn-add-evento" onclick="abrirModalEvento()">+ Evento</button>
+              <button class="btn-dl-rel" id="btn-dl-rel" onclick="baixarRelatorio()" style="display:none">⬇️ Relatório</button>
+            </div>
           </div>
           <div class="cal-ocs-lista" id="cal-ocs-lista">
             <div class="empty" style="padding:10px 0;font-size:12px;">Toque em um dia</div>
@@ -537,94 +607,168 @@ html[data-tema="black"] .toast { background:#222; }
     <div class="detalhe-card" id="detalhe-conteudo"></div>
   </div>
 
-  <!-- CONFIGURAÇÕES -->
+  <!-- ═══════════════════════════════════════
+       CONFIGURAÇÕES — Accordion
+       ═══════════════════════════════════════ -->
   <div class="view" id="view-config">
     <div class="config-wrap">
 
-      <!-- TEMA -->
-      <div class="admin-logado-area" style="margin-bottom:12px;">
-        <div style="font-size:13px;font-weight:700;color:var(--texto);margin-bottom:4px;">🎨 Aparência</div>
-        <div style="font-size:11px;color:var(--sub);margin-bottom:12px;">Tema do app neste dispositivo</div>
-        <div class="tema-grid">
-          <div class="tema-opcao tema-opcao-claro" id="tema-op-claro" onclick="selecionarTema('claro')">
-            <span class="tema-check">✔</span>
-            <div class="tema-preview"><div class="tp-bar"></div><div class="tp-card"></div></div>
-            <div class="tema-opcao-nome">Claro</div>
+      <!-- APARÊNCIA -->
+      <div class="accordion-item" id="acc-aparencia">
+        <div class="accordion-header" onclick="toggleAccordion('acc-aparencia')">
+          <div class="accordion-header-left">
+            <div class="accordion-icon">🎨</div>
+            <div>
+              <div class="accordion-title">Aparência</div>
+              <div class="accordion-desc">Tema do app neste dispositivo</div>
+            </div>
           </div>
-          <div class="tema-opcao tema-opcao-escuro" id="tema-op-escuro" onclick="selecionarTema('escuro')">
-            <span class="tema-check" style="color:#93C5FD">✔</span>
-            <div class="tema-preview"><div class="tp-bar"></div><div class="tp-card"></div></div>
-            <div class="tema-opcao-nome">Escuro</div>
-          </div>
-          <div class="tema-opcao tema-opcao-black" id="tema-op-black" onclick="selecionarTema('black')">
-            <span class="tema-check" style="color:#888">✔</span>
-            <div class="tema-preview"><div class="tp-bar"></div><div class="tp-card"></div></div>
-            <div class="tema-opcao-nome">Black</div>
+          <div class="accordion-chevron">▼</div>
+        </div>
+        <div class="accordion-divider"></div>
+        <div class="accordion-body">
+          <div class="tema-grid">
+            <div class="tema-opcao tema-opcao-claro" id="tema-op-claro" onclick="selecionarTema('claro')">
+              <span class="tema-check">✔</span>
+              <div class="tema-preview"><div class="tp-bar"></div><div class="tp-card"></div></div>
+              <div class="tema-opcao-nome">Claro</div>
+            </div>
+            <div class="tema-opcao tema-opcao-escuro" id="tema-op-escuro" onclick="selecionarTema('escuro')">
+              <span class="tema-check" style="color:#93C5FD">✔</span>
+              <div class="tema-preview"><div class="tp-bar"></div><div class="tp-card"></div></div>
+              <div class="tema-opcao-nome">Escuro</div>
+            </div>
+            <div class="tema-opcao tema-opcao-black" id="tema-op-black" onclick="selecionarTema('black')">
+              <span class="tema-check" style="color:#888">✔</span>
+              <div class="tema-preview"><div class="tp-bar"></div><div class="tp-card"></div></div>
+              <div class="tema-opcao-nome">Black</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- NOME DO PROFESSOR -->
-      <div class="admin-logado-area" style="margin-bottom:12px;">
-        <div style="font-size:13px;font-weight:700;color:var(--texto);margin-bottom:4px;">&#128100; Meu Nome</div>
-        <div style="font-size:11px;color:var(--sub);margin-bottom:12px;">Salvo neste dispositivo &mdash; preenchido automaticamente ao registrar</div>
-        <div class="form-group" style="margin-bottom:10px;">
-          <label>Prof(a). Nome</label>
-          <input type="text" id="cfg-nome-prof" placeholder="Seu nome completo" autocomplete="off">
+      <!-- MEU NOME -->
+      <div class="accordion-item" id="acc-nome">
+        <div class="accordion-header" onclick="toggleAccordion('acc-nome')">
+          <div class="accordion-header-left">
+            <div class="accordion-icon">👤</div>
+            <div>
+              <div class="accordion-title">Meu Nome</div>
+              <div class="accordion-desc">Preenchido automaticamente ao registrar</div>
+            </div>
+          </div>
+          <div class="accordion-chevron">▼</div>
         </div>
-        <div class="sucesso-msg" id="sucesso-nome-prof"></div>
-        <button class="btn-salvar" style="font-size:12px;padding:10px;" onclick="salvarNomeProf()">Salvar Meu Nome</button>
+        <div class="accordion-divider"></div>
+        <div class="accordion-body">
+          <div class="form-group" style="margin-bottom:10px;margin-top:4px;">
+            <label>Prof(a). Nome</label>
+            <input type="text" id="cfg-nome-prof" placeholder="Seu nome completo" autocomplete="off">
+          </div>
+          <div class="sucesso-msg" id="sucesso-nome-prof"></div>
+          <button class="btn-salvar" style="font-size:12px;padding:10px;" onclick="salvarNomeProf()">Salvar Meu Nome</button>
+        </div>
       </div>
 
-      <!-- LOGIN ADMIN via Firebase Auth -->
-      <div id="config-admin-deslogado" class="admin-login-area">
-        <div class="admin-login-titulo">🔐 Acesso Admin</div>
-        <div class="admin-login-sub">Entre com seu e-mail e senha de administrador</div>
-        <div class="form-group">
-          <label>E-mail</label>
-          <input type="email" id="cfg-email" placeholder="admin@exemplo.com" autocomplete="off"
-            onkeydown="if(event.key==='Enter')document.getElementById('cfg-senha').focus()">
+      <!-- ACESSO ADMIN -->
+      <div class="accordion-item" id="acc-admin">
+        <div class="accordion-header" onclick="toggleAccordion('acc-admin')">
+          <div class="accordion-header-left">
+            <div class="accordion-icon">🔐</div>
+            <div>
+              <div class="accordion-title">Acesso Admin</div>
+              <div class="accordion-desc" id="acc-admin-desc">Entre com e-mail e senha de administrador</div>
+            </div>
+          </div>
+          <div class="accordion-chevron">▼</div>
         </div>
-        <div class="form-group">
-          <label>Senha</label>
-          <div class="senha-wrap">
-            <input type="password" id="cfg-senha" placeholder="••••••"
-              onkeydown="if(event.key==='Enter')fazerLoginConfig()">
-            <button class="btn-olho" onclick="toggleOlho('cfg-senha','olho-cfg')" id="olho-cfg">👁️</button>
+        <div class="accordion-divider"></div>
+        <div class="accordion-body">
+
+          <!-- deslogado -->
+          <div id="config-admin-deslogado" style="margin-top:4px;">
+            <div class="form-group">
+              <label>E-mail</label>
+              <input type="email" id="cfg-email" placeholder="admin@exemplo.com" autocomplete="off"
+                onkeydown="if(event.key==='Enter')document.getElementById('cfg-senha').focus()">
+            </div>
+            <div class="form-group">
+              <label>Senha</label>
+              <div class="senha-wrap">
+                <input type="password" id="cfg-senha" placeholder="••••••"
+                  onkeydown="if(event.key==='Enter')fazerLoginConfig()">
+                <button class="btn-olho" onclick="toggleOlho('cfg-senha','olho-cfg')" id="olho-cfg">👁️</button>
+              </div>
+            </div>
+            <div class="erro-msg" id="cfg-login-erro"></div>
+            <div class="login-loading" id="cfg-login-loading">
+              <div class="spinner" style="width:18px;height:18px;border-width:2px;display:inline-block"></div> Verificando...
+            </div>
+            <button class="btn-salvar" style="margin-top:4px;" onclick="fazerLoginConfig()">Entrar</button>
+          </div>
+
+          <!-- logado -->
+          <div id="config-admin-logado" style="display:none;margin-top:4px;">
+            <div class="admin-logado-badge">🔴 Admin: <span id="cfg-admin-nome">—</span></div>
+            <button class="btn-salvar btn-vermelho" style="font-size:12px;padding:10px;" onclick="sairAdminConfig()">Sair do modo admin</button>
           </div>
         </div>
-        <div class="erro-msg" id="cfg-login-erro"></div>
-        <div class="login-loading" id="cfg-login-loading">
-          <div class="spinner" style="width:18px;height:18px;border-width:2px;display:inline-block"></div> Verificando...
-        </div>
-        <button class="btn-salvar" style="margin-top:4px;" onclick="fazerLoginConfig()">Entrar</button>
       </div>
 
-      <div id="config-admin-logado" style="display:none;">
-        <div class="admin-logado-area">
-          <div class="admin-logado-badge">🔴 Admin: <span id="cfg-admin-nome">—</span></div>
-          <button class="btn-salvar btn-vermelho" style="font-size:12px;padding:10px;" onclick="sairAdminConfig()">Sair do modo admin</button>
+      <!-- INSTITUIÇÃO (só admin) -->
+      <div class="accordion-item" id="acc-inst" style="display:none">
+        <div class="accordion-header" onclick="toggleAccordion('acc-inst')">
+          <div class="accordion-header-left">
+            <div class="accordion-icon">🏫</div>
+            <div>
+              <div class="accordion-title">Instituição</div>
+              <div class="accordion-desc">Nome exibido no cabeçalho do app</div>
+            </div>
+          </div>
+          <div class="accordion-chevron">▼</div>
         </div>
-
-        <!-- INSTITUIÇÃO -->
-        <div class="painel-secao">
-          <div class="painel-secao-titulo">🏫 Instituição</div>
-          <div class="form-group"><label>Nome exibido no cabeçalho</label><input type="text" id="p-nome-inst" placeholder="Nome da escola"></div>
+        <div class="accordion-divider"></div>
+        <div class="accordion-body">
+          <div class="form-group" style="margin-top:4px;"><label>Nome da escola</label><input type="text" id="p-nome-inst" placeholder="Nome da escola"></div>
           <div class="erro-msg" id="erro-inst"></div><div class="sucesso-msg" id="sucesso-inst"></div>
           <button class="btn-salvar btn-vermelho" onclick="alterarInstituicao()" style="font-size:12px;padding:10px">Salvar Nome</button>
         </div>
+      </div>
 
-        <!-- ÍCONE -->
-        <div class="painel-secao">
-          <div class="painel-secao-titulo">😀 Ícone do App</div>
-          <div id="emoji-grid-painel" class="emoji-grid"></div>
+      <!-- ÍCONE (só admin) -->
+      <div class="accordion-item" id="acc-icone" style="display:none">
+        <div class="accordion-header" onclick="toggleAccordion('acc-icone')">
+          <div class="accordion-header-left">
+            <div class="accordion-icon">😀</div>
+            <div>
+              <div class="accordion-title">Ícone do App</div>
+              <div class="accordion-desc">Emoji exibido no cabeçalho</div>
+            </div>
+          </div>
+          <div class="accordion-chevron">▼</div>
+        </div>
+        <div class="accordion-divider"></div>
+        <div class="accordion-body">
+          <div id="emoji-grid-painel" class="emoji-grid" style="margin-top:4px;"></div>
           <div class="sucesso-msg" id="sucesso-icone" style="margin-top:8px"></div>
         </div>
+      </div>
 
-        <!-- ALTERAR SENHA via Firebase Auth -->
-        <div class="painel-secao">
-          <div class="painel-secao-titulo">🔑 Alterar Senha</div>
-          <div class="form-group">
+      <!-- SENHA (só admin) -->
+      <div class="accordion-item" id="acc-senha" style="display:none">
+        <div class="accordion-header" onclick="toggleAccordion('acc-senha')">
+          <div class="accordion-header-left">
+            <div class="accordion-icon">🔑</div>
+            <div>
+              <div class="accordion-title">Alterar Senha</div>
+              <div class="accordion-desc">Redefina a senha de administrador</div>
+            </div>
+          </div>
+          <div class="accordion-chevron">▼</div>
+        </div>
+        <div class="accordion-divider"></div>
+        <div class="accordion-body">
+          <div class="form-group" style="margin-top:4px;">
             <label>Nova Senha</label>
             <div class="senha-wrap">
               <input type="password" id="p-senha-nova" placeholder="Mínimo 6 caracteres">
@@ -642,10 +786,10 @@ html[data-tema="black"] .toast { background:#222; }
           <div class="sucesso-msg" id="painel-sucesso"></div>
           <button class="btn-salvar btn-vermelho" onclick="alterarSenha()" style="font-size:12px;padding:10px">Salvar Senha</button>
         </div>
+      </div>
 
-      </div><!-- /config-admin-logado -->
     </div>
-  </div>
+  </div><!-- /view-config -->
 
 </div><!-- /main-scroll -->
 
@@ -690,6 +834,38 @@ html[data-tema="black"] .toast { background:#222; }
   </div>
 </div>
 
+<!-- MODAL ADICIONAR EVENTO -->
+<div class="modal-bg" id="modal-evento">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3>➕ Novo Evento</h3>
+    <p id="modal-evento-dia-label">—</p>
+    <div class="form-group">
+      <label>Título do Evento *</label>
+      <input type="text" id="ev-titulo" placeholder="Ex: Reunião de pais, Conselho...">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Horário início</label>
+        <input type="time" id="ev-hora-inicio" value="08:00">
+      </div>
+      <div class="form-group">
+        <label>Horário fim</label>
+        <input type="time" id="ev-hora-fim" value="09:00">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Observação</label>
+      <input type="text" id="ev-obs" placeholder="Opcional">
+    </div>
+    <div class="erro-msg" id="ev-erro"></div>
+    <div class="modal-btns">
+      <button class="btn-cancelar" onclick="fecharModalEvento()">Cancelar</button>
+      <button class="btn-confirmar-azul" onclick="salvarEvento()">Salvar</button>
+    </div>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
 import { getDatabase, ref, push, update, remove, onValue, get, set }
@@ -712,29 +888,28 @@ const firebaseConfig = {
   appId: "1:8069027724:web:7f3caf124fcae48900a8a9"
 };
 
-const app   = initializeApp(firebaseConfig);
-const db    = getDatabase(app);
-const auth  = getAuth(app);
-const ocRef = ref(db, 'ocorrencias');
+const app    = initializeApp(firebaseConfig);
+const db     = getDatabase(app);
+const auth   = getAuth(app);
+const ocRef  = ref(db, 'ocorrencias');
+const evRef  = ref(db, 'eventos_calendario');
 
-// ─── Estado global do admin ───────────────────────────────────────────────────
+// ─── Estado global ────────────────────────────────────────────────────────────
 window._adminAtivo   = false;
-window._adminUsuario = '';  // email do usuário logado
+window._adminUsuario = '';
+window._eventos      = [];   // eventos do calendário
 
-// ─── Observa mudanças de autenticação ────────────────────────────────────────
-// Se o usuário já estava logado (sessão persistida pelo Firebase), restaura o estado.
+// ─── Auth state ───────────────────────────────────────────────────────────────
 onAuthStateChanged(auth, function(user) {
   if (user) {
     window._adminAtivo   = true;
     window._adminUsuario = user.email;
-    renderLista();
-    atualizarUiAdminConfig();
   } else {
     window._adminAtivo   = false;
     window._adminUsuario = '';
-    renderLista();
-    atualizarUiAdminConfig();
   }
+  renderLista();
+  atualizarUiAdminConfig();
 });
 
 // ─── Nome da instituição ──────────────────────────────────────────────────────
@@ -753,6 +928,36 @@ onValue(ref(db, 'admin_config/icone_logo'), function(snap) {
     el.classList.toggle('selecionado', el.dataset.emoji === icone);
   });
 });
+
+// ─── Eventos do calendário ────────────────────────────────────────────────────
+onValue(evRef, function(snapshot) {
+  var lista = [];
+  snapshot.forEach(function(child) { lista.push(Object.assign({ firebaseKey: child.key }, child.val())); });
+  window._eventos = lista;
+  renderCalendario();
+  if (window._diaSel) renderOcsDia(window._diaSel);
+});
+
+// ─── Ocorrências ──────────────────────────────────────────────────────────────
+onValue(ocRef, function(snapshot) {
+  var lista = [];
+  snapshot.forEach(function(child) { lista.push(Object.assign({ firebaseKey: child.key }, child.val())); });
+  lista.reverse();
+  window._ocs = lista;
+  renderLista(); renderCalendario(); renderChart();
+});
+
+// ═══════════════════════════════════
+//  ACCORDION
+// ═══════════════════════════════════
+window.toggleAccordion = function(id) {
+  var el = document.getElementById(id);
+  var isOpen = el.classList.contains('open');
+  // fecha todos
+  document.querySelectorAll('.accordion-item.open').forEach(function(a) { a.classList.remove('open'); });
+  // abre o clicado (se estava fechado)
+  if (!isOpen) el.classList.add('open');
+};
 
 // ═══════════════════════════════════
 //  TEMA
@@ -855,14 +1060,6 @@ onValue(ref(db, '.info/connected'), function(snap) {
   if (_online) tentarSyncFila();
 });
 
-onValue(ocRef, function(snapshot) {
-  var lista = [];
-  snapshot.forEach(function(child) { lista.push(Object.assign({ firebaseKey: child.key }, child.val())); });
-  lista.reverse();
-  window._ocs = lista;
-  renderLista(); renderCalendario(); renderChart();
-});
-
 // ═══════════════════════════════════
 //  ABAS
 // ═══════════════════════════════════
@@ -893,72 +1090,75 @@ function mostrarViewSemTabs(id) {
 }
 
 // ═══════════════════════════════════
-//  LOGIN ADMIN — Firebase Auth
+//  LOGIN ADMIN
 // ═══════════════════════════════════
 function atualizarUiAdminConfig() {
   var logado = window._adminAtivo || false;
+
+  // alterna deslogado/logado dentro do accordion
   document.getElementById('config-admin-deslogado').style.display = logado ? 'none' : 'block';
   document.getElementById('config-admin-logado').style.display    = logado ? 'block' : 'none';
+
+  // descrição dinâmica
+  document.getElementById('acc-admin-desc').textContent = logado
+    ? ('Admin: ' + (window._adminUsuario || '—'))
+    : 'Entre com e-mail e senha de administrador';
+
+  // seções exclusivas de admin
+  ['acc-inst','acc-icone','acc-senha'].forEach(function(id) {
+    document.getElementById(id).style.display = logado ? '' : 'none';
+  });
+
   if (logado) {
     document.getElementById('cfg-admin-nome').textContent = window._adminUsuario || '—';
     popularEmojiGrid('emoji-grid-painel');
     var nomeAtual = document.getElementById('header-nome-inst').textContent;
     document.getElementById('p-nome-inst').value = nomeAtual === 'Minha Instituição' ? '' : nomeAtual;
   }
+
   document.getElementById('admin-banner').classList.toggle('show', logado);
   if (logado) document.getElementById('admin-user-badge').textContent = window._adminUsuario || '—';
 }
 
-// Login via Firebase Authentication (email + senha)
 window.fazerLoginConfig = async function() {
   var email  = document.getElementById('cfg-email').value.trim();
   var senha  = document.getElementById('cfg-senha').value;
   var erroEl = document.getElementById('cfg-login-erro');
   var loadEl = document.getElementById('cfg-login-loading');
 
-  if (!email || !senha) {
-    erroEl.textContent = '❌ Preencha e-mail e senha.';
-    erroEl.classList.add('show');
-    return;
-  }
+  if (!email || !senha) { erroEl.textContent = '❌ Preencha e-mail e senha.'; erroEl.classList.add('show'); return; }
   erroEl.classList.remove('show');
   loadEl.classList.add('show');
 
   try {
     const cred = await signInWithEmailAndPassword(auth, email, senha);
-    // onAuthStateChanged cuida de atualizar window._adminAtivo e a UI
     document.getElementById('cfg-email').value = '';
     document.getElementById('cfg-senha').value = '';
     document.getElementById('logo-btn').title  = 'Clique para alterar ícone';
     mostrarToast('✓ Bem-vindo, ' + cred.user.email + '!');
   } catch(e) {
     var msg = '❌ E-mail ou senha incorretos.';
-    // Mensagens mais amigáveis para erros comuns
     if (e.code === 'auth/user-not-found')    msg = '❌ Usuário não encontrado.';
     if (e.code === 'auth/wrong-password')    msg = '❌ Senha incorreta.';
     if (e.code === 'auth/invalid-email')     msg = '❌ E-mail inválido.';
-    if (e.code === 'auth/too-many-requests') msg = '❌ Muitas tentativas. Tente mais tarde.';
+    if (e.code === 'auth/too-many-requests') msg = '❌ Muitas tentativas.';
     if (e.code === 'auth/network-request-failed') msg = '❌ Sem conexão.';
-    erroEl.textContent = msg;
-    erroEl.classList.add('show');
+    erroEl.textContent = msg; erroEl.classList.add('show');
     document.getElementById('cfg-senha').value = '';
   }
   loadEl.classList.remove('show');
 };
 
-// Logout via Firebase Authentication
 window.sairAdminConfig = async function() {
   try {
     await signOut(auth);
-    // onAuthStateChanged cuida do restante
     document.getElementById('logo-btn').title = 'Ícone da escola';
     mostrarToast('Modo admin desativado');
-  } catch(e) {
-    mostrarToast('Erro ao sair: ' + e.message);
-  }
+    // fecha accordion admin depois de sair
+    document.getElementById('acc-admin').classList.remove('open');
+  } catch(e) { mostrarToast('Erro ao sair: ' + e.message); }
 };
 
-// ─── Alterar Senha via Firebase Auth ─────────────────────────────────────────
 window.alterarSenha = async function() {
   var nova  = document.getElementById('p-senha-nova').value;
   var conf  = document.getElementById('p-senha-conf').value;
@@ -981,10 +1181,7 @@ window.alterarSenha = async function() {
     mostrarToast('✓ Senha atualizada!');
   } catch(e) {
     var msg = '❌ ' + e.message;
-    // Se o token expirou, o Firebase exige re-autenticação
-    if (e.code === 'auth/requires-recent-login') {
-      msg = '❌ Sessão expirada. Saia e entre novamente para alterar a senha.';
-    }
+    if (e.code === 'auth/requires-recent-login') msg = '❌ Sessão expirada. Saia e entre novamente.';
     erroEl.textContent = msg; erroEl.classList.add('show');
   }
 };
@@ -1187,21 +1384,19 @@ window.irParaLista = function() {
 window.irParaNovo = function() {
   _abaAtiva = 'lista';
   mostrarView('view-novo');
-  // Preenche automaticamente o nome do professor salvo
   var nomeSalvo = localStorage.getItem('ceti_nome_prof') || '';
   var campo = document.getElementById('f-professor');
   if (campo && nomeSalvo) campo.value = nomeSalvo;
 };
 
-// ─── Salvar / carregar nome do professor ──────────────────────────────────────
 window.salvarNomeProf = function() {
   var nome = (document.getElementById('cfg-nome-prof').value || '').trim();
   var sucEl = document.getElementById('sucesso-nome-prof');
-  if (!nome) { mostrarToast('\u26a0\ufe0f Informe seu nome'); return; }
+  if (!nome) { mostrarToast('⚠️ Informe seu nome'); return; }
   localStorage.setItem('ceti_nome_prof', nome);
-  sucEl.textContent = '\u2705 Nome salvo!'; sucEl.classList.add('show');
+  sucEl.textContent = '✅ Nome salvo!'; sucEl.classList.add('show');
   setTimeout(function() { sucEl.classList.remove('show'); }, 2500);
-  mostrarToast('\u2713 Nome salvo neste dispositivo!');
+  mostrarToast('✓ Nome salvo neste dispositivo!');
 };
 
 function carregarNomeProfConfig() {
@@ -1237,7 +1432,7 @@ function mostrarToast(msg) {
 // ═══════════════════════════════════
 var _calAno  = new Date().getFullYear();
 var _calMes  = new Date().getMonth();
-var _diaSel  = null;
+window._diaSel  = null;
 var MESES_BR = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 
 function parseDateBR(dateStr) {
@@ -1250,42 +1445,77 @@ function renderCalendario() {
   document.getElementById('cal-mes-ano').textContent = MESES_BR[_calMes] + ' ' + _calAno;
   var primeiroDia = new Date(_calAno, _calMes, 1).getDay();
   var diasNoMes   = new Date(_calAno, _calMes+1, 0).getDate();
-  var hoje = new Date(); var ocs = window._ocs || [];
+  var hoje = new Date(); var ocs = window._ocs || []; var eventos = window._eventos || [];
   var ocPorData = {};
   ocs.forEach(function(o) { if (!o.data) return; if (!ocPorData[o.data]) ocPorData[o.data] = []; ocPorData[o.data].push(o); });
+  var evPorData = {};
+  eventos.forEach(function(ev) { if (!ev.data) return; if (!evPorData[ev.data]) evPorData[ev.data] = []; evPorData[ev.data].push(ev); });
+
   var cells = '';
   for (var i = 0; i < primeiroDia; i++) cells += '<div class="cal-dia vazio"></div>';
   for (var d = 1; d <= diasNoMes; d++) {
     var dataStr = String(d).padStart(2,'0') + '/' + String(_calMes+1).padStart(2,'0') + '/' + _calAno;
     var eHoje = hoje.getDate()===d && hoje.getMonth()===_calMes && hoje.getFullYear()===_calAno;
-    var eSel  = _diaSel === dataStr;
+    var eSel  = window._diaSel === dataStr;
     var temOc = ocPorData[dataStr] && ocPorData[dataStr].length > 0;
+    var temEv = evPorData[dataStr] && evPorData[dataStr].length > 0;
     var todosResolvidos = temOc && ocPorData[dataStr].every(function(o) { return o.status === 'Resolvido'; });
-    var cls = 'cal-dia' + (eHoje?' hoje':'') + (eSel?' selecionado':'') + (temOc?' tem-oc':'') + (todosResolvidos?' resolvido-dia':'');
-    cells += '<div class="' + cls + '" onclick="selecionarDia(\'' + dataStr + '\')">' + d + (temOc ? '<div class="cal-bolinha"></div>' : '') + '</div>';
+    var cls = 'cal-dia' + (eHoje?' hoje':'') + (eSel?' selecionado':'') + (temOc?' tem-oc':'') + (todosResolvidos?' resolvido-dia':'') + (temEv?' tem-evento':'');
+    cells += '<div class="' + cls + '" onclick="selecionarDia(\'' + dataStr + '\')">' + d +
+      (temOc ? '<div class="cal-bolinha"></div>' : '') +
+      (temEv ? '<div class="cal-bolinha-evento"></div>' : '') +
+      '</div>';
   }
   document.getElementById('cal-grid').innerHTML = cells;
-  if (_diaSel) renderOcsDia(_diaSel);
+  if (window._diaSel) renderOcsDia(window._diaSel);
 }
 
-window.selecionarDia = function(dataStr) { _diaSel = dataStr; renderCalendario(); renderOcsDia(dataStr); };
+window.selecionarDia = function(dataStr) {
+  window._diaSel = dataStr;
+  renderCalendario();
+  renderOcsDia(dataStr);
+  // mostra botão de adicionar evento ao selecionar um dia
+  document.getElementById('btn-add-evento').style.display = '';
+};
 
 function renderOcsDia(dataStr) {
   var ocs = (window._ocs||[]).filter(function(o) { return o.data === dataStr; });
+  var eventos = (window._eventos||[]).filter(function(ev) { return ev.data === dataStr; });
   var parts = dataStr.split('/');
   var label = parts[0] + ' de ' + MESES_BR[parseInt(parts[1])-1];
-  document.getElementById('cal-dia-titulo').textContent = label + ' (' + ocs.length + ')';
+  var total = ocs.length + eventos.length;
+  document.getElementById('cal-dia-titulo').textContent = label + ' (' + total + ')';
   document.getElementById('btn-dl-rel').style.display = ocs.length > 0 ? '' : 'none';
+
   var lista = document.getElementById('cal-ocs-lista');
-  if (!ocs.length) { lista.innerHTML = '<div class="empty" style="padding:10px 0;font-size:12px;">Nenhuma ocorrência</div>'; return; }
+  if (!total) { lista.innerHTML = '<div class="empty" style="padding:10px 0;font-size:12px;">Nenhum item neste dia</div>'; return; }
+
   var ICON = {"Agressão verbal":"💬","Agressão física":"👊","Uso de celular":"📱","Desrespeito ao professor":"🚫","Bagunça em sala":"🔊","Bullying":"😤","Vandalismo":"🔨","Outros":"📋"};
-  lista.innerHTML = ocs.map(function(o) {
+
+  // Eventos primeiro
+  var htmlEventos = eventos.map(function(ev) {
+    return '<div class="cal-evento-item">' +
+      '<div class="cal-evento-item-left">' +
+        '<div class="cal-evento-dot"></div>' +
+        '<div>' +
+          '<div class="cal-evento-nome"><span class="evento-tag">EVENTO</span>' + ev.titulo + '</div>' +
+          '<div class="cal-evento-hora">' + (ev.horaInicio || '') + (ev.horaFim ? ' → ' + ev.horaFim : '') + (ev.obs ? ' · ' + ev.obs : '') + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<button class="btn-del-evento" onclick="excluirEvento(\'' + ev.firebaseKey + '\')" title="Excluir evento">✕</button>' +
+    '</div>';
+  }).join('');
+
+  // Ocorrências
+  var htmlOcs = ocs.map(function(o) {
     var cls = o.status==='Pendente'?'s-pendente':o.status==='Resolvido'?'s-resolvido':'s-acomp';
     return '<div class="cal-oc-item ' + cls + '" onclick="irDetalheAnalytics(\'' + o.firebaseKey + '\')">' +
       '<div class="cal-oc-item-nome">' + o.aluno + (o.turma?' · '+o.turma:'') + '</div>' +
       '<div class="cal-oc-item-info">' + (ICON[o.tipo]||'📋') + ' ' + o.tipo + ' · ' + o.hora + '</div>' +
     '</div>';
   }).join('');
+
+  lista.innerHTML = htmlEventos + htmlOcs;
 }
 
 window.irDetalheAnalytics = function(key) {
@@ -1301,27 +1531,77 @@ window.navCal = function(dir) {
   _calMes += dir;
   if (_calMes < 0)  { _calMes = 11; _calAno--; }
   if (_calMes > 11) { _calMes = 0;  _calAno++; }
-  _diaSel = null;
+  window._diaSel = null;
   document.getElementById('cal-dia-titulo').textContent = 'Selecione um dia';
   document.getElementById('cal-ocs-lista').innerHTML = '<div class="empty" style="padding:10px 0;font-size:12px;">Toque em um dia</div>';
   document.getElementById('btn-dl-rel').style.display = 'none';
+  document.getElementById('btn-add-evento').style.display = 'none';
   renderCalendario();
 };
 
 window.baixarRelatorio = function() {
-  if (!_diaSel) return;
-  var ocs = (window._ocs||[]).filter(function(o) { return o.data === _diaSel; });
+  if (!window._diaSel) return;
+  var ocs = (window._ocs||[]).filter(function(o) { return o.data === window._diaSel; });
   if (!ocs.length) { mostrarToast('Nenhuma ocorrência neste dia'); return; }
   var nomeInst = document.getElementById('header-nome-inst').textContent;
-  var linhas = [nomeInst, 'Relatório — ' + _diaSel, 'Gerado: ' + new Date().toLocaleString('pt-BR'), 'Total: ' + ocs.length, '', '─'.repeat(50)];
+  var linhas = [nomeInst, 'Relatório — ' + window._diaSel, 'Gerado: ' + new Date().toLocaleString('pt-BR'), 'Total: ' + ocs.length, '', '─'.repeat(50)];
   ocs.forEach(function(o, i) {
     linhas.push('', '#' + (i+1) + ' — ' + o.aluno + (o.turma?' ('+o.turma+')':''));
     linhas.push('Tipo: '+o.tipo, 'Professor: '+o.professor, 'Hora: '+o.hora, 'Status: '+o.status, '', 'Descrição:', o.descricao, '─'.repeat(50));
   });
   var blob = new Blob([linhas.join('\n')], { type:'text/plain;charset=utf-8' });
   var url = URL.createObjectURL(blob); var a = document.createElement('a');
-  a.href = url; a.download = 'relatorio_' + _diaSel.replace(/\//g,'-') + '.txt'; a.click();
+  a.href = url; a.download = 'relatorio_' + window._diaSel.replace(/\//g,'-') + '.txt'; a.click();
   URL.revokeObjectURL(url); mostrarToast('✓ Relatório baixado!');
+};
+
+// ═══════════════════════════════════
+//  EVENTOS DO CALENDÁRIO
+// ═══════════════════════════════════
+window.abrirModalEvento = function() {
+  if (!window._diaSel) return;
+  var parts = window._diaSel.split('/');
+  var label = parts[0] + ' de ' + MESES_BR[parseInt(parts[1])-1] + ' de ' + parts[2];
+  document.getElementById('modal-evento-dia-label').textContent = '📅 ' + label;
+  document.getElementById('ev-titulo').value = '';
+  document.getElementById('ev-hora-inicio').value = '08:00';
+  document.getElementById('ev-hora-fim').value = '09:00';
+  document.getElementById('ev-obs').value = '';
+  document.getElementById('ev-erro').classList.remove('show');
+  document.getElementById('modal-evento').classList.add('show');
+};
+
+window.fecharModalEvento = function() {
+  document.getElementById('modal-evento').classList.remove('show');
+};
+
+window.salvarEvento = async function() {
+  var titulo = document.getElementById('ev-titulo').value.trim();
+  var horaInicio = document.getElementById('ev-hora-inicio').value;
+  var horaFim    = document.getElementById('ev-hora-fim').value;
+  var obs        = document.getElementById('ev-obs').value.trim();
+  var erroEl     = document.getElementById('ev-erro');
+  erroEl.classList.remove('show');
+
+  if (!titulo) { erroEl.textContent = '❌ Informe o título do evento.'; erroEl.classList.add('show'); return; }
+  if (!window._diaSel) return;
+
+  var dados = { titulo, data: window._diaSel, horaInicio, horaFim, obs, timestamp: Date.now() };
+  try {
+    await push(evRef, dados);
+    fecharModalEvento();
+    mostrarToast('✓ Evento adicionado!');
+  } catch(e) {
+    erroEl.textContent = '❌ Erro ao salvar: ' + e.message;
+    erroEl.classList.add('show');
+  }
+};
+
+window.excluirEvento = async function(key) {
+  try {
+    await remove(ref(db, 'eventos_calendario/' + key));
+    mostrarToast('🗑️ Evento removido!');
+  } catch(e) { mostrarToast('Erro: ' + e.message); }
 };
 
 // ═══════════════════════════════════

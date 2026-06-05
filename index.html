@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -70,52 +69,22 @@ html[data-tema="escuro"] .btn-nova,html[data-tema="black"] .btn-nova{background:
 .stat-label{font-size:9px;color:var(--sub);font-weight:500;margin-top:2px;text-transform:uppercase;letter-spacing:.5px;}
 .stat-card.c-amarelo .stat-num{color:#D97706;}.stat-card.c-azul .stat-num{color:var(--azul2);}
 .stat-card.c-verde .stat-num{color:#16A34A;}.stat-card.c-cinza .stat-num{color:var(--sub);}
-
-/* ═══ PATCH 1: BARRA DE FILTRO DE STATUS ═══ */
-.filtro-status-bar {
-  display: flex;
-  gap: 6px;
-  padding: 0 16px 10px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-.filtro-status-bar::-webkit-scrollbar { display: none; }
-.filtro-btn {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 6px 12px;
-  border-radius: 20px;
-  border: 1.5px solid var(--borda);
-  background: var(--bg-card);
-  color: var(--sub);
-  font-size: 11px;
-  font-weight: 600;
-  font-family: 'DM Sans', sans-serif;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all .18s;
-  flex-shrink: 0;
-}
-.filtro-btn:active { opacity: .7; }
-.filtro-btn.ativo {
-  border-color: transparent;
-  color: #fff;
-}
-.filtro-btn.ativo.f-todos   { background: var(--azul2); }
-.filtro-btn.ativo.f-pendente{ background: #D97706; }
-.filtro-btn.ativo.f-acomp   { background: #2563EB; }
-.filtro-btn.ativo.f-resolvido{ background: #16A34A; }
-.filtro-dot {
-  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
-}
-.filtro-btn:not(.ativo) .filtro-dot-todos    { background: var(--azul2); }
-.filtro-btn:not(.ativo) .filtro-dot-pendente { background: #D97706; }
-.filtro-btn:not(.ativo) .filtro-dot-acomp    { background: #2563EB; }
-.filtro-btn:not(.ativo) .filtro-dot-resolvido{ background: #16A34A; }
-.filtro-btn.ativo .filtro-dot { background: rgba(255,255,255,0.85); }
-
+/* FILTRO STATUS */
+.filtro-status-bar{display:flex;gap:6px;padding:0 16px 10px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.filtro-status-bar::-webkit-scrollbar{display:none;}
+.filtro-btn{display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:20px;border:1.5px solid var(--borda);background:var(--bg-card);color:var(--sub);font-size:11px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;transition:all .18s;flex-shrink:0;}
+.filtro-btn:active{opacity:.7;}
+.filtro-btn.ativo{border-color:transparent;color:#fff;}
+.filtro-btn.ativo.f-todos{background:var(--azul2);}
+.filtro-btn.ativo.f-pendente{background:#D97706;}
+.filtro-btn.ativo.f-acomp{background:#2563EB;}
+.filtro-btn.ativo.f-resolvido{background:#16A34A;}
+.filtro-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.filtro-btn:not(.ativo) .filtro-dot-todos{background:var(--azul2);}
+.filtro-btn:not(.ativo) .filtro-dot-pendente{background:#D97706;}
+.filtro-btn:not(.ativo) .filtro-dot-acomp{background:#2563EB;}
+.filtro-btn:not(.ativo) .filtro-dot-resolvido{background:#16A34A;}
+.filtro-btn.ativo .filtro-dot{background:rgba(255,255,255,0.85);}
 /* BUSCA */
 .busca-wrap{padding:0 16px 10px;}
 .busca-input{width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--borda);font-size:13px;font-family:'DM Sans',sans-serif;background:var(--bg-card);outline:none;color:var(--texto);transition:border .2s;}
@@ -195,7 +164,7 @@ html[data-tema="escuro"] .btn-vermelho,html[data-tema="black"] .btn-vermelho{bac
 .accordion-chevron{font-size:12px;color:var(--sub);transition:transform .25s ease;flex-shrink:0;width:20px;height:20px;display:flex;align-items:center;justify-content:center;background:var(--cinza);border:1px solid var(--borda);border-radius:6px;}
 .accordion-item.open .accordion-chevron{transform:rotate(180deg);background:var(--azulc);border-color:var(--azul2);color:var(--azul2);}
 .accordion-body{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease;padding:0 16px;}
-.accordion-item.open .accordion-body{max-height:1200px;padding:0 16px 16px;}
+.accordion-item.open .accordion-body{max-height:1400px;padding:0 16px 16px;}
 .accordion-divider{height:1px;background:var(--borda);margin:0 16px 0;}
 .accordion-item.open .accordion-divider{display:block;}.accordion-item:not(.open) .accordion-divider{display:none;}
 /* TEMA */
@@ -307,116 +276,41 @@ html[data-tema="black"] .toast{background:#222;}
 .tab-btn{flex:1;padding:10px 0 8px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;color:var(--sub);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;transition:color .2s;letter-spacing:.3px;text-transform:uppercase;}
 .tab-btn-icon{font-size:18px;line-height:1;transition:transform .2s;}
 .tab-btn.ativo{color:var(--azul2);}.tab-btn.ativo .tab-btn-icon{transform:translateY(-1px);}
-
-/* ═══ PATCH 2: CAPITALIZE NOS CAMPOS DE NOME ═══ */
-#f-aluno, #f-professor, #e-aluno, #e-professor {
-  text-transform: capitalize;
-}
-
-/* ═══ PATCH 3: SELETOR TURMA→ALUNO NO FORM NOVA OC ═══ */
-.aluno-modo-btns {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 10px;
-}
-.aluno-modo-btn {
-  flex: 1;
-  padding: 7px 10px;
-  border-radius: 8px;
-  border: 1.5px solid var(--borda);
-  background: var(--cinza);
-  color: var(--sub);
-  font-size: 11px;
-  font-weight: 600;
-  font-family: 'DM Sans', sans-serif;
-  cursor: pointer;
-  transition: all .15s;
-  text-align: center;
-}
-.aluno-modo-btn.ativo {
-  border-color: var(--azul2);
-  background: var(--azulc);
-  color: var(--azul2);
-}
-
-/* ═══ PATCH 4: LISTA DE ALUNOS NA CONFIG ═══ */
-.alunos-lista-config {
-  margin-top: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  max-height: 280px;
-  overflow-y: auto;
-}
-.aluno-config-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--cinza);
-  border: 1px solid var(--borda);
-  border-radius: 8px;
-  padding: 9px 12px;
-}
-.aluno-config-nome {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--texto);
-}
-.aluno-config-sub {
-  font-size: 10px;
-  color: var(--sub);
-  margin-top: 1px;
-}
-.btn-del-aluno {
-  background: none;
-  border: none;
-  color: var(--sub);
-  cursor: pointer;
-  font-size: 15px;
-  padding: 2px 6px;
-  border-radius: 5px;
-  flex-shrink: 0;
-}
-.btn-del-aluno:hover { background: #FEE2E2; color: var(--vermelho); }
-.alunos-vazio {
-  font-size: 12px;
-  color: var(--sub);
-  text-align: center;
-  padding: 12px 0;
-}
-
+/* CAPITALIZE CAMPOS NOME */
+#f-aluno,#f-professor,#e-aluno,#e-professor{text-transform:capitalize;}
+/* SELETOR TURMA→ALUNO */
+.aluno-modo-btns{display:flex;gap:6px;margin-bottom:10px;}
+.aluno-modo-btn{flex:1;padding:7px 10px;border-radius:8px;border:1.5px solid var(--borda);background:var(--cinza);color:var(--sub);font-size:11px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;text-align:center;}
+.aluno-modo-btn.ativo{border-color:var(--azul2);background:var(--azulc);color:var(--azul2);}
+/* LISTA ALUNOS CONFIG */
+.alunos-lista-config{margin-top:12px;display:flex;flex-direction:column;gap:6px;max-height:320px;overflow-y:auto;}
+.aluno-config-item{background:var(--cinza);border:1px solid var(--borda);border-radius:8px;padding:9px 12px;}
+.aluno-config-main{display:flex;align-items:center;justify-content:space-between;}
+.aluno-config-nome{font-size:13px;font-weight:600;color:var(--texto);}
+.aluno-config-sub{font-size:10px;color:var(--sub);margin-top:1px;}
+.aluno-config-acoes{display:flex;gap:4px;flex-shrink:0;}
+.btn-editar-aluno{background:var(--azulc);border:1px solid var(--azul2);color:var(--azul2);cursor:pointer;font-size:11px;font-weight:600;padding:3px 8px;border-radius:5px;font-family:'DM Sans',sans-serif;}
+.btn-editar-aluno:hover{background:var(--azul2);color:#fff;}
+.btn-del-aluno{background:none;border:none;color:var(--sub);cursor:pointer;font-size:15px;padding:2px 6px;border-radius:5px;flex-shrink:0;}
+.btn-del-aluno:hover{background:#FEE2E2;color:var(--vermelho);}
+.aluno-config-edit-form{display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--borda);}
+.aluno-config-edit-form.aberto{display:block;}
+.aluno-edit-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;}
+.aluno-edit-input{width:100%;padding:7px 10px;border-radius:7px;border:1px solid var(--borda);font-size:12px;font-family:'DM Sans',sans-serif;background:var(--bg-input);outline:none;color:var(--texto);}
+.aluno-edit-input:focus{border-color:var(--azul2);}
+.aluno-edit-btns{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.btn-salvar-aluno-edit{padding:8px;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;background:var(--azul2);color:#fff;}
+.btn-cancelar-aluno-edit{padding:8px;border:1px solid var(--borda);border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;background:var(--cinza);color:var(--sub);}
+.alunos-vazio{font-size:12px;color:var(--sub);text-align:center;padding:12px 0;}
+/* AVISO REGRAS FIREBASE */
+.aviso-regras{background:#FEF3C7;border:1px solid #FCD34D;border-radius:8px;padding:10px 12px;font-size:11px;color:#92400E;font-weight:500;line-height:1.5;margin-bottom:12px;display:none;}
+.aviso-regras.show{display:block;}
 /* BANNER SUPORTE */
-.banner-suporte {
-  margin: 8px 16px 16px;
-  background: var(--bg-card);
-  border: 1px solid var(--borda);
-  border-radius: var(--radius);
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 7px;
-  cursor: pointer;
-  transition: opacity .15s, border-color .15s;
-  text-decoration: none;
-}
-.banner-suporte:active { opacity: .7; }
-.banner-suporte:hover { border-color: #25D366; }
-.banner-suporte-dev {
-  font-size: 11px;
-  color: var(--sub);
-  font-weight: 500;
-  text-align: center;
-  line-height: 1.4;
-}
-.banner-suporte-wa {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 700;
-  color: #25D366;
-}
+.banner-suporte{margin:8px 16px 16px;background:var(--bg-card);border:1px solid var(--borda);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;transition:opacity .15s,border-color .15s;text-decoration:none;}
+.banner-suporte:active{opacity:.7;}
+.banner-suporte:hover{border-color:#25D366;}
+.banner-suporte-dev{font-size:11px;color:var(--sub);font-weight:500;text-align:center;line-height:1.4;}
+.banner-suporte-wa{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:#25D366;}
 </style>
 </head>
 <body>
@@ -454,8 +348,6 @@ html[data-tema="black"] .toast{background:#222;}
       <div class="stat-card c-verde"><div class="stat-num" id="cnt-resolvido">0</div><div class="stat-label">Resolv.</div></div>
       <div class="stat-card c-cinza"><div class="stat-num" id="cnt-total">0</div><div class="stat-label">Total</div></div>
     </div>
-
-    <!-- ═══ BARRA DE FILTRO DE STATUS ═══ -->
     <div class="filtro-status-bar" id="filtro-status-bar">
       <button class="filtro-btn f-todos ativo" data-filtro="todos" onclick="setFiltroStatus('todos')">
         <span class="filtro-dot filtro-dot-todos"></span>Todos
@@ -470,7 +362,6 @@ html[data-tema="black"] .toast{background:#222;}
         <span class="filtro-dot filtro-dot-resolvido"></span>Resolvidos
       </button>
     </div>
-
     <div class="busca-wrap"><input class="busca-input" type="text" id="busca" placeholder="Buscar aluno, turma..." oninput="renderLista()"></div>
     <div class="lista" id="lista-container"><div class="loading"><div class="spinner"></div></div></div>
   </div>
@@ -526,15 +417,12 @@ html[data-tema="black"] .toast{background:#222;}
   <div class="view" id="view-novo">
     <div class="form-wrap"><div class="form-card">
       <div class="form-header"><button class="btn-back" onclick="irParaLista()">← Voltar</button><div class="form-title">Nova Ocorrência</div></div>
-
-      <!-- ═══ SELETOR TURMA→ALUNO ═══ -->
       <div class="form-group">
         <label>Aluno *</label>
         <div class="aluno-modo-btns">
           <button class="aluno-modo-btn ativo" id="modo-btn-banco" onclick="setModoAluno('banco')">🗂️ Do banco</button>
           <button class="aluno-modo-btn" id="modo-btn-manual" onclick="setModoAluno('manual')">✏️ Digitar</button>
         </div>
-        <!-- MODO BANCO -->
         <div id="aluno-modo-banco">
           <select id="f-turma-sel" onchange="popularAlunosSel()" style="margin-bottom:6px;">
             <option value="">— Selecione a turma —</option>
@@ -543,14 +431,12 @@ html[data-tema="black"] .toast{background:#222;}
             <option value="">— Selecione o aluno —</option>
           </select>
         </div>
-        <!-- MODO MANUAL -->
         <div id="aluno-modo-manual" style="display:none;">
           <input id="f-aluno" type="text" placeholder="Nome completo do aluno">
         </div>
       </div>
-
       <div class="form-row">
-        <div class="form-group"><label>Turma</label><input id="f-turma" type="text" placeholder="Ex: 3A" id="f-turma-manual"></div>
+        <div class="form-group"><label>Turma</label><input id="f-turma" type="text" placeholder="Ex: 3A"></div>
         <div class="form-group"><label>Tipo *</label>
           <select id="f-tipo"><option>Agressão verbal</option><option>Agressão física</option><option>Uso de celular</option><option>Desrespeito ao professor</option><option>Bagunça em sala</option><option>Bullying</option><option>Vandalismo</option><option>Outros</option></select>
         </div>
@@ -585,6 +471,7 @@ html[data-tema="black"] .toast{background:#222;}
   <!-- CONFIGURAÇÕES -->
   <div class="view" id="view-config">
     <div class="config-wrap">
+      <!-- APARÊNCIA -->
       <div class="accordion-item" id="acc-aparencia">
         <div class="accordion-header" onclick="toggleAccordion('acc-aparencia')">
           <div class="accordion-header-left"><div class="accordion-icon">🎨</div><div><div class="accordion-title">Aparência</div><div class="accordion-desc">Tema do app neste dispositivo</div></div></div>
@@ -599,6 +486,7 @@ html[data-tema="black"] .toast{background:#222;}
           </div>
         </div>
       </div>
+      <!-- MEU NOME -->
       <div class="accordion-item" id="acc-nome">
         <div class="accordion-header" onclick="toggleAccordion('acc-nome')">
           <div class="accordion-header-left"><div class="accordion-icon">👤</div><div><div class="accordion-title">Meu Nome</div><div class="accordion-desc">Preenchido automaticamente ao registrar</div></div></div>
@@ -611,6 +499,7 @@ html[data-tema="black"] .toast{background:#222;}
           <button class="btn-salvar" style="font-size:12px;padding:10px;" onclick="salvarNomeProf()">Salvar Meu Nome</button>
         </div>
       </div>
+      <!-- ACESSO ADMIN -->
       <div class="accordion-item" id="acc-admin">
         <div class="accordion-header" onclick="toggleAccordion('acc-admin')">
           <div class="accordion-header-left"><div class="accordion-icon">🔐</div><div><div class="accordion-title">Acesso Admin</div><div class="accordion-desc" id="acc-admin-desc">Entre com e-mail e senha de administrador</div></div></div>
@@ -632,7 +521,7 @@ html[data-tema="black"] .toast{background:#222;}
         </div>
       </div>
 
-      <!-- ═══ ACCORDION CADASTRO DE ALUNOS (visível para todos) ═══ -->
+      <!-- BANCO DE ALUNOS -->
       <div class="accordion-item" id="acc-alunos">
         <div class="accordion-header" onclick="toggleAccordion('acc-alunos')">
           <div class="accordion-header-left"><div class="accordion-icon">🎒</div><div><div class="accordion-title">Banco de Alunos</div><div class="accordion-desc" id="acc-alunos-desc">Cadastre alunos por série e turma</div></div></div>
@@ -641,6 +530,10 @@ html[data-tema="black"] .toast{background:#222;}
         <div class="accordion-divider"></div>
         <div class="accordion-body">
           <div style="margin-top:4px;">
+            <!-- Aviso quando há erro de permissão -->
+            <div class="aviso-regras" id="aviso-regras-firebase">
+              ⚠️ <strong>Configuração necessária:</strong> Vá ao Firebase Console → Realtime Database → Regras e configure conforme orientado pelo desenvolvedor.
+            </div>
             <div class="form-group"><label>Nome do Aluno *</label><input type="text" id="cfg-aluno-nome" placeholder="Nome completo" style="text-transform:capitalize;" autocomplete="off"></div>
             <div class="form-row">
               <div class="form-group"><label>Série</label><input type="text" id="cfg-aluno-serie" placeholder="Ex: 7º Ano"></div>
@@ -648,7 +541,11 @@ html[data-tema="black"] .toast{background:#222;}
             </div>
             <div class="erro-msg" id="erro-aluno"></div>
             <div class="sucesso-msg" id="sucesso-aluno"></div>
-            <button class="btn-salvar" style="font-size:12px;padding:10px;margin-bottom:4px;" onclick="salvarAluno()">+ Adicionar Aluno</button>
+            <button class="btn-salvar" style="font-size:12px;padding:10px;margin-bottom:12px;" onclick="salvarAluno()">+ Adicionar Aluno</button>
+            <!-- Info sobre edição/exclusão -->
+            <div id="info-admin-alunos" style="display:none;font-size:11px;color:var(--sub);margin-bottom:8px;padding:7px 10px;background:var(--azulc);border-radius:7px;border:1px solid var(--azul2);color:var(--azul2);">
+              🔐 Modo admin: você pode editar e excluir alunos abaixo.
+            </div>
             <div class="alunos-lista-config" id="alunos-lista-config">
               <div class="alunos-vazio">Nenhum aluno cadastrado</div>
             </div>
@@ -656,6 +553,7 @@ html[data-tema="black"] .toast{background:#222;}
         </div>
       </div>
 
+      <!-- ADMIN ONLY -->
       <div class="accordion-item" id="acc-inst" style="display:none">
         <div class="accordion-header" onclick="toggleAccordion('acc-inst')">
           <div class="accordion-header-left"><div class="accordion-icon">🏫</div><div><div class="accordion-title">Instituição</div><div class="accordion-desc">Nome exibido no cabeçalho do app</div></div></div>
@@ -728,7 +626,7 @@ html[data-tema="black"] .toast{background:#222;}
 
 <div class="toast" id="toast"></div>
 
-<!-- MODAL EXCLUIR -->
+<!-- MODAL EXCLUIR OC -->
 <div class="modal-bg" id="modal-excluir">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -797,7 +695,7 @@ html[data-tema="black"] .toast{background:#222;}
   </div>
 </div>
 
-<!-- MODAL CONFIRMAR EXCLUIR ALUNO -->
+<!-- MODAL EXCLUIR ALUNO -->
 <div class="modal-bg" id="modal-excluir-aluno">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -829,13 +727,13 @@ const ocRef=ref(db,'ocorrencias');const evRef=ref(db,'eventos_calendario');
 const alunosRef=ref(db,'banco_alunos');
 
 window._adminAtivo=false;window._adminUsuario='';window._eventos=[];window._alunos=[];
-window._filtroStatus='todos'; // ← estado do filtro ativo
+window._filtroStatus='todos';
 
 // ═══ AUTH ═══
 onAuthStateChanged(auth,function(user){
   if(user){window._adminAtivo=true;window._adminUsuario=user.email;}
   else{window._adminAtivo=false;window._adminUsuario='';}
-  renderLista();atualizarUiAdminConfig();
+  renderLista();atualizarUiAdminConfig();renderAlunosConfig();
 });
 onValue(ref(db,'admin_config/nome_instituicao'),function(snap){
   var nome=snap.val()||'CETI Dariana';
@@ -854,17 +752,17 @@ onValue(ocRef,function(snapshot){
   lista.reverse();window._ocs=lista;renderLista();renderCalendario();renderChart();
 });
 
-// ═══ BANCO DE ALUNOS — listener em tempo real ═══
+// ═══ BANCO DE ALUNOS — listener ═══
 onValue(alunosRef,function(snapshot){
   var lista=[];
   snapshot.forEach(function(child){lista.push(Object.assign({firebaseKey:child.key},child.val()));});
-  lista.sort(function(a,b){return (a.turma||'').localeCompare(b.turma||'') || (a.nome||'').localeCompare(b.nome||'');});
+  lista.sort(function(a,b){return(a.turma||'').localeCompare(b.turma||'')||(a.nome||'').localeCompare(b.nome||'');});
   window._alunos=lista;
   renderAlunosConfig();
   popularTurmasSel();
 });
 
-// ═══ FUNÇÕES DO BANCO DE ALUNOS ═══
+// ═══ ADICIONAR ALUNO (qualquer usuário pode) ═══
 window.salvarAluno=async function(){
   var nome=(document.getElementById('cfg-aluno-nome').value||'').trim();
   var serie=(document.getElementById('cfg-aluno-serie').value||'').trim();
@@ -873,36 +771,90 @@ window.salvarAluno=async function(){
   erroEl.classList.remove('show');sucEl.classList.remove('show');
   if(!nome){erroEl.textContent='❌ Informe o nome do aluno.';erroEl.classList.add('show');return;}
   if(!turma){erroEl.textContent='❌ Informe a turma.';erroEl.classList.add('show');return;}
-  // Capitalizar nome
   nome=nome.split(' ').map(function(p){return p.charAt(0).toUpperCase()+p.slice(1).toLowerCase();}).join(' ');
+  var btn=document.querySelector('#acc-alunos .btn-salvar');if(btn){btn.disabled=true;btn.textContent='Salvando...';}
   try{
     await push(alunosRef,{nome,serie,turma,timestamp:Date.now()});
     document.getElementById('cfg-aluno-nome').value='';
+    document.getElementById('cfg-aluno-serie').value='';
     sucEl.textContent='✅ Aluno adicionado!';sucEl.classList.add('show');
     setTimeout(function(){sucEl.classList.remove('show');},2500);
     mostrarToast('✓ '+nome+' cadastrado!');
-  }catch(e){erroEl.textContent='❌ '+e.message;erroEl.classList.add('show');}
+    document.getElementById('aviso-regras-firebase').classList.remove('show');
+  }catch(e){
+    console.error('Erro ao salvar aluno:',e);
+    var msgErro='❌ Erro ao salvar.';
+    if(e.code==='PERMISSION_DENIED'||e.message.includes('PERMISSION_DENIED')){
+      msgErro='❌ Acesso negado. Configure as Regras do Firebase conforme instrução.';
+      document.getElementById('aviso-regras-firebase').classList.add('show');
+    }else{msgErro='❌ '+e.message;}
+    erroEl.textContent=msgErro;erroEl.classList.add('show');
+  }
+  if(btn){btn.disabled=false;btn.textContent='+ Adicionar Aluno';}
 };
 
+// ═══ EDITAR ALUNO (somente admin) ═══
+window.abrirEdicaoAluno=function(key){
+  if(!window._adminAtivo){mostrarToast('⚠️ Apenas admin pode editar');return;}
+  // Fechar outros abertos
+  document.querySelectorAll('.aluno-config-edit-form.aberto').forEach(function(f){f.classList.remove('aberto');});
+  var formEl=document.getElementById('edit-form-'+key);
+  if(formEl)formEl.classList.add('aberto');
+};
+window.cancelarEdicaoAluno=function(key){
+  var formEl=document.getElementById('edit-form-'+key);
+  if(formEl)formEl.classList.remove('aberto');
+};
+window.salvarEdicaoAluno=async function(key){
+  var nomeInput=document.getElementById('edit-nome-'+key);
+  var serieInput=document.getElementById('edit-serie-'+key);
+  var turmaInput=document.getElementById('edit-turma-'+key);
+  if(!nomeInput||!turmaInput)return;
+  var nome=(nomeInput.value||'').trim();
+  var serie=(serieInput?serieInput.value||'':'').trim();
+  var turma=(turmaInput.value||'').trim().toUpperCase();
+  if(!nome){mostrarToast('⚠️ Informe o nome');return;}
+  if(!turma){mostrarToast('⚠️ Informe a turma');return;}
+  nome=nome.split(' ').map(function(p){return p.charAt(0).toUpperCase()+p.slice(1).toLowerCase();}).join(' ');
+  try{
+    await update(ref(db,'banco_alunos/'+key),{nome,serie,turma});
+    mostrarToast('✓ Aluno atualizado!');
+  }catch(e){
+    var msg=e.message||'';
+    if(msg.includes('PERMISSION_DENIED')){mostrarToast('❌ Acesso negado. Configure as regras do Firebase.');}
+    else{mostrarToast('❌ Erro: '+msg);}
+  }
+};
+
+// ═══ EXCLUIR ALUNO (admin ou sem restrição de acordo com as regras) ═══
 window._alunoParaExcluir=null;
 window.pedirExclusaoAluno=function(key){
+  if(!window._adminAtivo){mostrarToast('⚠️ Apenas admin pode excluir');return;}
   window._alunoParaExcluir=key;
   document.getElementById('modal-excluir-aluno').classList.add('show');
 };
 window.confirmarExclusaoAluno=async function(){
   var key=window._alunoParaExcluir;if(!key)return;
   document.getElementById('modal-excluir-aluno').classList.remove('show');
-  try{await remove(ref(db,'banco_alunos/'+key));mostrarToast('🗑️ Aluno removido!');}
-  catch(e){mostrarToast('Erro: '+e.message);}
+  try{
+    await remove(ref(db,'banco_alunos/'+key));mostrarToast('🗑️ Aluno removido!');
+  }catch(e){
+    var msg=e.message||'';
+    if(msg.includes('PERMISSION_DENIED')){mostrarToast('❌ Acesso negado. Configure as regras do Firebase.');}
+    else{mostrarToast('❌ Erro: '+msg);}
+  }
   window._alunoParaExcluir=null;
 };
 
+// ═══ RENDER LISTA ALUNOS CONFIG ═══
 function renderAlunosConfig(){
   var lista=window._alunos||[];
+  var isAdmin=window._adminAtivo||false;
   var container=document.getElementById('alunos-lista-config');if(!container)return;
-  // atualizar desc do accordion
   var desc=document.getElementById('acc-alunos-desc');
   if(desc)desc.textContent=lista.length>0?lista.length+' aluno(s) cadastrado(s)':'Cadastre alunos por série e turma';
+  var infoAdmin=document.getElementById('info-admin-alunos');
+  if(infoAdmin)infoAdmin.style.display=isAdmin?'block':'none';
   if(!lista.length){container.innerHTML='<div class="alunos-vazio">Nenhum aluno cadastrado</div>';return;}
   // agrupar por turma
   var turmas={};lista.forEach(function(a){var t=a.turma||'—';if(!turmas[t])turmas[t]=[];turmas[t].push(a);});
@@ -910,19 +862,47 @@ function renderAlunosConfig(){
   Object.keys(turmas).sort().forEach(function(t){
     html+='<div style="font-size:9px;font-weight:700;color:var(--azul2);text-transform:uppercase;letter-spacing:.5px;margin:8px 0 4px;">Turma '+t+'</div>';
     turmas[t].forEach(function(a){
-      html+='<div class="aluno-config-item">'+
-        '<div><div class="aluno-config-nome">'+a.nome+'</div>'+
-        '<div class="aluno-config-sub">'+(a.serie?a.serie+' · ':'')+'Turma '+a.turma+'</div></div>'+
-        '<button class="btn-del-aluno" onclick="pedirExclusaoAluno(\''+a.firebaseKey+'\')" title="Remover">✕</button>'+
-      '</div>';
+      var botoesAdmin=isAdmin?
+        '<div class="aluno-config-acoes">'+
+          '<button class="btn-editar-aluno" onclick="abrirEdicaoAluno(\''+a.firebaseKey+'\')">✏️ Editar</button>'+
+          '<button class="btn-del-aluno" onclick="pedirExclusaoAluno(\''+a.firebaseKey+'\')" title="Remover">✕</button>'+
+        '</div>':'';
+      var formEdicao=isAdmin?
+        '<div class="aluno-config-edit-form" id="edit-form-'+a.firebaseKey+'">'+
+          '<div class="aluno-edit-row">'+
+            '<input class="aluno-edit-input" id="edit-nome-'+a.firebaseKey+'" type="text" value="'+htmlEscape(a.nome)+'" placeholder="Nome" style="grid-column:1/-1">'+
+          '</div>'+
+          '<div class="aluno-edit-row">'+
+            '<input class="aluno-edit-input" id="edit-serie-'+a.firebaseKey+'" type="text" value="'+htmlEscape(a.serie||'')+'" placeholder="Série">'+
+            '<input class="aluno-edit-input" id="edit-turma-'+a.firebaseKey+'" type="text" value="'+htmlEscape(a.turma||'')+'" placeholder="Turma">'+
+          '</div>'+
+          '<div class="aluno-edit-btns">'+
+            '<button class="btn-cancelar-aluno-edit" onclick="cancelarEdicaoAluno(\''+a.firebaseKey+'\')">Cancelar</button>'+
+            '<button class="btn-salvar-aluno-edit" onclick="salvarEdicaoAluno(\''+a.firebaseKey+'\')">💾 Salvar</button>'+
+          '</div>'+
+        '</div>':'';
+      html+=
+        '<div class="aluno-config-item">'+
+          '<div class="aluno-config-main">'+
+            '<div>'+
+              '<div class="aluno-config-nome">'+htmlEscape(a.nome)+'</div>'+
+              '<div class="aluno-config-sub">'+(a.serie?htmlEscape(a.serie)+' · ':'')+'Turma '+htmlEscape(a.turma)+'</div>'+
+            '</div>'+
+            botoesAdmin+
+          '</div>'+
+          formEdicao+
+        '</div>';
     });
   });
   container.innerHTML=html;
 }
 
+function htmlEscape(str){
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
 // ═══ SELETOR TURMA→ALUNO NO FORMULÁRIO ═══
 window._modoAluno='banco';
-
 window.setModoAluno=function(modo){
   window._modoAluno=modo;
   document.getElementById('modo-btn-banco').classList.toggle('ativo',modo==='banco');
@@ -930,7 +910,6 @@ window.setModoAluno=function(modo){
   document.getElementById('aluno-modo-banco').style.display=modo==='banco'?'':'none';
   document.getElementById('aluno-modo-manual').style.display=modo==='manual'?'':'none';
 };
-
 function popularTurmasSel(){
   var alunos=window._alunos||[];
   var sel=document.getElementById('f-turma-sel');if(!sel)return;
@@ -940,14 +919,12 @@ function popularTurmasSel(){
     turmasUnicas.map(function(t){return '<option value="'+t+'"'+(t===valorAtual?' selected':'')+'>Turma '+t+'</option>';}).join('');
   popularAlunosSel();
 }
-
 window.popularAlunosSel=function(){
   var turma=document.getElementById('f-turma-sel').value;
   var alunosSel=document.getElementById('f-aluno-sel');
   var alunos=(window._alunos||[]).filter(function(a){return a.turma===turma;});
   alunosSel.innerHTML='<option value="">— Selecione o aluno —</option>'+
-    alunos.map(function(a){return '<option value="'+a.nome+'|'+a.turma+'">'+a.nome+'</option>';}).join('');
-  // Preencher turma no campo hidden quando selecionado
+    alunos.map(function(a){return '<option value="'+a.nome+'|'+a.turma+'">'+htmlEscape(a.nome)+'</option>';}).join('');
   alunosSel.onchange=function(){
     var val=alunosSel.value;
     if(val){var parts=val.split('|');document.getElementById('f-turma').value=parts[1]||'';}
@@ -959,9 +936,7 @@ window.popularAlunosSel=function(){
 window.setFiltroStatus=function(filtro){
   window._filtroStatus=filtro;
   document.querySelectorAll('.filtro-btn').forEach(function(btn){
-    var bf=btn.dataset.filtro;
-    var classMap={'todos':'f-todos','Pendente':'f-pendente','Em acompanhamento':'f-acomp','Resolvido':'f-resolvido'};
-    btn.classList.toggle('ativo',bf===filtro);
+    btn.classList.toggle('ativo',btn.dataset.filtro===filtro);
   });
   renderLista();
 };
@@ -986,7 +961,7 @@ window.alterarNumeroSuporte=async function(){
   var num=(document.getElementById('p-numero-suporte').value||'').replace(/\D/g,'');
   var erroEl=document.getElementById('erro-suporte');var sucEl=document.getElementById('sucesso-suporte');
   erroEl.classList.remove('show');sucEl.classList.remove('show');
-  if(!num||num.length<10){erroEl.textContent='❌ Número inválido. Use DDD + número (mínimo 10 dígitos).';erroEl.classList.add('show');return;}
+  if(!num||num.length<10){erroEl.textContent='❌ Número inválido.';erroEl.classList.add('show');return;}
   try{
     await update(ref(db,'admin_config'),{numero_suporte:num});
     sucEl.textContent='✅ Número atualizado!';sucEl.classList.add('show');mostrarToast('✓ Número de suporte salvo!');
@@ -1101,6 +1076,8 @@ function atualizarUiAdminConfig(){
   }
   document.getElementById('admin-banner').classList.toggle('show',logado);
   if(logado)document.getElementById('admin-user-badge').textContent=window._adminUsuario||'—';
+  // re-render lista de alunos com/sem botões de admin
+  renderAlunosConfig();
 }
 window.fazerLoginConfig=async function(){
   var email=document.getElementById('cfg-email').value.trim();var senha=document.getElementById('cfg-senha').value;
@@ -1110,7 +1087,6 @@ window.fazerLoginConfig=async function(){
   try{
     const cred=await signInWithEmailAndPassword(auth,email,senha);
     document.getElementById('cfg-email').value='';document.getElementById('cfg-senha').value='';
-    document.getElementById('logo-btn').title='Clique para alterar ícone';
     mostrarToast('✓ Bem-vindo, '+cred.user.email+'!');
   }catch(e){
     var msg='❌ E-mail ou senha incorretos.';
@@ -1124,7 +1100,7 @@ window.fazerLoginConfig=async function(){
   loadEl.classList.remove('show');
 };
 window.sairAdminConfig=async function(){
-  try{await signOut(auth);document.getElementById('logo-btn').title='Ícone da escola';mostrarToast('Modo admin desativado');document.getElementById('acc-admin').classList.remove('open');}
+  try{await signOut(auth);mostrarToast('Modo admin desativado');document.getElementById('acc-admin').classList.remove('open');}
   catch(e){mostrarToast('Erro ao sair: '+e.message);}
 };
 window.alterarSenha=async function(){
@@ -1149,7 +1125,6 @@ window.alterarSenha=async function(){
 // ═══ SALVAR OCORRÊNCIA ═══
 window.salvarOcorrencia=async function(){
   var btn=document.getElementById('btn-salvar');
-  // Pegar aluno dependendo do modo
   var aluno='',turma='';
   if(window._modoAluno==='banco'){
     var selVal=document.getElementById('f-aluno-sel').value;
@@ -1177,7 +1152,6 @@ window.salvarOcorrencia=async function(){
   }
   btn.disabled=false;btn.textContent='Salvar Ocorrência';
 };
-
 function limparFormNovo(){
   document.getElementById('f-aluno-sel').value='';
   document.getElementById('f-turma-sel').value='';
@@ -1188,7 +1162,6 @@ function limparFormNovo(){
   document.getElementById('f-descricao').value='';
   document.getElementById('f-tipo').selectedIndex=0;
 }
-
 window.salvarEdicao=async function(){
   var btn=document.getElementById('btn-editar-salvar');var key=window._idAtual;if(!key)return;
   var aluno=document.getElementById('e-aluno').value.trim();var turma=document.getElementById('e-turma').value.trim();
@@ -1221,7 +1194,7 @@ window.atualizarStatus=async function(novoStatus){
   catch(e){mostrarToast('Erro: '+e.message);}
 };
 
-// ═══ RENDER LISTA (com filtro de status) ═══
+// ═══ RENDER LISTA ═══
 window.renderLista=function renderLista(){
   var filaLocal=lerFila();var ocs=window._ocs||[];
   var keysFirebase=ocs.map(function(o){return o.firebaseKey;});
@@ -1229,12 +1202,9 @@ window.renderLista=function renderLista(){
   var locais=filaLocal.map(function(x){var item=Object.assign({},x);item.firebaseKey=x._localId;item._offline=true;delete item._localId;return item;});
   var todos=locais.concat(ocs);
   var busca=(document.getElementById('busca')?document.getElementById('busca').value:'').toLowerCase();
-  // Filtro texto
   var fil=todos.filter(function(o){return(o.aluno||'').toLowerCase().includes(busca)||(o.turma||'').toLowerCase().includes(busca);});
-  // Filtro status
   var filtroStatus=window._filtroStatus||'todos';
   if(filtroStatus!=='todos'){fil=fil.filter(function(o){return o.status===filtroStatus;});}
-  // Contadores sempre baseados no total (sem filtro de status)
   document.getElementById('cnt-pendente').textContent=ocs.filter(function(o){return o.status==='Pendente';}).length;
   document.getElementById('cnt-acomp').textContent=ocs.filter(function(o){return o.status==='Em acompanhamento';}).length;
   document.getElementById('cnt-resolvido').textContent=ocs.filter(function(o){return o.status==='Resolvido';}).length;
@@ -1251,9 +1221,9 @@ window.renderLista=function renderLista(){
     var offlineCls=o._offline?' offline-pending':'';
     return '<div class="oc-card'+offlineCls+'" onclick="verDetalhe(\''+o.firebaseKey+'\')">'+
       '<button class="btn-excluir-card" onclick="event.stopPropagation();pedirExclusao(\''+o.firebaseKey+'\')">🗑️</button>'+
-      '<div class="oc-top"><span class="oc-nome">'+o.aluno+offlineTag+'</span><span class="oc-turma">'+(o.turma||'—')+'</span></div>'+
+      '<div class="oc-top"><span class="oc-nome">'+htmlEscape(o.aluno)+offlineTag+'</span><span class="oc-turma">'+(o.turma||'—')+'</span></div>'+
       '<div class="oc-tipo">'+(ICON[o.tipo]||'📋')+' '+o.tipo+'</div>'+
-      '<div class="oc-meta"><span class="oc-data">'+o.data+' · '+o.hora+' · <span style="font-size:9px;font-weight:700;background:var(--azulc);color:var(--azul2);border-radius:4px;padding:1px 5px;margin-right:2px;">Prof(a).</span> '+o.professor+'</span>'+
+      '<div class="oc-meta"><span class="oc-data">'+o.data+' · '+o.hora+' · <span style="font-size:9px;font-weight:700;background:var(--azulc);color:var(--azul2);border-radius:4px;padding:1px 5px;margin-right:2px;">Prof(a).</span> '+htmlEscape(o.professor)+'</span>'+
       '<span class="badge badge-'+cls+'"><span class="badge-dot"></span>'+o.status+'</span></div></div>';
   }).join('');
   c.className='lista'+(window._adminAtivo?' modo-admin':'');
@@ -1272,16 +1242,16 @@ window.verDetalhe=function(key){
   mostrarView('view-detalhe');
   document.getElementById('detalhe-conteudo').innerHTML=
     '<button class="btn-back" onclick="irParaLista()">← Voltar</button>'+
-    '<div class="detalhe-nome">'+o.aluno+'</div>'+
+    '<div class="detalhe-nome">'+htmlEscape(o.aluno)+'</div>'+
     '<span class="badge badge-'+cls+'"><span class="badge-dot"></span>'+o.status+'</span>'+offlineAviso+
     '<div class="detalhe-info">'+
       '<div class="info-item"><div class="info-label">Turma</div><div class="info-val">'+(o.turma||'—')+'</div></div>'+
       '<div class="info-item"><div class="info-label">Tipo</div><div class="info-val">'+(ICON[o.tipo]||'📋')+' '+o.tipo+'</div></div>'+
       '<div class="info-item"><div class="info-label">Data</div><div class="info-val">'+o.data+'</div></div>'+
       '<div class="info-item"><div class="info-label">Hora</div><div class="info-val">'+o.hora+'</div></div>'+
-      '<div class="info-item" style="grid-column:1/-1"><div class="info-label">Professor(a)</div><div class="info-val">Prof(a). '+o.professor+'</div></div>'+
+      '<div class="info-item" style="grid-column:1/-1"><div class="info-label">Professor(a)</div><div class="info-val">Prof(a). '+htmlEscape(o.professor)+'</div></div>'+
     '</div>'+
-    '<div class="detalhe-desc">'+o.descricao+'</div>'+
+    '<div class="detalhe-desc">'+htmlEscape(o.descricao)+'</div>'+
     (o._offline?'':
       '<div style="font-size:10px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Atualizar Status</div>'+
       '<div class="status-btns">'+
@@ -1330,7 +1300,6 @@ window.irParaNovo=function(){
   _abaAtiva='lista';mostrarView('view-novo');
   var nomeSalvo=localStorage.getItem('ceti_nome_prof')||'';
   var campo=document.getElementById('f-professor');if(campo&&nomeSalvo)campo.value=nomeSalvo;
-  // garantir modo banco se há alunos
   setModoAluno(window._alunos&&window._alunos.length>0?'banco':'manual');
   popularTurmasSel();
 };
@@ -1367,7 +1336,6 @@ function dateToInputVal(d){
 
 // ═══ CALENDÁRIO ═══
 var _calAno=new Date().getFullYear();var _calMes=new Date().getMonth();window._diaSel=null;
-
 function renderCalendario(){
   document.getElementById('cal-mes-ano').textContent=MESES_BR[_calMes]+' '+_calAno;
   var primeiroDia=new Date(_calAno,_calMes,1).getDay();var diasNoMes=new Date(_calAno,_calMes+1,0).getDate();
@@ -1407,8 +1375,8 @@ function renderOcsDia(dataStr){
   var htmlEventos=eventos.map(function(ev){
     return '<div class="cal-evento-item">'+
       '<div class="cal-evento-item-left"><div class="cal-evento-dot"></div><div>'+
-        '<div class="cal-evento-nome"><span class="evento-tag">EVENTO</span>'+ev.titulo+'</div>'+
-        '<div class="cal-evento-hora">'+(ev.horaInicio||'')+(ev.horaFim?' → '+ev.horaFim:'')+(ev.obs?' · '+ev.obs:'')+'</div>'+
+        '<div class="cal-evento-nome"><span class="evento-tag">EVENTO</span>'+htmlEscape(ev.titulo)+'</div>'+
+        '<div class="cal-evento-hora">'+(ev.horaInicio||'')+(ev.horaFim?' → '+ev.horaFim:'')+(ev.obs?' · '+htmlEscape(ev.obs):'')+'</div>'+
       '</div></div>'+
       '<button class="btn-del-evento" onclick="excluirEvento(\''+ev.firebaseKey+'\')" title="Excluir evento">✕</button>'+
     '</div>';
@@ -1416,7 +1384,7 @@ function renderOcsDia(dataStr){
   var htmlOcs=ocs.map(function(o){
     var cls=o.status==='Pendente'?'s-pendente':o.status==='Resolvido'?'s-resolvido':'s-acomp';
     return '<div class="cal-oc-item '+cls+'" onclick="irDetalheAnalytics(\''+o.firebaseKey+'\')">'+
-      '<div class="cal-oc-item-nome">'+o.aluno+(o.turma?' · '+o.turma:'')+'</div>'+
+      '<div class="cal-oc-item-nome">'+htmlEscape(o.aluno)+(o.turma?' · '+o.turma:'')+'</div>'+
       '<div class="cal-oc-item-info">'+(ICON[o.tipo]||'📋')+' '+o.tipo+' · '+o.hora+'</div>'+
     '</div>';
   }).join('');
@@ -1438,7 +1406,6 @@ window.navCal=function(dir){
 
 // ═══ RELATÓRIO ═══
 var _relAtalhoAtivo=null;
-
 window.abrirModalRelatorio=function(){
   var hoje=new Date();
   document.getElementById('rel-label-dia').textContent=String(hoje.getDate()).padStart(2,'0')+'/'+String(hoje.getMonth()+1).padStart(2,'0')+'/'+hoje.getFullYear();
@@ -1458,7 +1425,6 @@ window.abrirModalRelatorio=function(){
   document.getElementById('modal-relatorio').classList.add('show');
 };
 window.fecharModalRelatorio=function(){document.getElementById('modal-relatorio').classList.remove('show');};
-
 window.aplicarAtalhoRel=function(tipo){
   var hoje=new Date();_relAtalhoAtivo=tipo;
   ['dia','semana','mes'].forEach(function(k){document.getElementById('rel-btn-'+k).classList.toggle('ativo',k===tipo);});
@@ -1477,7 +1443,6 @@ window.limparAtalhosRel=function(){
   _relAtalhoAtivo=null;
   ['dia','semana','mes'].forEach(function(k){document.getElementById('rel-btn-'+k).classList.remove('ativo');});
 };
-
 window.gerarRelatorio=function(){
   var iniVal=document.getElementById('rel-data-ini').value;var fimVal=document.getElementById('rel-data-fim').value;
   if(!iniVal||!fimVal){mostrarToast('⚠️ Selecione as datas de início e fim');return;}
@@ -1487,11 +1452,7 @@ window.gerarRelatorio=function(){
   var ocsFiltradas=ocs.filter(function(o){var d=parseDateBR(o.data);return d&&d>=iniDate&&d<=fimDate;});
   if(!ocsFiltradas.length){mostrarToast('⚠️ Nenhuma ocorrência neste período');return;}
   var fmtDate=function(d){return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();};
-  var titulos={
-    dia:'Relatório do Dia — '+fmtDate(iniDate),
-    semana:'Relatório Semanal — '+fmtDate(iniDate)+' a '+fmtDate(fimDate),
-    mes:'Relatório Mensal — '+MESES_BR[iniDate.getMonth()]+' '+iniDate.getFullYear()
-  };
+  var titulos={dia:'Relatório do Dia — '+fmtDate(iniDate),semana:'Relatório Semanal — '+fmtDate(iniDate)+' a '+fmtDate(fimDate),mes:'Relatório Mensal — '+MESES_BR[iniDate.getMonth()]+' '+iniDate.getFullYear()};
   var tituloRelatorio=titulos[_relAtalhoAtivo]||('Relatório — '+fmtDate(iniDate)+' a '+fmtDate(fimDate));
   fecharModalRelatorio();
   var nomeInst=document.getElementById('header-nome-inst').textContent;
@@ -1506,11 +1467,11 @@ window.gerarRelatorio=function(){
       contador++;var bg=contador%2===0?'#F8F9FF':'#FFFFFF';
       return '<tr style="background:'+bg+';page-break-inside:avoid;">'+
         '<td style="padding:14px 10px;vertical-align:top;font-size:13px;font-weight:700;color:#64748B;border-bottom:1px solid #E8EEFF;text-align:center;width:40px;">'+contador+'</td>'+
-        '<td style="padding:14px 10px;vertical-align:top;font-size:14px;font-weight:700;color:#0F1729;border-bottom:1px solid #E8EEFF;">'+o.aluno+'</td>'+
+        '<td style="padding:14px 10px;vertical-align:top;font-size:14px;font-weight:700;color:#0F1729;border-bottom:1px solid #E8EEFF;">'+htmlEscape(o.aluno)+'</td>'+
         '<td style="padding:14px 10px;vertical-align:top;font-size:13px;color:#0F1729;border-bottom:1px solid #E8EEFF;">'+(o.turma||'—')+'</td>'+
-        '<td style="padding:14px 10px;vertical-align:top;font-size:13px;color:#0F1729;border-bottom:1px solid #E8EEFF;">Prof(a). '+o.professor+'<br><span style="font-size:11px;color:#64748B;">'+(o.data||'')+' · '+(o.hora||'')+'</span></td>'+
+        '<td style="padding:14px 10px;vertical-align:top;font-size:13px;color:#0F1729;border-bottom:1px solid #E8EEFF;">Prof(a). '+htmlEscape(o.professor)+'<br><span style="font-size:11px;color:#64748B;">'+(o.data||'')+' · '+(o.hora||'')+'</span></td>'+
         '<td style="padding:14px 10px;vertical-align:top;font-size:13px;color:#0F1729;border-bottom:1px solid #E8EEFF;max-width:240px;line-height:1.6;">'+
-          '<div style="font-size:11px;font-weight:600;color:#2A5BD7;margin-bottom:4px;">'+o.tipo+'</div>'+o.descricao+
+          '<div style="font-size:11px;font-weight:600;color:#2A5BD7;margin-bottom:4px;">'+htmlEscape(o.tipo)+'</div>'+htmlEscape(o.descricao)+
         '</td>'+
       '</tr>';
     }).join('');

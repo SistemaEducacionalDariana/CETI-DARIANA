@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -69,6 +70,52 @@ html[data-tema="escuro"] .btn-nova,html[data-tema="black"] .btn-nova{background:
 .stat-label{font-size:9px;color:var(--sub);font-weight:500;margin-top:2px;text-transform:uppercase;letter-spacing:.5px;}
 .stat-card.c-amarelo .stat-num{color:#D97706;}.stat-card.c-azul .stat-num{color:var(--azul2);}
 .stat-card.c-verde .stat-num{color:#16A34A;}.stat-card.c-cinza .stat-num{color:var(--sub);}
+
+/* ═══ PATCH 1: BARRA DE FILTRO DE STATUS ═══ */
+.filtro-status-bar {
+  display: flex;
+  gap: 6px;
+  padding: 0 16px 10px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.filtro-status-bar::-webkit-scrollbar { display: none; }
+.filtro-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1.5px solid var(--borda);
+  background: var(--bg-card);
+  color: var(--sub);
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .18s;
+  flex-shrink: 0;
+}
+.filtro-btn:active { opacity: .7; }
+.filtro-btn.ativo {
+  border-color: transparent;
+  color: #fff;
+}
+.filtro-btn.ativo.f-todos   { background: var(--azul2); }
+.filtro-btn.ativo.f-pendente{ background: #D97706; }
+.filtro-btn.ativo.f-acomp   { background: #2563EB; }
+.filtro-btn.ativo.f-resolvido{ background: #16A34A; }
+.filtro-dot {
+  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+}
+.filtro-btn:not(.ativo) .filtro-dot-todos    { background: var(--azul2); }
+.filtro-btn:not(.ativo) .filtro-dot-pendente { background: #D97706; }
+.filtro-btn:not(.ativo) .filtro-dot-acomp    { background: #2563EB; }
+.filtro-btn:not(.ativo) .filtro-dot-resolvido{ background: #16A34A; }
+.filtro-btn.ativo .filtro-dot { background: rgba(255,255,255,0.85); }
+
 /* BUSCA */
 .busca-wrap{padding:0 16px 10px;}
 .busca-input{width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--borda);font-size:13px;font-family:'DM Sans',sans-serif;background:var(--bg-card);outline:none;color:var(--texto);transition:border .2s;}
@@ -148,7 +195,7 @@ html[data-tema="escuro"] .btn-vermelho,html[data-tema="black"] .btn-vermelho{bac
 .accordion-chevron{font-size:12px;color:var(--sub);transition:transform .25s ease;flex-shrink:0;width:20px;height:20px;display:flex;align-items:center;justify-content:center;background:var(--cinza);border:1px solid var(--borda);border-radius:6px;}
 .accordion-item.open .accordion-chevron{transform:rotate(180deg);background:var(--azulc);border-color:var(--azul2);color:var(--azul2);}
 .accordion-body{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease;padding:0 16px;}
-.accordion-item.open .accordion-body{max-height:800px;padding:0 16px 16px;}
+.accordion-item.open .accordion-body{max-height:1200px;padding:0 16px 16px;}
 .accordion-divider{height:1px;background:var(--borda);margin:0 16px 0;}
 .accordion-item.open .accordion-divider{display:block;}.accordion-item:not(.open) .accordion-divider{display:none;}
 /* TEMA */
@@ -260,11 +307,85 @@ html[data-tema="black"] .toast{background:#222;}
 .tab-btn{flex:1;padding:10px 0 8px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;color:var(--sub);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;transition:color .2s;letter-spacing:.3px;text-transform:uppercase;}
 .tab-btn-icon{font-size:18px;line-height:1;transition:transform .2s;}
 .tab-btn.ativo{color:var(--azul2);}.tab-btn.ativo .tab-btn-icon{transform:translateY(-1px);}
-/* ═══ PATCH 1: CAPITALIZE AUTOMÁTICO NOS CAMPOS DE NOME ═══ */
+
+/* ═══ PATCH 2: CAPITALIZE NOS CAMPOS DE NOME ═══ */
 #f-aluno, #f-professor, #e-aluno, #e-professor {
   text-transform: capitalize;
 }
-/* ═══ PATCH 2: BANNER DE SUPORTE ═══ */
+
+/* ═══ PATCH 3: SELETOR TURMA→ALUNO NO FORM NOVA OC ═══ */
+.aluno-modo-btns {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.aluno-modo-btn {
+  flex: 1;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1.5px solid var(--borda);
+  background: var(--cinza);
+  color: var(--sub);
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all .15s;
+  text-align: center;
+}
+.aluno-modo-btn.ativo {
+  border-color: var(--azul2);
+  background: var(--azulc);
+  color: var(--azul2);
+}
+
+/* ═══ PATCH 4: LISTA DE ALUNOS NA CONFIG ═══ */
+.alunos-lista-config {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+.aluno-config-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--cinza);
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  padding: 9px 12px;
+}
+.aluno-config-nome {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--texto);
+}
+.aluno-config-sub {
+  font-size: 10px;
+  color: var(--sub);
+  margin-top: 1px;
+}
+.btn-del-aluno {
+  background: none;
+  border: none;
+  color: var(--sub);
+  cursor: pointer;
+  font-size: 15px;
+  padding: 2px 6px;
+  border-radius: 5px;
+  flex-shrink: 0;
+}
+.btn-del-aluno:hover { background: #FEE2E2; color: var(--vermelho); }
+.alunos-vazio {
+  font-size: 12px;
+  color: var(--sub);
+  text-align: center;
+  padding: 12px 0;
+}
+
+/* BANNER SUPORTE */
 .banner-suporte {
   margin: 8px 16px 16px;
   background: var(--bg-card);
@@ -333,9 +454,27 @@ html[data-tema="black"] .toast{background:#222;}
       <div class="stat-card c-verde"><div class="stat-num" id="cnt-resolvido">0</div><div class="stat-label">Resolv.</div></div>
       <div class="stat-card c-cinza"><div class="stat-num" id="cnt-total">0</div><div class="stat-label">Total</div></div>
     </div>
+
+    <!-- ═══ BARRA DE FILTRO DE STATUS ═══ -->
+    <div class="filtro-status-bar" id="filtro-status-bar">
+      <button class="filtro-btn f-todos ativo" data-filtro="todos" onclick="setFiltroStatus('todos')">
+        <span class="filtro-dot filtro-dot-todos"></span>Todos
+      </button>
+      <button class="filtro-btn f-pendente" data-filtro="Pendente" onclick="setFiltroStatus('Pendente')">
+        <span class="filtro-dot filtro-dot-pendente"></span>Pendentes
+      </button>
+      <button class="filtro-btn f-acomp" data-filtro="Em acompanhamento" onclick="setFiltroStatus('Em acompanhamento')">
+        <span class="filtro-dot filtro-dot-acomp"></span>Acompan.
+      </button>
+      <button class="filtro-btn f-resolvido" data-filtro="Resolvido" onclick="setFiltroStatus('Resolvido')">
+        <span class="filtro-dot filtro-dot-resolvido"></span>Resolvidos
+      </button>
+    </div>
+
     <div class="busca-wrap"><input class="busca-input" type="text" id="busca" placeholder="Buscar aluno, turma..." oninput="renderLista()"></div>
     <div class="lista" id="lista-container"><div class="loading"><div class="spinner"></div></div></div>
   </div>
+
   <!-- ANALYTICS -->
   <div class="view" id="view-analytics">
     <div class="analytics-wrap">
@@ -382,13 +521,36 @@ html[data-tema="black"] .toast{background:#222;}
       </div>
     </div>
   </div>
+
   <!-- NOVA OCORRÊNCIA -->
   <div class="view" id="view-novo">
     <div class="form-wrap"><div class="form-card">
       <div class="form-header"><button class="btn-back" onclick="irParaLista()">← Voltar</button><div class="form-title">Nova Ocorrência</div></div>
-      <div class="form-group"><label>Aluno *</label><input id="f-aluno" type="text" placeholder="Nome completo"></div>
+
+      <!-- ═══ SELETOR TURMA→ALUNO ═══ -->
+      <div class="form-group">
+        <label>Aluno *</label>
+        <div class="aluno-modo-btns">
+          <button class="aluno-modo-btn ativo" id="modo-btn-banco" onclick="setModoAluno('banco')">🗂️ Do banco</button>
+          <button class="aluno-modo-btn" id="modo-btn-manual" onclick="setModoAluno('manual')">✏️ Digitar</button>
+        </div>
+        <!-- MODO BANCO -->
+        <div id="aluno-modo-banco">
+          <select id="f-turma-sel" onchange="popularAlunosSel()" style="margin-bottom:6px;">
+            <option value="">— Selecione a turma —</option>
+          </select>
+          <select id="f-aluno-sel">
+            <option value="">— Selecione o aluno —</option>
+          </select>
+        </div>
+        <!-- MODO MANUAL -->
+        <div id="aluno-modo-manual" style="display:none;">
+          <input id="f-aluno" type="text" placeholder="Nome completo do aluno">
+        </div>
+      </div>
+
       <div class="form-row">
-        <div class="form-group"><label>Turma</label><input id="f-turma" type="text" placeholder="Ex: 3A"></div>
+        <div class="form-group"><label>Turma</label><input id="f-turma" type="text" placeholder="Ex: 3A" id="f-turma-manual"></div>
         <div class="form-group"><label>Tipo *</label>
           <select id="f-tipo"><option>Agressão verbal</option><option>Agressão física</option><option>Uso de celular</option><option>Desrespeito ao professor</option><option>Bagunça em sala</option><option>Bullying</option><option>Vandalismo</option><option>Outros</option></select>
         </div>
@@ -398,6 +560,7 @@ html[data-tema="black"] .toast{background:#222;}
       <button class="btn-salvar" id="btn-salvar" onclick="salvarOcorrencia()">Salvar Ocorrência</button>
     </div></div>
   </div>
+
   <!-- EDITAR -->
   <div class="view" id="view-editar">
     <div class="form-wrap"><div class="form-card">
@@ -415,8 +578,10 @@ html[data-tema="black"] .toast{background:#222;}
       <button class="btn-salvar btn-vermelho" id="btn-editar-salvar" onclick="salvarEdicao()">Salvar Alterações</button>
     </div></div>
   </div>
+
   <!-- DETALHE -->
   <div class="view" id="view-detalhe"><div class="detalhe-card" id="detalhe-conteudo"></div></div>
+
   <!-- CONFIGURAÇÕES -->
   <div class="view" id="view-config">
     <div class="config-wrap">
@@ -466,6 +631,31 @@ html[data-tema="black"] .toast{background:#222;}
           </div>
         </div>
       </div>
+
+      <!-- ═══ ACCORDION CADASTRO DE ALUNOS (visível para todos) ═══ -->
+      <div class="accordion-item" id="acc-alunos">
+        <div class="accordion-header" onclick="toggleAccordion('acc-alunos')">
+          <div class="accordion-header-left"><div class="accordion-icon">🎒</div><div><div class="accordion-title">Banco de Alunos</div><div class="accordion-desc" id="acc-alunos-desc">Cadastre alunos por série e turma</div></div></div>
+          <div class="accordion-chevron">▼</div>
+        </div>
+        <div class="accordion-divider"></div>
+        <div class="accordion-body">
+          <div style="margin-top:4px;">
+            <div class="form-group"><label>Nome do Aluno *</label><input type="text" id="cfg-aluno-nome" placeholder="Nome completo" style="text-transform:capitalize;" autocomplete="off"></div>
+            <div class="form-row">
+              <div class="form-group"><label>Série</label><input type="text" id="cfg-aluno-serie" placeholder="Ex: 7º Ano"></div>
+              <div class="form-group"><label>Turma *</label><input type="text" id="cfg-aluno-turma" placeholder="Ex: 3A"></div>
+            </div>
+            <div class="erro-msg" id="erro-aluno"></div>
+            <div class="sucesso-msg" id="sucesso-aluno"></div>
+            <button class="btn-salvar" style="font-size:12px;padding:10px;margin-bottom:4px;" onclick="salvarAluno()">+ Adicionar Aluno</button>
+            <div class="alunos-lista-config" id="alunos-lista-config">
+              <div class="alunos-vazio">Nenhum aluno cadastrado</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="accordion-item" id="acc-inst" style="display:none">
         <div class="accordion-header" onclick="toggleAccordion('acc-inst')">
           <div class="accordion-header-left"><div class="accordion-icon">🏫</div><div><div class="accordion-title">Instituição</div><div class="accordion-desc">Nome exibido no cabeçalho do app</div></div></div>
@@ -502,7 +692,6 @@ html[data-tema="black"] .toast{background:#222;}
           <button class="btn-salvar btn-vermelho" onclick="alterarSenha()" style="font-size:12px;padding:10px">Salvar Senha</button>
         </div>
       </div>
-      <!-- ACCORDION SUPORTE — só aparece no modo admin -->
       <div class="accordion-item" id="acc-suporte" style="display:none">
         <div class="accordion-header" onclick="toggleAccordion('acc-suporte')">
           <div class="accordion-header-left"><div class="accordion-icon">💬</div><div><div class="accordion-title">Contato de Suporte</div><div class="accordion-desc">Número exibido no banner de suporte</div></div></div>
@@ -519,7 +708,6 @@ html[data-tema="black"] .toast{background:#222;}
           <button class="btn-salvar btn-vermelho" onclick="alterarNumeroSuporte()" style="font-size:12px;padding:10px">Salvar Número</button>
         </div>
       </div>
-      <!-- BANNER SUPORTE — sempre visível na aba config -->
       <a id="banner-suporte-link" class="banner-suporte" href="#" onclick="abrirSuporte(event)">
         <div class="banner-suporte-dev">Desenvolvido por Alfa Store — Soluções e Tecnologia</div>
         <div class="banner-suporte-wa">
@@ -609,6 +797,18 @@ html[data-tema="black"] .toast{background:#222;}
   </div>
 </div>
 
+<!-- MODAL CONFIRMAR EXCLUIR ALUNO -->
+<div class="modal-bg" id="modal-excluir-aluno">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3>Remover Aluno</h3><p>Tem certeza que deseja remover este aluno do banco?</p>
+    <div class="modal-btns">
+      <button class="btn-cancelar" onclick="document.getElementById('modal-excluir-aluno').classList.remove('show')">Cancelar</button>
+      <button class="btn-confirmar" onclick="confirmarExclusaoAluno()">Remover</button>
+    </div>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
 import { getDatabase, ref, push, update, remove, onValue, get, set } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
@@ -626,9 +826,12 @@ const firebaseConfig = {
 const app=initializeApp(firebaseConfig);
 const db=getDatabase(app);const auth=getAuth(app);
 const ocRef=ref(db,'ocorrencias');const evRef=ref(db,'eventos_calendario');
+const alunosRef=ref(db,'banco_alunos');
 
-window._adminAtivo=false;window._adminUsuario='';window._eventos=[];
+window._adminAtivo=false;window._adminUsuario='';window._eventos=[];window._alunos=[];
+window._filtroStatus='todos'; // ← estado do filtro ativo
 
+// ═══ AUTH ═══
 onAuthStateChanged(auth,function(user){
   if(user){window._adminAtivo=true;window._adminUsuario=user.email;}
   else{window._adminAtivo=false;window._adminUsuario='';}
@@ -650,6 +853,118 @@ onValue(ocRef,function(snapshot){
   var lista=[];snapshot.forEach(function(child){lista.push(Object.assign({firebaseKey:child.key},child.val()));});
   lista.reverse();window._ocs=lista;renderLista();renderCalendario();renderChart();
 });
+
+// ═══ BANCO DE ALUNOS — listener em tempo real ═══
+onValue(alunosRef,function(snapshot){
+  var lista=[];
+  snapshot.forEach(function(child){lista.push(Object.assign({firebaseKey:child.key},child.val()));});
+  lista.sort(function(a,b){return (a.turma||'').localeCompare(b.turma||'') || (a.nome||'').localeCompare(b.nome||'');});
+  window._alunos=lista;
+  renderAlunosConfig();
+  popularTurmasSel();
+});
+
+// ═══ FUNÇÕES DO BANCO DE ALUNOS ═══
+window.salvarAluno=async function(){
+  var nome=(document.getElementById('cfg-aluno-nome').value||'').trim();
+  var serie=(document.getElementById('cfg-aluno-serie').value||'').trim();
+  var turma=(document.getElementById('cfg-aluno-turma').value||'').trim().toUpperCase();
+  var erroEl=document.getElementById('erro-aluno');var sucEl=document.getElementById('sucesso-aluno');
+  erroEl.classList.remove('show');sucEl.classList.remove('show');
+  if(!nome){erroEl.textContent='❌ Informe o nome do aluno.';erroEl.classList.add('show');return;}
+  if(!turma){erroEl.textContent='❌ Informe a turma.';erroEl.classList.add('show');return;}
+  // Capitalizar nome
+  nome=nome.split(' ').map(function(p){return p.charAt(0).toUpperCase()+p.slice(1).toLowerCase();}).join(' ');
+  try{
+    await push(alunosRef,{nome,serie,turma,timestamp:Date.now()});
+    document.getElementById('cfg-aluno-nome').value='';
+    sucEl.textContent='✅ Aluno adicionado!';sucEl.classList.add('show');
+    setTimeout(function(){sucEl.classList.remove('show');},2500);
+    mostrarToast('✓ '+nome+' cadastrado!');
+  }catch(e){erroEl.textContent='❌ '+e.message;erroEl.classList.add('show');}
+};
+
+window._alunoParaExcluir=null;
+window.pedirExclusaoAluno=function(key){
+  window._alunoParaExcluir=key;
+  document.getElementById('modal-excluir-aluno').classList.add('show');
+};
+window.confirmarExclusaoAluno=async function(){
+  var key=window._alunoParaExcluir;if(!key)return;
+  document.getElementById('modal-excluir-aluno').classList.remove('show');
+  try{await remove(ref(db,'banco_alunos/'+key));mostrarToast('🗑️ Aluno removido!');}
+  catch(e){mostrarToast('Erro: '+e.message);}
+  window._alunoParaExcluir=null;
+};
+
+function renderAlunosConfig(){
+  var lista=window._alunos||[];
+  var container=document.getElementById('alunos-lista-config');if(!container)return;
+  // atualizar desc do accordion
+  var desc=document.getElementById('acc-alunos-desc');
+  if(desc)desc.textContent=lista.length>0?lista.length+' aluno(s) cadastrado(s)':'Cadastre alunos por série e turma';
+  if(!lista.length){container.innerHTML='<div class="alunos-vazio">Nenhum aluno cadastrado</div>';return;}
+  // agrupar por turma
+  var turmas={};lista.forEach(function(a){var t=a.turma||'—';if(!turmas[t])turmas[t]=[];turmas[t].push(a);});
+  var html='';
+  Object.keys(turmas).sort().forEach(function(t){
+    html+='<div style="font-size:9px;font-weight:700;color:var(--azul2);text-transform:uppercase;letter-spacing:.5px;margin:8px 0 4px;">Turma '+t+'</div>';
+    turmas[t].forEach(function(a){
+      html+='<div class="aluno-config-item">'+
+        '<div><div class="aluno-config-nome">'+a.nome+'</div>'+
+        '<div class="aluno-config-sub">'+(a.serie?a.serie+' · ':'')+'Turma '+a.turma+'</div></div>'+
+        '<button class="btn-del-aluno" onclick="pedirExclusaoAluno(\''+a.firebaseKey+'\')" title="Remover">✕</button>'+
+      '</div>';
+    });
+  });
+  container.innerHTML=html;
+}
+
+// ═══ SELETOR TURMA→ALUNO NO FORMULÁRIO ═══
+window._modoAluno='banco';
+
+window.setModoAluno=function(modo){
+  window._modoAluno=modo;
+  document.getElementById('modo-btn-banco').classList.toggle('ativo',modo==='banco');
+  document.getElementById('modo-btn-manual').classList.toggle('ativo',modo==='manual');
+  document.getElementById('aluno-modo-banco').style.display=modo==='banco'?'':'none';
+  document.getElementById('aluno-modo-manual').style.display=modo==='manual'?'':'none';
+};
+
+function popularTurmasSel(){
+  var alunos=window._alunos||[];
+  var sel=document.getElementById('f-turma-sel');if(!sel)return;
+  var turmasUnicas=[...new Set(alunos.map(function(a){return a.turma||'';}).filter(Boolean))].sort();
+  var valorAtual=sel.value;
+  sel.innerHTML='<option value="">— Selecione a turma —</option>'+
+    turmasUnicas.map(function(t){return '<option value="'+t+'"'+(t===valorAtual?' selected':'')+'>Turma '+t+'</option>';}).join('');
+  popularAlunosSel();
+}
+
+window.popularAlunosSel=function(){
+  var turma=document.getElementById('f-turma-sel').value;
+  var alunosSel=document.getElementById('f-aluno-sel');
+  var alunos=(window._alunos||[]).filter(function(a){return a.turma===turma;});
+  alunosSel.innerHTML='<option value="">— Selecione o aluno —</option>'+
+    alunos.map(function(a){return '<option value="'+a.nome+'|'+a.turma+'">'+a.nome+'</option>';}).join('');
+  // Preencher turma no campo hidden quando selecionado
+  alunosSel.onchange=function(){
+    var val=alunosSel.value;
+    if(val){var parts=val.split('|');document.getElementById('f-turma').value=parts[1]||'';}
+    else{document.getElementById('f-turma').value='';}
+  };
+};
+
+// ═══ FILTRO DE STATUS ═══
+window.setFiltroStatus=function(filtro){
+  window._filtroStatus=filtro;
+  document.querySelectorAll('.filtro-btn').forEach(function(btn){
+    var bf=btn.dataset.filtro;
+    var classMap={'todos':'f-todos','Pendente':'f-pendente','Em acompanhamento':'f-acomp','Resolvido':'f-resolvido'};
+    btn.classList.toggle('ativo',bf===filtro);
+  });
+  renderLista();
+};
 
 // ═══ SUPORTE WHATSAPP ═══
 onValue(ref(db,'admin_config/numero_suporte'),function(snap){
@@ -777,7 +1092,6 @@ function atualizarUiAdminConfig(){
   document.getElementById('config-admin-deslogado').style.display=logado?'none':'block';
   document.getElementById('config-admin-logado').style.display=logado?'block':'none';
   document.getElementById('acc-admin-desc').textContent=logado?('Admin: '+(window._adminUsuario||'—')):'Entre com e-mail e senha de administrador';
-  // PATCH: inclui acc-suporte na lista de painéis admin
   ['acc-inst','acc-icone','acc-senha','acc-suporte'].forEach(function(id){document.getElementById(id).style.display=logado?'':'none';});
   if(logado){
     document.getElementById('cfg-admin-nome').textContent=window._adminUsuario||'—';
@@ -832,10 +1146,19 @@ window.alterarSenha=async function(){
   }
 };
 
-// ═══ SALVAR ═══
+// ═══ SALVAR OCORRÊNCIA ═══
 window.salvarOcorrencia=async function(){
   var btn=document.getElementById('btn-salvar');
-  var aluno=document.getElementById('f-aluno').value.trim();var turma=document.getElementById('f-turma').value.trim();
+  // Pegar aluno dependendo do modo
+  var aluno='',turma='';
+  if(window._modoAluno==='banco'){
+    var selVal=document.getElementById('f-aluno-sel').value;
+    if(!selVal){mostrarToast('⚠️ Selecione o aluno');return;}
+    var parts=selVal.split('|');aluno=parts[0]||'';turma=parts[1]||'';
+  }else{
+    aluno=(document.getElementById('f-aluno').value||'').trim();
+    turma=(document.getElementById('f-turma').value||'').trim();
+  }
   var tipo=document.getElementById('f-tipo').value;var professor=document.getElementById('f-professor').value.trim();
   var descricao=document.getElementById('f-descricao').value.trim();
   if(!aluno||!professor||!descricao){mostrarToast('⚠️ Preencha os campos obrigatórios');return;}
@@ -845,17 +1168,27 @@ window.salvarOcorrencia=async function(){
     var localId=adicionarNaFila(dados);var lista=window._ocs||[];
     lista.unshift(Object.assign({},dados,{firebaseKey:localId,_offline:true}));
     window._ocs=lista;renderLista();mostrarToast('📦 Salvo localmente!');
-    ['f-aluno','f-turma','f-professor','f-descricao'].forEach(function(id){document.getElementById(id).value='';});
-    document.getElementById('f-tipo').selectedIndex=0;irParaLista();
+    limparFormNovo();irParaLista();
   }else{
     try{
       await push(ocRef,dados);mostrarToast('✓ Ocorrência salva!');
-      ['f-aluno','f-turma','f-professor','f-descricao'].forEach(function(id){document.getElementById(id).value='';});
-      document.getElementById('f-tipo').selectedIndex=0;irParaLista();
+      limparFormNovo();irParaLista();
     }catch(e){adicionarNaFila(dados);mostrarToast('📦 Guardado para envio automático');irParaLista();}
   }
   btn.disabled=false;btn.textContent='Salvar Ocorrência';
 };
+
+function limparFormNovo(){
+  document.getElementById('f-aluno-sel').value='';
+  document.getElementById('f-turma-sel').value='';
+  document.getElementById('f-aluno-sel').innerHTML='<option value="">— Selecione o aluno —</option>';
+  document.getElementById('f-aluno').value='';
+  document.getElementById('f-turma').value='';
+  document.getElementById('f-professor').value='';
+  document.getElementById('f-descricao').value='';
+  document.getElementById('f-tipo').selectedIndex=0;
+}
+
 window.salvarEdicao=async function(){
   var btn=document.getElementById('btn-editar-salvar');var key=window._idAtual;if(!key)return;
   var aluno=document.getElementById('e-aluno').value.trim();var turma=document.getElementById('e-turma').value.trim();
@@ -888,7 +1221,7 @@ window.atualizarStatus=async function(novoStatus){
   catch(e){mostrarToast('Erro: '+e.message);}
 };
 
-// ═══ RENDER LISTA ═══
+// ═══ RENDER LISTA (com filtro de status) ═══
 window.renderLista=function renderLista(){
   var filaLocal=lerFila();var ocs=window._ocs||[];
   var keysFirebase=ocs.map(function(o){return o.firebaseKey;});
@@ -896,13 +1229,21 @@ window.renderLista=function renderLista(){
   var locais=filaLocal.map(function(x){var item=Object.assign({},x);item.firebaseKey=x._localId;item._offline=true;delete item._localId;return item;});
   var todos=locais.concat(ocs);
   var busca=(document.getElementById('busca')?document.getElementById('busca').value:'').toLowerCase();
+  // Filtro texto
   var fil=todos.filter(function(o){return(o.aluno||'').toLowerCase().includes(busca)||(o.turma||'').toLowerCase().includes(busca);});
+  // Filtro status
+  var filtroStatus=window._filtroStatus||'todos';
+  if(filtroStatus!=='todos'){fil=fil.filter(function(o){return o.status===filtroStatus;});}
+  // Contadores sempre baseados no total (sem filtro de status)
   document.getElementById('cnt-pendente').textContent=ocs.filter(function(o){return o.status==='Pendente';}).length;
   document.getElementById('cnt-acomp').textContent=ocs.filter(function(o){return o.status==='Em acompanhamento';}).length;
   document.getElementById('cnt-resolvido').textContent=ocs.filter(function(o){return o.status==='Resolvido';}).length;
   document.getElementById('cnt-total').textContent=ocs.length;
   var c=document.getElementById('lista-container');
-  if(!fil.length){c.innerHTML='<div class="empty">Nenhuma ocorrência encontrada</div>';c.className='lista';return;}
+  if(!fil.length){
+    var msg=filtroStatus!=='todos'?'Nenhuma ocorrência com este status':'Nenhuma ocorrência encontrada';
+    c.innerHTML='<div class="empty">'+msg+'</div>';c.className='lista';return;
+  }
   var ICON={"Agressão verbal":"💬","Agressão física":"👊","Uso de celular":"📱","Desrespeito ao professor":"🚫","Bagunça em sala":"🔊","Bullying":"😤","Vandalismo":"🔨","Outros":"📋"};
   c.innerHTML=fil.map(function(o){
     var cls=o.status==='Pendente'?'pendente':o.status==='Resolvido'?'resolvido':'acomp';
@@ -989,6 +1330,9 @@ window.irParaNovo=function(){
   _abaAtiva='lista';mostrarView('view-novo');
   var nomeSalvo=localStorage.getItem('ceti_nome_prof')||'';
   var campo=document.getElementById('f-professor');if(campo&&nomeSalvo)campo.value=nomeSalvo;
+  // garantir modo banco se há alunos
+  setModoAluno(window._alunos&&window._alunos.length>0?'banco':'manual');
+  popularTurmasSel();
 };
 window.salvarNomeProf=function(){
   var nome=(document.getElementById('cfg-nome-prof').value||'').trim();var sucEl=document.getElementById('sucesso-nome-prof');

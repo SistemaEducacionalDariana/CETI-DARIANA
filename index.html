@@ -1,3 +1,23 @@
+
+Claude terminou a resposta
+1780700035541_image.png
+
+<!DOCTYPE html> <html lang="pt-BR"> <head> <link rel="manifest" href="/manifest.json"> <script>if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');</script> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, u
+
+pasted
+
+na areade ocorrencias eu quero que fique organizado acategorias eo sastus das ococrrencias, categoria pendentes fica embaixo do estatus pendente, e etc, tudo alinhado
+
+18:55
+Entendi — você quer que a lista de ocorrências seja agrupada por status (Pendentes → Em Acompanhamento → Resolvidos), cada grupo com seu cabeçalho.
+
+Vou modificar apenas a função renderLista no JS e adicionar um pouco de CSS para os cabeçalhos de grupo.
+
+Mudanças:
+
+CSS: .grupo-header para o cabeçalho de cada seção
+JS: renderLista agrupa por status antes de renderizar
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -91,6 +111,22 @@ html[data-tema="escuro"] .btn-nova,html[data-tema="black"] .btn-nova{background:
 .busca-input:focus{border-color:var(--azul2);}
 /* LISTA */
 .lista{padding:0 16px 16px;display:flex;flex-direction:column;gap:8px;}
+/* GRUPO DE STATUS NA LISTA */
+.grupo-status-header{display:flex;align-items:center;gap:8px;padding:6px 0 4px;margin-top:4px;}
+.grupo-status-header:first-child{margin-top:0;}
+.grupo-status-linha{flex:1;height:1px;background:var(--borda);}
+.grupo-status-label{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;white-space:nowrap;padding:3px 10px;border-radius:20px;}
+.grupo-status-label.g-pendente{background:var(--badge-pendente-bg);color:var(--badge-pendente-txt);}
+.grupo-status-label.g-acomp{background:var(--badge-acomp-bg);color:var(--badge-acomp-txt);}
+.grupo-status-label.g-resolvido{background:var(--badge-resolvido-bg);color:var(--badge-resolvido-txt);}
+.grupo-status-label.g-offline{background:var(--cinza);color:var(--sub);}
+.grupo-status-dot{width:5px;height:5px;border-radius:50%;}
+.g-pendente .grupo-status-dot{background:var(--badge-pendente-dot);}
+.g-acomp .grupo-status-dot{background:var(--badge-acomp-dot);}
+.g-resolvido .grupo-status-dot{background:var(--badge-resolvido-dot);}
+.g-offline .grupo-status-dot{background:var(--sub);}
+.grupo-status-count{font-size:10px;font-weight:600;opacity:.75;}
+/* FIM GRUPO */
 .oc-card{background:var(--bg-card);border-radius:var(--radius);padding:13px 14px;border:1px solid var(--borda);cursor:pointer;position:relative;transition:border-color .15s;}
 .oc-card:active{opacity:.85;}
 .oc-card.offline-pending{border-left:3px solid var(--amarelo);}
@@ -471,7 +507,6 @@ html[data-tema="black"] .toast{background:#222;}
   <!-- CONFIGURAÇÕES -->
   <div class="view" id="view-config">
     <div class="config-wrap">
-      <!-- APARÊNCIA -->
       <div class="accordion-item" id="acc-aparencia">
         <div class="accordion-header" onclick="toggleAccordion('acc-aparencia')">
           <div class="accordion-header-left"><div class="accordion-icon">🎨</div><div><div class="accordion-title">Aparência</div><div class="accordion-desc">Tema do app neste dispositivo</div></div></div>
@@ -486,7 +521,6 @@ html[data-tema="black"] .toast{background:#222;}
           </div>
         </div>
       </div>
-      <!-- MEU NOME -->
       <div class="accordion-item" id="acc-nome">
         <div class="accordion-header" onclick="toggleAccordion('acc-nome')">
           <div class="accordion-header-left"><div class="accordion-icon">👤</div><div><div class="accordion-title">Meu Nome</div><div class="accordion-desc">Preenchido automaticamente ao registrar</div></div></div>
@@ -499,7 +533,6 @@ html[data-tema="black"] .toast{background:#222;}
           <button class="btn-salvar" style="font-size:12px;padding:10px;" onclick="salvarNomeProf()">Salvar Meu Nome</button>
         </div>
       </div>
-      <!-- ACESSO ADMIN -->
       <div class="accordion-item" id="acc-admin">
         <div class="accordion-header" onclick="toggleAccordion('acc-admin')">
           <div class="accordion-header-left"><div class="accordion-icon">🔐</div><div><div class="accordion-title">Acesso Admin</div><div class="accordion-desc" id="acc-admin-desc">Entre com e-mail e senha de administrador</div></div></div>
@@ -520,8 +553,6 @@ html[data-tema="black"] .toast{background:#222;}
           </div>
         </div>
       </div>
-
-      <!-- BANCO DE ALUNOS — visível somente no modo admin -->
       <div class="accordion-item" id="acc-alunos" style="display:none">
         <div class="accordion-header" onclick="toggleAccordion('acc-alunos')">
           <div class="accordion-header-left"><div class="accordion-icon">🎒</div><div><div class="accordion-title">Banco de Alunos</div><div class="accordion-desc" id="acc-alunos-desc">Cadastre alunos por série e turma</div></div></div>
@@ -530,7 +561,6 @@ html[data-tema="black"] .toast{background:#222;}
         <div class="accordion-divider"></div>
         <div class="accordion-body">
           <div style="margin-top:4px;">
-            <!-- Aviso quando há erro de permissão -->
             <div class="aviso-regras" id="aviso-regras-firebase">
               ⚠️ <strong>Configuração necessária:</strong> Vá ao Firebase Console → Realtime Database → Regras e configure conforme orientado pelo desenvolvedor.
             </div>
@@ -542,7 +572,6 @@ html[data-tema="black"] .toast{background:#222;}
             <div class="erro-msg" id="erro-aluno"></div>
             <div class="sucesso-msg" id="sucesso-aluno"></div>
             <button class="btn-salvar" style="font-size:12px;padding:10px;margin-bottom:12px;" onclick="salvarAluno()">+ Adicionar Aluno</button>
-            <!-- Info sobre edição/exclusão -->
             <div id="info-admin-alunos" style="display:none;font-size:11px;color:var(--sub);margin-bottom:8px;padding:7px 10px;background:var(--azulc);border-radius:7px;border:1px solid var(--azul2);color:var(--azul2);">
               🔐 Modo admin: você pode editar e excluir alunos abaixo.
             </div>
@@ -552,8 +581,6 @@ html[data-tema="black"] .toast{background:#222;}
           </div>
         </div>
       </div>
-
-      <!-- ADMIN ONLY -->
       <div class="accordion-item" id="acc-inst" style="display:none">
         <div class="accordion-header" onclick="toggleAccordion('acc-inst')">
           <div class="accordion-header-left"><div class="accordion-icon">🏫</div><div><div class="accordion-title">Instituição</div><div class="accordion-desc">Nome exibido no cabeçalho do app</div></div></div>
@@ -752,7 +779,7 @@ onValue(ocRef,function(snapshot){
   lista.reverse();window._ocs=lista;renderLista();renderCalendario();renderChart();
 });
 
-// ═══ BANCO DE ALUNOS — listener ═══
+// ═══ BANCO DE ALUNOS ═══
 onValue(alunosRef,function(snapshot){
   var lista=[];
   snapshot.forEach(function(child){lista.push(Object.assign({firebaseKey:child.key},child.val()));});
@@ -762,7 +789,6 @@ onValue(alunosRef,function(snapshot){
   popularTurmasSel();
 });
 
-// ═══ ADICIONAR ALUNO (somente admin) ═══
 window.salvarAluno=async function(){
   var nome=(document.getElementById('cfg-aluno-nome').value||'').trim();
   var serie=(document.getElementById('cfg-aluno-serie').value||'').trim();
@@ -782,7 +808,6 @@ window.salvarAluno=async function(){
     mostrarToast('✓ '+nome+' cadastrado!');
     document.getElementById('aviso-regras-firebase').classList.remove('show');
   }catch(e){
-    console.error('Erro ao salvar aluno:',e);
     var msgErro='❌ Erro ao salvar.';
     if(e.code==='PERMISSION_DENIED'||e.message.includes('PERMISSION_DENIED')){
       msgErro='❌ Acesso negado. Configure as Regras do Firebase conforme instrução.';
@@ -793,7 +818,6 @@ window.salvarAluno=async function(){
   if(btn){btn.disabled=false;btn.textContent='+ Adicionar Aluno';}
 };
 
-// ═══ EDITAR ALUNO (somente admin) ═══
 window.abrirEdicaoAluno=function(key){
   if(!window._adminAtivo){mostrarToast('⚠️ Apenas admin pode editar');return;}
   document.querySelectorAll('.aluno-config-edit-form.aberto').forEach(function(f){f.classList.remove('aberto');});
@@ -825,7 +849,6 @@ window.salvarEdicaoAluno=async function(key){
   }
 };
 
-// ═══ EXCLUIR ALUNO (somente admin) ═══
 window._alunoParaExcluir=null;
 window.pedirExclusaoAluno=function(key){
   if(!window._adminAtivo){mostrarToast('⚠️ Apenas admin pode excluir');return;}
@@ -845,7 +868,6 @@ window.confirmarExclusaoAluno=async function(){
   window._alunoParaExcluir=null;
 };
 
-// ═══ RENDER LISTA ALUNOS CONFIG ═══
 function renderAlunosConfig(){
   var lista=window._alunos||[];
   var isAdmin=window._adminAtivo||false;
@@ -899,7 +921,7 @@ function htmlEscape(str){
   return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// ═══ SELETOR TURMA→ALUNO NO FORMULÁRIO ═══
+// ═══ SELETOR TURMA→ALUNO ═══
 window._modoAluno='banco';
 window.setModoAluno=function(modo){
   window._modoAluno=modo;
@@ -1065,7 +1087,6 @@ function atualizarUiAdminConfig(){
   document.getElementById('config-admin-deslogado').style.display=logado?'none':'block';
   document.getElementById('config-admin-logado').style.display=logado?'block':'none';
   document.getElementById('acc-admin-desc').textContent=logado?('Admin: '+(window._adminUsuario||'—')):'Entre com e-mail e senha de administrador';
-  // acc-alunos agora faz parte do grupo de accordions exclusivos do admin
   ['acc-inst','acc-icone','acc-senha','acc-suporte','acc-alunos'].forEach(function(id){document.getElementById(id).style.display=logado?'':'none';});
   if(logado){
     document.getElementById('cfg-admin-nome').textContent=window._adminUsuario||'—';
@@ -1192,7 +1213,7 @@ window.atualizarStatus=async function(novoStatus){
   catch(e){mostrarToast('Erro: '+e.message);}
 };
 
-// ═══ RENDER LISTA ═══
+// ═══ RENDER LISTA (COM AGRUPAMENTO POR STATUS) ═══
 window.renderLista=function renderLista(){
   var filaLocal=lerFila();var ocs=window._ocs||[];
   var keysFirebase=ocs.map(function(o){return o.firebaseKey;});
@@ -1203,30 +1224,65 @@ window.renderLista=function renderLista(){
   var fil=todos.filter(function(o){return(o.aluno||'').toLowerCase().includes(busca)||(o.turma||'').toLowerCase().includes(busca);});
   var filtroStatus=window._filtroStatus||'todos';
   if(filtroStatus!=='todos'){fil=fil.filter(function(o){return o.status===filtroStatus;});}
+
   document.getElementById('cnt-pendente').textContent=ocs.filter(function(o){return o.status==='Pendente';}).length;
   document.getElementById('cnt-acomp').textContent=ocs.filter(function(o){return o.status==='Em acompanhamento';}).length;
   document.getElementById('cnt-resolvido').textContent=ocs.filter(function(o){return o.status==='Resolvido';}).length;
   document.getElementById('cnt-total').textContent=ocs.length;
+
   var c=document.getElementById('lista-container');
   if(!fil.length){
     var msg=filtroStatus!=='todos'?'Nenhuma ocorrência com este status':'Nenhuma ocorrência encontrada';
     c.innerHTML='<div class="empty">'+msg+'</div>';c.className='lista';return;
   }
+
   var ICON={"Agressão verbal":"💬","Agressão física":"👊","Uso de celular":"📱","Desrespeito ao professor":"🚫","Bagunça em sala":"🔊","Bullying":"😤","Vandalismo":"🔨","Outros":"📋"};
-  c.innerHTML=fil.map(function(o){
-    var cls=o.status==='Pendente'?'pendente':o.status==='Resolvido'?'resolvido':'acomp';
-    var offlineTag=o._offline?'<span class="offline-tag">Offline</span>':'';
-    var offlineCls=o._offline?' offline-pending':'';
-    return '<div class="oc-card'+offlineCls+'" onclick="verDetalhe(\''+o.firebaseKey+'\')">'+
-      '<button class="btn-excluir-card" onclick="event.stopPropagation();pedirExclusao(\''+o.firebaseKey+'\')">🗑️</button>'+
-      '<div class="oc-top"><span class="oc-nome">'+htmlEscape(o.aluno)+offlineTag+'</span><span class="oc-turma">'+(o.turma||'—')+'</span></div>'+
-      '<div class="oc-tipo">'+(ICON[o.tipo]||'📋')+' '+o.tipo+'</div>'+
-      '<div class="oc-meta"><span class="oc-data">'+o.data+' · '+o.hora+' · <span style="font-size:9px;font-weight:700;background:var(--azulc);color:var(--azul2);border-radius:4px;padding:1px 5px;margin-right:2px;">Prof(a).</span> '+htmlEscape(o.professor)+'</span>'+
-      '<span class="badge badge-'+cls+'"><span class="badge-dot"></span>'+o.status+'</span></div></div>';
-  }).join('');
+
+  // ── agrupamento por status (ordem fixa: Offline → Pendente → Em acompanhamento → Resolvido) ──
+  var GRUPOS=[
+    {key:'offline',  label:'Offline',            cls:'g-offline',   test:function(o){return!!o._offline;}},
+    {key:'pendente', label:'Pendentes',           cls:'g-pendente',  test:function(o){return!o._offline&&o.status==='Pendente';}},
+    {key:'acomp',    label:'Em Acompanhamento',   cls:'g-acomp',     test:function(o){return!o._offline&&o.status==='Em acompanhamento';}},
+    {key:'resolvido',label:'Resolvidos',          cls:'g-resolvido', test:function(o){return!o._offline&&o.status==='Resolvido';}}
+  ];
+
+  // quando há filtro ativo, não agrupa (lista simples)
+  var agrupar=filtroStatus==='todos'&&!busca;
+
+  var html='';
+  if(agrupar){
+    GRUPOS.forEach(function(grupo){
+      var itens=fil.filter(grupo.test);
+      if(!itens.length)return;
+      html+='<div class="grupo-status-header">'+
+        '<div class="grupo-status-label '+grupo.cls+'">'+
+          '<span class="grupo-status-dot"></span>'+grupo.label+
+          '<span class="grupo-status-count">'+itens.length+'</span>'+
+        '</div>'+
+        '<div class="grupo-status-linha"></div>'+
+      '</div>';
+      itens.forEach(function(o){html+=renderOcCard(o,ICON);});
+    });
+  }else{
+    fil.forEach(function(o){html+=renderOcCard(o,ICON);});
+  }
+
+  c.innerHTML=html;
   c.className='lista'+(window._adminAtivo?' modo-admin':'');
   atualizarBannerFila();
 };
+
+function renderOcCard(o,ICON){
+  var cls=o.status==='Pendente'?'pendente':o.status==='Resolvido'?'resolvido':'acomp';
+  var offlineTag=o._offline?'<span class="offline-tag">Offline</span>':'';
+  var offlineCls=o._offline?' offline-pending':'';
+  return '<div class="oc-card'+offlineCls+'" onclick="verDetalhe(\''+o.firebaseKey+'\')">'+
+    '<button class="btn-excluir-card" onclick="event.stopPropagation();pedirExclusao(\''+o.firebaseKey+'\')">🗑️</button>'+
+    '<div class="oc-top"><span class="oc-nome">'+htmlEscape(o.aluno)+offlineTag+'</span><span class="oc-turma">'+(o.turma||'—')+'</span></div>'+
+    '<div class="oc-tipo">'+(ICON[o.tipo]||'📋')+' '+o.tipo+'</div>'+
+    '<div class="oc-meta"><span class="oc-data">'+o.data+' · '+o.hora+' · <span style="font-size:9px;font-weight:700;background:var(--azulc);color:var(--azul2);border-radius:4px;padding:1px 5px;margin-right:2px;">Prof(a).</span> '+htmlEscape(o.professor)+'</span>'+
+    '<span class="badge badge-'+cls+'"><span class="badge-dot"></span>'+o.status+'</span></div></div>';
+}
 
 // ═══ DETALHE ═══
 window.verDetalhe=function(key){

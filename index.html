@@ -521,8 +521,8 @@ html[data-tema="black"] .toast{background:#222;}
         </div>
       </div>
 
-      <!-- BANCO DE ALUNOS -->
-      <div class="accordion-item" id="acc-alunos">
+      <!-- BANCO DE ALUNOS — visível somente no modo admin -->
+      <div class="accordion-item" id="acc-alunos" style="display:none">
         <div class="accordion-header" onclick="toggleAccordion('acc-alunos')">
           <div class="accordion-header-left"><div class="accordion-icon">🎒</div><div><div class="accordion-title">Banco de Alunos</div><div class="accordion-desc" id="acc-alunos-desc">Cadastre alunos por série e turma</div></div></div>
           <div class="accordion-chevron">▼</div>
@@ -762,7 +762,7 @@ onValue(alunosRef,function(snapshot){
   popularTurmasSel();
 });
 
-// ═══ ADICIONAR ALUNO (qualquer usuário pode) ═══
+// ═══ ADICIONAR ALUNO (somente admin) ═══
 window.salvarAluno=async function(){
   var nome=(document.getElementById('cfg-aluno-nome').value||'').trim();
   var serie=(document.getElementById('cfg-aluno-serie').value||'').trim();
@@ -796,7 +796,6 @@ window.salvarAluno=async function(){
 // ═══ EDITAR ALUNO (somente admin) ═══
 window.abrirEdicaoAluno=function(key){
   if(!window._adminAtivo){mostrarToast('⚠️ Apenas admin pode editar');return;}
-  // Fechar outros abertos
   document.querySelectorAll('.aluno-config-edit-form.aberto').forEach(function(f){f.classList.remove('aberto');});
   var formEl=document.getElementById('edit-form-'+key);
   if(formEl)formEl.classList.add('aberto');
@@ -826,7 +825,7 @@ window.salvarEdicaoAluno=async function(key){
   }
 };
 
-// ═══ EXCLUIR ALUNO (admin ou sem restrição de acordo com as regras) ═══
+// ═══ EXCLUIR ALUNO (somente admin) ═══
 window._alunoParaExcluir=null;
 window.pedirExclusaoAluno=function(key){
   if(!window._adminAtivo){mostrarToast('⚠️ Apenas admin pode excluir');return;}
@@ -856,7 +855,6 @@ function renderAlunosConfig(){
   var infoAdmin=document.getElementById('info-admin-alunos');
   if(infoAdmin)infoAdmin.style.display=isAdmin?'block':'none';
   if(!lista.length){container.innerHTML='<div class="alunos-vazio">Nenhum aluno cadastrado</div>';return;}
-  // agrupar por turma
   var turmas={};lista.forEach(function(a){var t=a.turma||'—';if(!turmas[t])turmas[t]=[];turmas[t].push(a);});
   var html='';
   Object.keys(turmas).sort().forEach(function(t){
@@ -1067,7 +1065,8 @@ function atualizarUiAdminConfig(){
   document.getElementById('config-admin-deslogado').style.display=logado?'none':'block';
   document.getElementById('config-admin-logado').style.display=logado?'block':'none';
   document.getElementById('acc-admin-desc').textContent=logado?('Admin: '+(window._adminUsuario||'—')):'Entre com e-mail e senha de administrador';
-  ['acc-inst','acc-icone','acc-senha','acc-suporte'].forEach(function(id){document.getElementById(id).style.display=logado?'':'none';});
+  // acc-alunos agora faz parte do grupo de accordions exclusivos do admin
+  ['acc-inst','acc-icone','acc-senha','acc-suporte','acc-alunos'].forEach(function(id){document.getElementById(id).style.display=logado?'':'none';});
   if(logado){
     document.getElementById('cfg-admin-nome').textContent=window._adminUsuario||'—';
     popularEmojiGrid('emoji-grid-painel');
@@ -1076,7 +1075,6 @@ function atualizarUiAdminConfig(){
   }
   document.getElementById('admin-banner').classList.toggle('show',logado);
   if(logado)document.getElementById('admin-user-badge').textContent=window._adminUsuario||'—';
-  // re-render lista de alunos com/sem botões de admin
   renderAlunosConfig();
 }
 window.fazerLoginConfig=async function(){

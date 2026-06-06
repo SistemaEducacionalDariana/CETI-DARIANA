@@ -436,10 +436,10 @@ html[data-tema="black"] .toast{background:#222;}
       <div class="form-group">
         <label>Aluno *</label>
         <div class="aluno-modo-btns">
-          <button class="aluno-modo-btn ativo" id="modo-btn-banco" onclick="setModoAluno('banco')">🗂️ Do banco</button>
-          <button class="aluno-modo-btn" id="modo-btn-manual" onclick="setModoAluno('manual')">✏️ Digitar</button>
+         <button class="aluno-modo-btn" id="modo-btn-banco" onclick="setModoAluno('banco')">🗂️ Do banco</button>
+          <button class="aluno-modo-btn ativo" id="modo-btn-manual" onclick="setModoAluno('manual')">✏️ Digitar</button>
         </div>
-        <div id="aluno-modo-banco">
+    <div id="aluno-modo-banco" style="display:none;">
           <select id="f-turma-sel" onchange="popularAlunosSel()" style="margin-bottom:6px;">
             <option value="">— Selecione a turma —</option>
           </select>
@@ -447,7 +447,7 @@ html[data-tema="black"] .toast{background:#222;}
             <option value="">— Selecione o aluno —</option>
           </select>
         </div>
-        <div id="aluno-modo-manual" style="display:none;">
+     <div id="aluno-modo-manual">
           <input id="f-aluno" type="text" placeholder="Nome completo do aluno">
         </div>
       </div>
@@ -902,7 +902,7 @@ function htmlEscape(str){
 }
 
 // ═══ SELETOR TURMA→ALUNO ═══
-window._modoAluno='banco';
+window._modoAluno='manual';
 window.setModoAluno=function(modo){
   window._modoAluno=modo;
   document.getElementById('modo-btn-banco').classList.toggle('ativo',modo==='banco');

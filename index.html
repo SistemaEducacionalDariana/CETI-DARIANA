@@ -1334,7 +1334,7 @@ window.irParaNovo=function(){
   _abaAtiva='lista';mostrarView('view-novo');
   var nomeSalvo=localStorage.getItem('ceti_nome_prof')||'';
   var campo=document.getElementById('f-professor');if(campo&&nomeSalvo)campo.value=nomeSalvo;
-  setModoAluno(window._alunos&&window._alunos.length>0?'banco':'manual');
+  setModoAluno('manual');
   popularTurmasSel();
 };
 window.salvarNomeProf=function(){

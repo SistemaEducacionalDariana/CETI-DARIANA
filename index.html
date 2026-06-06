@@ -365,10 +365,7 @@ html[data-tema="black"] .toast{background:#222;}
       <div class="stat-card c-cinza"><div class="stat-num" id="cnt-total">0</div><div class="stat-label">Total</div></div>
     </div>
     <div class="filtro-status-bar" id="filtro-status-bar">
-      <button class="filtro-btn f-todos ativo" data-filtro="todos" onclick="setFiltroStatus('todos')">
-        <span class="filtro-dot filtro-dot-todos"></span>Todos
-      </button>
-      <button class="filtro-btn f-pendente" data-filtro="Pendente" onclick="setFiltroStatus('Pendente')">
+  <button class="filtro-btn f-pendente" data-filtro="Pendente" onclick="setFiltroStatus('Pendente')">
         <span class="filtro-dot filtro-dot-pendente"></span>Pendentes
       </button>
       <button class="filtro-btn f-acomp" data-filtro="Em acompanhamento" onclick="setFiltroStatus('Em acompanhamento')">
@@ -376,6 +373,9 @@ html[data-tema="black"] .toast{background:#222;}
       </button>
       <button class="filtro-btn f-resolvido" data-filtro="Resolvido" onclick="setFiltroStatus('Resolvido')">
         <span class="filtro-dot filtro-dot-resolvido"></span>Resolvidos
+      </button>
+      <button class="filtro-btn f-todos" data-filtro="todos" onclick="setFiltroStatus('todos')">
+        <span class="filtro-dot filtro-dot-todos"></span>Todos
       </button>
     </div>
     <div class="busca-wrap"><input class="busca-input" type="text" id="busca" placeholder="Buscar aluno, turma..." oninput="renderLista()"></div>

@@ -509,6 +509,7 @@ html[data-tema="black"] .toast{background:#222;}
         <div class="accordion-divider"></div>
         <div class="accordion-body">
           <div class="form-group" style="margin-bottom:10px;margin-top:4px;"><label>Prof(a). Nome</label><input type="text" id="cfg-nome-prof" placeholder="Seu nome completo" autocomplete="off"></div>
+         <div class="form-group" style="margin-bottom:10px;margin-top:8px;"><label>Minha Disciplina (opcional)</label><input type="text" id="cfg-disc-prof" placeholder="Ex: Matemática, Português..." autocomplete="off"></div>
           <div class="sucesso-msg" id="sucesso-nome-prof"></div>
           <button class="btn-salvar" style="font-size:12px;padding:10px;" onclick="salvarNomeProf()">Salvar Meu Nome</button>
         </div>
@@ -1136,7 +1137,8 @@ window.salvarOcorrencia=async function(){
   var tipo=document.getElementById('f-tipo').value;var professor=document.getElementById('f-professor').value.trim();
   var descricao=document.getElementById('f-descricao').value.trim();
   if(!aluno||!professor||!descricao){mostrarToast('⚠️ Preencha os campos obrigatórios');return;}
-  var dados={aluno,turma,tipo,professor,descricao,status:'Pendente',data:new Date().toLocaleDateString('pt-BR'),hora:new Date().toTimeString().slice(0,5),timestamp:Date.now()};
+ var disciplina=window._discProfAtual||'';
+  var dados={aluno,turma,tipo,professor,disciplina,descricao,status:'Pendente',data:new Date().toLocaleDateString('pt-BR'),hora:new Date().toTimeString().slice(0,5),timestamp:Date.now()};
   btn.disabled=true;btn.textContent='Salvando...';
   if(!_online){
     var localId=adicionarNaFila(dados);var lista=window._ocs||[];
@@ -1260,7 +1262,7 @@ function renderOcCard(o,ICON){
     '<button class="btn-excluir-card" onclick="event.stopPropagation();pedirExclusao(\''+o.firebaseKey+'\')">🗑️</button>'+
     '<div class="oc-top"><span class="oc-nome">'+htmlEscape(o.aluno)+offlineTag+'</span><span class="oc-turma">'+(o.turma||'—')+'</span></div>'+
     '<div class="oc-tipo">'+(ICON[o.tipo]||'📋')+' '+o.tipo+'</div>'+
-    '<div class="oc-meta"><span class="oc-data">'+o.data+' · '+o.hora+' · <span style="font-size:9px;font-weight:700;background:var(--azulc);color:var(--azul2);border-radius:4px;padding:1px 5px;margin-right:2px;">Prof(a).</span> '+htmlEscape(o.professor)+'</span>'+
+    '<div class="oc-meta"><span class="oc-data">'+o.data+' · '+o.hora+' · <span style="font-size:9px;font-weight:700;background:var(--azulc);color:var(--azul2);border-radius:4px;padding:1px 5px;margin-right:2px;">Prof(a).</span> '+htmlEscape(o.professor)+'</span>'+(o.disciplina?'<span style="font-size:9px;font-weight:700;background:var(--cinza);color:var(--sub);border-radius:4px;padding:1px 5px;margin-left:3px;border:1px solid var(--borda);">'+htmlEscape(o.disciplina)+'</span>':'')+'</span>'+
     '<span class="badge badge-'+cls+'"><span class="badge-dot"></span>'+o.status+'</span></div></div>';
 }
 
@@ -1333,17 +1335,27 @@ window.irParaLista=function(){
 window.irParaNovo=function(){
   _abaAtiva='lista';mostrarView('view-novo');
   var nomeSalvo=localStorage.getItem('ceti_nome_prof')||'';
-  var campo=document.getElementById('f-professor');if(campo&&nomeSalvo)campo.value=nomeSalvo;
+ var campo=document.getElementById('f-professor');if(campo&&nomeSalvo)campo.value=nomeSalvo;
+  window._discProfAtual=localStorage.getItem('ceti_disc_prof')||'';
   setModoAluno('manual');
   popularTurmasSel();
 };
 window.salvarNomeProf=function(){
-  var nome=(document.getElementById('cfg-nome-prof').value||'').trim();var sucEl=document.getElementById('sucesso-nome-prof');
+  var nome=(document.getElementById('cfg-nome-prof').value||'').trim();
+  var disc=(document.getElementById('cfg-disc-prof').value||'').trim();
+  var sucEl=document.getElementById('sucesso-nome-prof');
   if(!nome){mostrarToast('⚠️ Informe seu nome');return;}
-  localStorage.setItem('ceti_nome_prof',nome);sucEl.textContent='✅ Nome salvo!';sucEl.classList.add('show');
-  setTimeout(function(){sucEl.classList.remove('show');},2500);mostrarToast('✓ Nome salvo neste dispositivo!');
+  localStorage.setItem('ceti_nome_prof',nome);
+  localStorage.setItem('ceti_disc_prof',disc);
+  sucEl.textContent='✅ Nome e disciplina salvos!';sucEl.classList.add('show');
+  setTimeout(function(){sucEl.classList.remove('show');},2500);mostrarToast('✓ Salvo neste dispositivo!');
 };
-function carregarNomeProfConfig(){var nome=localStorage.getItem('ceti_nome_prof')||'';var campo=document.getElementById('cfg-nome-prof');if(campo)campo.value=nome;}
+function carregarNomeProfConfig(){
+  var nome=localStorage.getItem('ceti_nome_prof')||'';
+  var disc=localStorage.getItem('ceti_disc_prof')||'';
+  var campo=document.getElementById('cfg-nome-prof');if(campo)campo.value=nome;
+  var campoDisc=document.getElementById('cfg-disc-prof');if(campoDisc)campoDisc.value=disc;
+}
 window.irParaPainel=function(){
   _abaAtiva='config';mostrarView('view-config');
   document.getElementById('tab-config').classList.add('ativo');

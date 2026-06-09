@@ -331,6 +331,13 @@ html[data-tema="black"] .toast{background:#222;}
 .btn-salvar-aluno-edit{padding:8px;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;background:var(--azul2);color:#fff;}
 .btn-cancelar-aluno-edit{padding:8px;border:1px solid var(--borda);border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;background:var(--cinza);color:var(--sub);}
 .alunos-vazio{font-size:12px;color:var(--sub);text-align:center;padding:12px 0;}
+/* TURMAS CONFIG */
+.turmas-lista-config{margin-top:12px;display:flex;flex-direction:column;gap:6px;max-height:260px;overflow-y:auto;}
+.turma-config-item{background:var(--cinza);border:1px solid var(--borda);border-radius:8px;padding:9px 12px;display:flex;align-items:center;justify-content:space-between;}
+.turma-config-nome{font-size:13px;font-weight:600;color:var(--texto);}
+.turma-config-sub{font-size:10px;color:var(--sub);margin-top:1px;}
+.btn-del-turma{background:none;border:none;color:var(--sub);cursor:pointer;font-size:15px;padding:2px 6px;border-radius:5px;flex-shrink:0;}
+.btn-del-turma:hover{background:#FEE2E2;color:var(--vermelho);}
 /* AVISO REGRAS FIREBASE */
 .aviso-regras{background:#FEF3C7;border:1px solid #FCD34D;border-radius:8px;padding:10px 12px;font-size:11px;color:#92400E;font-weight:500;line-height:1.5;margin-bottom:12px;display:none;}
 .aviso-regras.show{display:block;}
@@ -459,7 +466,7 @@ html[data-tema="black"] .toast{background:#222;}
           <div class="banco-step">
             <div class="banco-step-label"><span class="banco-step-num">1</span><span id="label-passo-serie">Ano</span></div>
             <select id="f-serie-sel" onchange="popularTurmasSel()">
-              <option value="">— Selecione o <span id="opt-serie-placeholder">ano</span> —</option>
+              <option value="">— Selecione o ano —</option>
             </select>
           </div>
           <!-- PASSO 2: Turma -->
@@ -483,9 +490,11 @@ html[data-tema="black"] .toast{background:#222;}
           <input id="f-aluno" type="text" placeholder="Nome completo do aluno">
         </div>
       </div>
+
+      <!-- MUDANÇA 1: turma só aparece no modo manual -->
       <div class="form-row">
-        <div class="form-group"><label>Turma</label><input id="f-turma" type="text" placeholder="Ex: 3A"></div>
-        <div class="form-group"><label>Tipo *</label>
+        <div class="form-group" id="turma-manual-wrap"><label>Turma</label><input id="f-turma" type="text" placeholder="Ex: 3A"></div>
+        <div class="form-group" style="grid-column: var(--tipo-col, 1);" id="tipo-wrap"><label>Tipo *</label>
           <select id="f-tipo"><option>Agressão verbal</option><option>Agressão física</option><option>Uso de celular</option><option>Desrespeito ao professor</option><option>Bagunça em sala</option><option>Bullying</option><option>Vandalismo</option><option>Outros</option></select>
         </div>
       </div>
@@ -536,7 +545,7 @@ html[data-tema="black"] .toast{background:#222;}
         </div>
       </div>
 
-      <!-- TERMINOLOGIA ANO/SÉRIE (NOVO) -->
+      <!-- TERMINOLOGIA ANO/SÉRIE -->
       <div class="accordion-item" id="acc-terminologia">
         <div class="accordion-header" onclick="toggleAccordion('acc-terminologia')">
           <div class="accordion-header-left"><div class="accordion-icon">🏷️</div><div><div class="accordion-title">Terminologia Escolar</div><div class="accordion-desc" id="acc-terminologia-desc">Como sua escola chama: Ano ou Série?</div></div></div>
@@ -549,12 +558,12 @@ html[data-tema="black"] .toast{background:#222;}
             <div class="terminologia-opcao" id="term-op-ano" onclick="selecionarTerminologia('ano')">
               <span class="terminologia-check">✔</span>
               <div class="terminologia-opcao-titulo">Ano</div>
-              <div class="terminologia-opcao-ex">Ex: 6º Ano, 7º Ano...</div>
+              <div class="terminologia-opcao-ex">Ex: 6° Ano, 7° Ano...</div>
             </div>
             <div class="terminologia-opcao" id="term-op-serie" onclick="selecionarTerminologia('serie')">
               <span class="terminologia-check">✔</span>
               <div class="terminologia-opcao-titulo">Série</div>
-              <div class="terminologia-opcao-ex">Ex: 6ª Série, 7ª Série...</div>
+              <div class="terminologia-opcao-ex">Ex: 6° Série, 7° Série...</div>
             </div>
           </div>
         </div>
@@ -600,7 +609,7 @@ html[data-tema="black"] .toast{background:#222;}
       <!-- BANCO DE ALUNOS (só admin) -->
       <div class="accordion-item" id="acc-alunos" style="display:none">
         <div class="accordion-header" onclick="toggleAccordion('acc-alunos')">
-          <div class="accordion-header-left"><div class="accordion-icon">🎒</div><div><div class="accordion-title">Banco de Alunos</div><div class="accordion-desc" id="acc-alunos-desc">Cadastre alunos por série e turma</div></div></div>
+          <div class="accordion-header-left"><div class="accordion-icon">🎒</div><div><div class="accordion-title">Banco de Alunos</div><div class="accordion-desc" id="acc-alunos-desc">Gerencie alunos cadastrados</div></div></div>
           <div class="accordion-chevron">▼</div>
         </div>
         <div class="accordion-divider"></div>
@@ -609,19 +618,66 @@ html[data-tema="black"] .toast{background:#222;}
             <div class="aviso-regras" id="aviso-regras-firebase">
               ⚠️ <strong>Configuração necessária:</strong> Vá ao Firebase Console → Realtime Database → Regras e configure conforme orientado pelo desenvolvedor.
             </div>
+            <!-- Adicionar novo aluno -->
+            <div style="font-size:10px;font-weight:700;color:var(--azul2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;padding:7px 10px;background:var(--azulc);border-radius:8px;border:1px solid var(--azul2);">➕ Adicionar Aluno</div>
             <div class="form-group"><label>Nome do Aluno *</label><input type="text" id="cfg-aluno-nome" placeholder="Nome completo" style="text-transform:capitalize;" autocomplete="off"></div>
             <div class="form-row">
-              <div class="form-group"><label id="label-cfg-serie">Ano *</label><input type="text" id="cfg-aluno-serie" placeholder="Ex: 6º Ano"></div>
-              <div class="form-group"><label>Turma *</label><input type="text" id="cfg-aluno-turma" placeholder="Ex: A"></div>
+              <div class="form-group">
+                <label id="label-cfg-serie">Ano *</label>
+                <input type="text" id="cfg-aluno-serie" placeholder="Ex: 6" autocomplete="off" inputmode="numeric">
+              </div>
+              <div class="form-group">
+                <label>Turma *</label>
+                <select id="cfg-aluno-turma-sel">
+                  <option value="">— Selecione —</option>
+                </select>
+              </div>
             </div>
             <div class="erro-msg" id="erro-aluno"></div>
             <div class="sucesso-msg" id="sucesso-aluno"></div>
-            <button class="btn-salvar" style="font-size:12px;padding:10px;margin-bottom:12px;" onclick="salvarAluno()">+ Adicionar Aluno</button>
+            <button class="btn-salvar" style="font-size:12px;padding:10px;margin-bottom:16px;" onclick="salvarAluno()">+ Adicionar Aluno</button>
+
+            <!-- Lista de alunos -->
+            <div style="font-size:10px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;padding:7px 10px;background:var(--cinza);border-radius:8px;border:1px solid var(--borda);">👥 Alunos Cadastrados</div>
             <div id="info-admin-alunos" style="display:none;font-size:11px;color:var(--sub);margin-bottom:8px;padding:7px 10px;background:var(--azulc);border-radius:7px;border:1px solid var(--azul2);color:var(--azul2);">
               🔐 Modo admin: você pode editar e excluir alunos abaixo.
             </div>
             <div class="alunos-lista-config" id="alunos-lista-config">
               <div class="alunos-vazio">Nenhum aluno cadastrado</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BANCO DE TURMAS (só admin) — NOVO -->
+      <div class="accordion-item" id="acc-turmas" style="display:none">
+        <div class="accordion-header" onclick="toggleAccordion('acc-turmas')">
+          <div class="accordion-header-left"><div class="accordion-icon">🏷️</div><div><div class="accordion-title">Banco de Turmas</div><div class="accordion-desc" id="acc-turmas-desc">Gerencie as turmas disponíveis</div></div></div>
+          <div class="accordion-chevron">▼</div>
+        </div>
+        <div class="accordion-divider"></div>
+        <div class="accordion-body">
+          <div style="margin-top:4px;">
+            <!-- Adicionar nova turma -->
+            <div style="font-size:10px;font-weight:700;color:var(--azul2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;padding:7px 10px;background:var(--azulc);border-radius:8px;border:1px solid var(--azul2);">➕ Adicionar Turma</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label id="label-cfg-serie-turma">Ano/Série *</label>
+                <input type="text" id="cfg-turma-serie" placeholder="Ex: 6" autocomplete="off" inputmode="numeric">
+              </div>
+              <div class="form-group">
+                <label>Turma *</label>
+                <input type="text" id="cfg-turma-nome" placeholder="Ex: A, B, C..." autocomplete="off">
+              </div>
+            </div>
+            <div class="erro-msg" id="erro-turma"></div>
+            <div class="sucesso-msg" id="sucesso-turma"></div>
+            <button class="btn-salvar" style="font-size:12px;padding:10px;margin-bottom:16px;" onclick="salvarTurma()">+ Adicionar Turma</button>
+
+            <!-- Lista de turmas -->
+            <div style="font-size:10px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;padding:7px 10px;background:var(--cinza);border-radius:8px;border:1px solid var(--borda);">🏷️ Turmas Cadastradas</div>
+            <div class="turmas-lista-config" id="turmas-lista-config">
+              <div class="alunos-vazio">Nenhuma turma cadastrada</div>
             </div>
           </div>
         </div>
@@ -788,6 +844,18 @@ html[data-tema="black"] .toast{background:#222;}
   </div>
 </div>
 
+<!-- MODAL EXCLUIR TURMA -->
+<div class="modal-bg" id="modal-excluir-turma">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h3>Remover Turma</h3><p>Tem certeza que deseja remover esta turma?</p>
+    <div class="modal-btns">
+      <button class="btn-cancelar" onclick="document.getElementById('modal-excluir-turma').classList.remove('show')">Cancelar</button>
+      <button class="btn-confirmar" onclick="confirmarExclusaoTurma()">Remover</button>
+    </div>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
 import { getDatabase, ref, push, update, remove, onValue, get, set } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-database.js";
@@ -806,13 +874,42 @@ const app=initializeApp(firebaseConfig);
 const db=getDatabase(app);const auth=getAuth(app);
 const ocRef=ref(db,'ocorrencias');const evRef=ref(db,'eventos_calendario');
 const alunosRef=ref(db,'banco_alunos');
+const turmasRef=ref(db,'banco_turmas');
 
-window._adminAtivo=false;window._adminUsuario='';window._eventos=[];window._alunos=[];
+window._adminAtivo=false;window._adminUsuario='';window._eventos=[];window._alunos=[];window._turmas=[];
 window._filtroStatus='todos';
 
+// ═══════════════════════════════════════════════
+// MUDANÇA 3: AUTO-° para campos de série/ano
+// ═══════════════════════════════════════════════
+function formatarSerie(val){
+  // Remove tudo exceto dígitos e °
+  var nums=val.replace(/[^\d]/g,'');
+  if(!nums)return'';
+  return nums+'°';
+}
+function bindAutoGrau(inputId){
+  var el=document.getElementById(inputId);if(!el)return;
+  el.addEventListener('blur',function(){
+    var v=(el.value||'').trim();
+    if(v&&!/°/.test(v)){
+      // Se é só número, adiciona °
+      var nums=v.replace(/[^\d]/g,'');
+      if(nums)el.value=nums+'°';
+    }
+  });
+  el.addEventListener('input',function(){
+    // Remove ° antigos enquanto digita para não atrapalhar
+    var cursor=el.selectionStart;
+    var v=el.value.replace(/°/g,'');
+    el.value=v;
+    el.setSelectionRange(cursor,cursor);
+  });
+}
+
 // ═══ TERMINOLOGIA ANO/SÉRIE ═══
-var TERM_KEY='ceti_terminologia'; // 'ano' ou 'serie'
-window._terminologia='ano'; // padrão
+var TERM_KEY='ceti_terminologia';
+window._terminologia='ano';
 
 function carregarTerminologia(){
   var t=localStorage.getItem(TERM_KEY)||'ano';
@@ -824,21 +921,17 @@ function aplicarTerminologia(t){
   window._terminologia=t;
   var label=t==='serie'?'Série':'Ano';
   var labelMin=t==='serie'?'série':'ano';
-  // atualiza opções visuais
   document.getElementById('term-op-ano').classList.toggle('selecionado',t==='ano');
   document.getElementById('term-op-serie').classList.toggle('selecionado',t==='serie');
-  // atualiza desc do accordion
   document.getElementById('acc-terminologia-desc').textContent='Usando: '+label;
-  // atualiza label do passo 1 no formulário
   var elLabel=document.getElementById('label-passo-serie');
   if(elLabel)elLabel.textContent=label;
-  // atualiza label no banco de alunos (config)
   var elCfg=document.getElementById('label-cfg-serie');
   if(elCfg)elCfg.textContent=label+' *';
-  // atualiza placeholder do select de série
+  var elCfgT=document.getElementById('label-cfg-serie-turma');
+  if(elCfgT)elCfgT.textContent=label+'/Série *';
   var selSerie=document.getElementById('f-serie-sel');
   if(selSerie&&selSerie.options[0])selSerie.options[0].text='— Selecione o '+labelMin+' —';
-  // repopula o select de série caso já esteja aberto
   popularSeriesSel();
 }
 
@@ -852,7 +945,7 @@ window.selecionarTerminologia=function(t){
 onAuthStateChanged(auth,function(user){
   if(user){window._adminAtivo=true;window._adminUsuario=user.email;}
   else{window._adminAtivo=false;window._adminUsuario='';}
-  renderLista();atualizarUiAdminConfig();renderAlunosConfig();
+  renderLista();atualizarUiAdminConfig();renderAlunosConfig();renderTurmasConfig();
 });
 onValue(ref(db,'admin_config/nome_instituicao'),function(snap){
   var nome=snap.val()||'CETI Dariana';
@@ -871,6 +964,113 @@ onValue(ocRef,function(snapshot){
   lista.reverse();window._ocs=lista;renderLista();renderCalendario();renderChart();
 });
 
+// ═══ BANCO DE TURMAS ═══
+onValue(turmasRef,function(snapshot){
+  var lista=[];
+  snapshot.forEach(function(child){lista.push(Object.assign({firebaseKey:child.key},child.val()));});
+  lista.sort(function(a,b){
+    return(a.serie||'').localeCompare(b.serie||'')||(a.nome||'').localeCompare(b.nome||'');
+  });
+  window._turmas=lista;
+  renderTurmasConfig();
+  popularTurmasSelectAluno();
+});
+
+window.salvarTurma=async function(){
+  var serieRaw=(document.getElementById('cfg-turma-serie').value||'').trim();
+  var nome=(document.getElementById('cfg-turma-nome').value||'').trim().toUpperCase();
+  var erroEl=document.getElementById('erro-turma');var sucEl=document.getElementById('sucesso-turma');
+  erroEl.classList.remove('show');sucEl.classList.remove('show');
+  var t=window._terminologia==='serie'?'série':'ano';
+  if(!serieRaw){erroEl.textContent='❌ Informe o '+t+'.';erroEl.classList.add('show');return;}
+  if(!nome){erroEl.textContent='❌ Informe o nome da turma.';erroEl.classList.add('show');return;}
+  // Auto-formatar °
+  var nums=serieRaw.replace(/[^\d]/g,'');
+  var serie=nums?nums+'°':serieRaw;
+  // Verificar duplicata
+  var jaExiste=(window._turmas||[]).some(function(tu){return tu.serie===serie&&tu.nome===nome;});
+  if(jaExiste){erroEl.textContent='❌ Esta turma já está cadastrada.';erroEl.classList.add('show');return;}
+  var btn=document.querySelector('#acc-turmas .btn-salvar');if(btn){btn.disabled=true;btn.textContent='Salvando...';}
+  try{
+    await push(turmasRef,{serie,nome,timestamp:Date.now()});
+    document.getElementById('cfg-turma-serie').value='';
+    document.getElementById('cfg-turma-nome').value='';
+    sucEl.textContent='✅ Turma adicionada!';sucEl.classList.add('show');
+    setTimeout(function(){sucEl.classList.remove('show');},2500);
+    mostrarToast('✓ Turma '+serie+' '+nome+' cadastrada!');
+  }catch(e){
+    var msgErro='❌ Erro ao salvar.';
+    if(e.message.includes('PERMISSION_DENIED'))msgErro='❌ Acesso negado. Configure as Regras do Firebase.';
+    else msgErro='❌ '+e.message;
+    erroEl.textContent=msgErro;erroEl.classList.add('show');
+  }
+  if(btn){btn.disabled=false;btn.textContent='+ Adicionar Turma';}
+};
+
+window._turmaParaExcluir=null;
+window.pedirExclusaoTurma=function(key){
+  if(!window._adminAtivo){mostrarToast('⚠️ Apenas admin pode excluir');return;}
+  window._turmaParaExcluir=key;
+  document.getElementById('modal-excluir-turma').classList.add('show');
+};
+window.confirmarExclusaoTurma=async function(){
+  var key=window._turmaParaExcluir;if(!key)return;
+  document.getElementById('modal-excluir-turma').classList.remove('show');
+  try{
+    await remove(ref(db,'banco_turmas/'+key));mostrarToast('🗑️ Turma removida!');
+  }catch(e){
+    var msg=e.message||'';
+    if(msg.includes('PERMISSION_DENIED'))mostrarToast('❌ Acesso negado. Configure as regras do Firebase.');
+    else mostrarToast('❌ Erro: '+msg);
+  }
+  window._turmaParaExcluir=null;
+};
+
+function renderTurmasConfig(){
+  var lista=window._turmas||[];
+  var isAdmin=window._adminAtivo||false;
+  var container=document.getElementById('turmas-lista-config');if(!container)return;
+  var desc=document.getElementById('acc-turmas-desc');
+  if(desc)desc.textContent=lista.length>0?lista.length+' turma(s) cadastrada(s)':'Gerencie as turmas disponíveis';
+  if(!lista.length){container.innerHTML='<div class="alunos-vazio">Nenhuma turma cadastrada</div>';return;}
+  // Agrupar por série
+  var series={};
+  lista.forEach(function(tu){var s=tu.serie||'—';if(!series[s])series[s]=[];series[s].push(tu);});
+  var labelSerie=window._terminologia==='serie'?'Série':'Ano';
+  var html='';
+  Object.keys(series).sort().forEach(function(s){
+    html+='<div style="font-size:9px;font-weight:700;color:var(--azul2);text-transform:uppercase;letter-spacing:.5px;margin:8px 0 4px;">'+labelSerie+': '+s+'</div>';
+    series[s].forEach(function(tu){
+      var btnDel=isAdmin?'<button class="btn-del-turma" onclick="pedirExclusaoTurma(\''+tu.firebaseKey+'\')" title="Remover">✕</button>':'';
+      html+='<div class="turma-config-item">'+
+        '<div>'+
+          '<div class="turma-config-nome">Turma '+htmlEscape(tu.nome)+'</div>'+
+          '<div class="turma-config-sub">'+htmlEscape(tu.serie||'—')+'</div>'+
+        '</div>'+btnDel+
+      '</div>';
+    });
+  });
+  container.innerHTML=html;
+}
+
+// Popula select de turma no formulário "Adicionar Aluno" com base nas turmas cadastradas
+function popularTurmasSelectAluno(){
+  var sel=document.getElementById('cfg-aluno-turma-sel');if(!sel)return;
+  var turmas=window._turmas||[];
+  // Agrupar por série para optgroup
+  var series={};
+  turmas.forEach(function(tu){var s=tu.serie||'—';if(!series[s])series[s]=[];series[s].push(tu);});
+  var html='<option value="">— Selecione —</option>';
+  Object.keys(series).sort().forEach(function(s){
+    html+='<optgroup label="'+htmlEscape(s)+'">';
+    series[s].forEach(function(tu){
+      html+='<option value="'+htmlEscape(tu.nome)+'">Turma '+htmlEscape(tu.nome)+'</option>';
+    });
+    html+='</optgroup>';
+  });
+  sel.innerHTML=html;
+}
+
 // ═══ BANCO DE ALUNOS ═══
 onValue(alunosRef,function(snapshot){
   var lista=[];
@@ -885,20 +1085,23 @@ onValue(alunosRef,function(snapshot){
 
 window.salvarAluno=async function(){
   var nome=(document.getElementById('cfg-aluno-nome').value||'').trim();
-  var serie=(document.getElementById('cfg-aluno-serie').value||'').trim();
-  var turma=(document.getElementById('cfg-aluno-turma').value||'').trim().toUpperCase();
+  var serieRaw=(document.getElementById('cfg-aluno-serie').value||'').trim();
+  var turma=(document.getElementById('cfg-aluno-turma-sel').value||'').trim().toUpperCase();
   var erroEl=document.getElementById('erro-aluno');var sucEl=document.getElementById('sucesso-aluno');
   erroEl.classList.remove('show');sucEl.classList.remove('show');
   if(!nome){erroEl.textContent='❌ Informe o nome do aluno.';erroEl.classList.add('show');return;}
-  if(!serie){var t=window._terminologia==='serie'?'série':'ano';erroEl.textContent='❌ Informe o '+t+'.';erroEl.classList.add('show');return;}
-  if(!turma){erroEl.textContent='❌ Informe a turma.';erroEl.classList.add('show');return;}
+  if(!serieRaw){var t=window._terminologia==='serie'?'série':'ano';erroEl.textContent='❌ Informe o '+t+'.';erroEl.classList.add('show');return;}
+  if(!turma){erroEl.textContent='❌ Selecione a turma.';erroEl.classList.add('show');return;}
+  // Auto-formatar °
+  var nums=serieRaw.replace(/[^\d]/g,'');
+  var serie=nums?nums+'°':serieRaw;
   nome=nome.split(' ').map(function(p){return p.charAt(0).toUpperCase()+p.slice(1).toLowerCase();}).join(' ');
   var btn=document.querySelector('#acc-alunos .btn-salvar');if(btn){btn.disabled=true;btn.textContent='Salvando...';}
   try{
     await push(alunosRef,{nome,serie,turma,timestamp:Date.now()});
     document.getElementById('cfg-aluno-nome').value='';
     document.getElementById('cfg-aluno-serie').value='';
-    document.getElementById('cfg-aluno-turma').value='';
+    document.getElementById('cfg-aluno-turma-sel').selectedIndex=0;
     sucEl.textContent='✅ Aluno adicionado!';sucEl.classList.add('show');
     setTimeout(function(){sucEl.classList.remove('show');},2500);
     mostrarToast('✓ '+nome+' cadastrado!');
@@ -930,10 +1133,13 @@ window.salvarEdicaoAluno=async function(key){
   var turmaInput=document.getElementById('edit-turma-'+key);
   if(!nomeInput||!turmaInput)return;
   var nome=(nomeInput.value||'').trim();
-  var serie=(serieInput?serieInput.value||'':'').trim();
+  var serieRaw=(serieInput?serieInput.value||'':'').trim();
   var turma=(turmaInput.value||'').trim().toUpperCase();
   if(!nome){mostrarToast('⚠️ Informe o nome');return;}
   if(!turma){mostrarToast('⚠️ Informe a turma');return;}
+  // Auto-formatar °
+  var nums=serieRaw.replace(/[^\d]/g,'');
+  var serie=nums?nums+'°':serieRaw;
   nome=nome.split(' ').map(function(p){return p.charAt(0).toUpperCase()+p.slice(1).toLowerCase();}).join(' ');
   try{
     await update(ref(db,'banco_alunos/'+key),{nome,serie,turma});
@@ -969,12 +1175,11 @@ function renderAlunosConfig(){
   var isAdmin=window._adminAtivo||false;
   var container=document.getElementById('alunos-lista-config');if(!container)return;
   var desc=document.getElementById('acc-alunos-desc');
-  if(desc)desc.textContent=lista.length>0?lista.length+' aluno(s) cadastrado(s)':'Cadastre alunos por série e turma';
+  if(desc)desc.textContent=lista.length>0?lista.length+' aluno(s) cadastrado(s)':'Gerencie alunos cadastrados';
   var infoAdmin=document.getElementById('info-admin-alunos');
   if(infoAdmin)infoAdmin.style.display=isAdmin?'block':'none';
   if(!lista.length){container.innerHTML='<div class="alunos-vazio">Nenhum aluno cadastrado</div>';return;}
   var labelSerie=window._terminologia==='serie'?'Série':'Ano';
-  // agrupa por série depois por turma
   var series={};
   lista.forEach(function(a){
     var s=a.serie||'—';
@@ -1037,10 +1242,25 @@ window.setModoAluno=function(modo){
   document.getElementById('modo-btn-manual').classList.toggle('ativo',modo==='manual');
   document.getElementById('aluno-modo-banco').style.display=modo==='banco'?'':'none';
   document.getElementById('aluno-modo-manual').style.display=modo==='manual'?'':'none';
+
+  // ── MUDANÇA 1: esconde campo Turma quando no modo banco ──
+  var turmaWrap=document.getElementById('turma-manual-wrap');
+  if(turmaWrap)turmaWrap.style.display=modo==='manual'?'':'none';
+
+  // Ajusta a grid: quando banco, o campo Tipo ocupa a linha inteira
+  var tipoWrap=document.getElementById('tipo-wrap');
+  if(tipoWrap){
+    if(modo==='banco'){
+      tipoWrap.style.gridColumn='1 / -1';
+    }else{
+      tipoWrap.style.gridColumn='';
+    }
+  }
+
   if(modo==='banco')popularSeriesSel();
 };
 
-// Passo 1: popula séries únicas
+// Passo 1: popula séries únicas (a partir dos alunos cadastrados)
 function popularSeriesSel(){
   var alunos=window._alunos||[];
   var sel=document.getElementById('f-serie-sel');if(!sel)return;
@@ -1048,7 +1268,6 @@ function popularSeriesSel(){
   var labelMin=(window._terminologia==='serie')?'série':'ano';
   sel.innerHTML='<option value="">— Selecione o '+labelMin+' —</option>'+
     seriesUnicas.map(function(s){return '<option value="'+htmlEscape(s)+'">'+htmlEscape(s)+'</option>';}).join('');
-  // esconde passos 2 e 3
   document.getElementById('banco-passo-turma').style.display='none';
   document.getElementById('banco-passo-aluno').style.display='none';
   document.getElementById('f-turma').value='';
@@ -1227,7 +1446,7 @@ function atualizarUiAdminConfig(){
   document.getElementById('config-admin-deslogado').style.display=logado?'none':'block';
   document.getElementById('config-admin-logado').style.display=logado?'block':'none';
   document.getElementById('acc-admin-desc').textContent=logado?('Admin: '+(window._adminUsuario||'—')):'Entre com e-mail e senha de administrador';
-  ['acc-inst','acc-icone','acc-senha','acc-suporte','acc-alunos'].forEach(function(id){document.getElementById(id).style.display=logado?'':'none';});
+  ['acc-inst','acc-icone','acc-senha','acc-suporte','acc-alunos','acc-turmas'].forEach(function(id){document.getElementById(id).style.display=logado?'':'none';});
   if(logado){
     document.getElementById('cfg-admin-nome').textContent=window._adminUsuario||'—';
     popularEmojiGrid('emoji-grid-painel');
@@ -1236,7 +1455,7 @@ function atualizarUiAdminConfig(){
   }
   document.getElementById('admin-banner').classList.toggle('show',logado);
   if(logado)document.getElementById('admin-user-badge').textContent=window._adminUsuario||'—';
-  renderAlunosConfig();
+  renderAlunosConfig();renderTurmasConfig();
 }
 window.fazerLoginConfig=async function(){
   var email=document.getElementById('cfg-email').value.trim();var senha=document.getElementById('cfg-senha').value;
@@ -1826,6 +2045,11 @@ function renderChart(){
 atualizarBannerFila();
 renderCalendario();
 carregarTerminologia();
+
+// Bind auto-° nos campos de série
+bindAutoGrau('cfg-aluno-serie');
+bindAutoGrau('cfg-turma-serie');
+
 </script>
 </body>
 </html>

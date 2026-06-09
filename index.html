@@ -106,7 +106,6 @@ html[data-tema="escuro"] .btn-nova,html[data-tema="black"] .btn-nova{background:
 .g-resolvido .grupo-status-dot{background:var(--badge-resolvido-dot);}
 .g-offline .grupo-status-dot{background:var(--sub);}
 .grupo-status-count{font-size:10px;font-weight:600;opacity:.75;}
-/* FIM GRUPO */
 .oc-card{background:var(--bg-card);border-radius:var(--radius);padding:13px 14px;border:1px solid var(--borda);cursor:pointer;position:relative;transition:border-color .15s;}
 .oc-card:active{opacity:.85;}
 .oc-card.offline-pending{border-left:3px solid var(--amarelo);}
@@ -197,6 +196,16 @@ html[data-tema="escuro"] .btn-vermelho,html[data-tema="black"] .btn-vermelho{bac
 .tema-opcao-claro .tema-opcao-nome{color:#1B3F8B;}.tema-opcao-escuro .tema-opcao-nome{color:#93C5FD;}.tema-opcao-black .tema-opcao-nome{color:#888;}
 .tema-check{position:absolute;top:5px;right:6px;font-size:11px;opacity:0;transition:opacity .2s;}
 .tema-opcao.selecionado .tema-check{opacity:1;}
+/* TERMINOLOGIA ANO/SÉRIE */
+.terminologia-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+.terminologia-opcao{border-radius:10px;padding:12px 10px;text-align:center;cursor:pointer;border:1.5px solid var(--borda);background:var(--cinza);transition:all .2s;position:relative;}
+.terminologia-opcao.selecionado{border-color:var(--azul2);background:var(--azulc);}
+.terminologia-opcao-titulo{font-size:13px;font-weight:700;color:var(--texto);}
+.terminologia-opcao.selecionado .terminologia-opcao-titulo{color:var(--azul2);}
+.terminologia-opcao-ex{font-size:10px;color:var(--sub);margin-top:3px;}
+.terminologia-opcao.selecionado .terminologia-opcao-ex{color:var(--azul2);opacity:.8;}
+.terminologia-check{position:absolute;top:5px;right:7px;font-size:11px;opacity:0;color:var(--azul2);}
+.terminologia-opcao.selecionado .terminologia-check{opacity:1;}
 /* ADMIN */
 .admin-logado-badge{display:inline-flex;align-items:center;gap:8px;background:#FEE2E2;color:#991B1B;border-radius:8px;padding:8px 12px;font-size:12px;font-weight:600;margin-bottom:14px;}
 /* ANALYTICS */
@@ -294,10 +303,14 @@ html[data-tema="black"] .toast{background:#222;}
 .tab-btn.ativo{color:var(--azul2);}.tab-btn.ativo .tab-btn-icon{transform:translateY(-1px);}
 /* CAPITALIZE CAMPOS NOME */
 #f-aluno,#f-professor,#e-aluno,#e-professor{text-transform:capitalize;}
-/* SELETOR TURMA→ALUNO */
+/* SELETOR HIERÁRQUICO ANO→TURMA→ALUNO */
 .aluno-modo-btns{display:flex;gap:6px;margin-bottom:10px;}
 .aluno-modo-btn{flex:1;padding:7px 10px;border-radius:8px;border:1.5px solid var(--borda);background:var(--cinza);color:var(--sub);font-size:11px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;text-align:center;}
 .aluno-modo-btn.ativo{border-color:var(--azul2);background:var(--azulc);color:var(--azul2);}
+.banco-step{margin-bottom:6px;}
+.banco-step-label{font-size:9px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;display:flex;align-items:center;gap:5px;}
+.banco-step-num{width:16px;height:16px;border-radius:50%;background:var(--azul2);color:#fff;font-size:9px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
+.banco-select-disabled{opacity:.45;pointer-events:none;}
 /* LISTA ALUNOS CONFIG */
 .alunos-lista-config{margin-top:12px;display:flex;flex-direction:column;gap:6px;max-height:320px;overflow-y:auto;}
 .aluno-config-item{background:var(--cinza);border:1px solid var(--borda);border-radius:8px;padding:9px 12px;}
@@ -365,7 +378,7 @@ html[data-tema="black"] .toast{background:#222;}
       <div class="stat-card c-cinza"><div class="stat-num" id="cnt-total">0</div><div class="stat-label">Total</div></div>
     </div>
     <div class="filtro-status-bar" id="filtro-status-bar">
-  <button class="filtro-btn f-pendente" data-filtro="Pendente" onclick="setFiltroStatus('Pendente')">
+      <button class="filtro-btn f-pendente" data-filtro="Pendente" onclick="setFiltroStatus('Pendente')">
         <span class="filtro-dot filtro-dot-pendente"></span>Pendentes
       </button>
       <button class="filtro-btn f-acomp" data-filtro="Em acompanhamento" onclick="setFiltroStatus('Em acompanhamento')">
@@ -436,18 +449,37 @@ html[data-tema="black"] .toast{background:#222;}
       <div class="form-group">
         <label>Aluno *</label>
         <div class="aluno-modo-btns">
-         <button class="aluno-modo-btn" id="modo-btn-banco" onclick="setModoAluno('banco')">🗂️ Do banco</button>
+          <button class="aluno-modo-btn" id="modo-btn-banco" onclick="setModoAluno('banco')">🗂️ Do banco</button>
           <button class="aluno-modo-btn ativo" id="modo-btn-manual" onclick="setModoAluno('manual')">✏️ Digitar</button>
         </div>
-    <div id="aluno-modo-banco" style="display:none;">
-          <select id="f-turma-sel" onchange="popularAlunosSel()" style="margin-bottom:6px;">
-            <option value="">— Selecione a turma —</option>
-          </select>
-          <select id="f-aluno-sel">
-            <option value="">— Selecione o aluno —</option>
-          </select>
+
+        <!-- MODO BANCO: hierarquia Ano/Série → Turma → Aluno -->
+        <div id="aluno-modo-banco" style="display:none;">
+          <!-- PASSO 1: Ano/Série -->
+          <div class="banco-step">
+            <div class="banco-step-label"><span class="banco-step-num">1</span><span id="label-passo-serie">Ano</span></div>
+            <select id="f-serie-sel" onchange="popularTurmasSel()">
+              <option value="">— Selecione o <span id="opt-serie-placeholder">ano</span> —</option>
+            </select>
+          </div>
+          <!-- PASSO 2: Turma -->
+          <div class="banco-step" id="banco-passo-turma" style="display:none;">
+            <div class="banco-step-label"><span class="banco-step-num">2</span>Turma</div>
+            <select id="f-turma-sel" onchange="popularAlunosSel()">
+              <option value="">— Selecione a turma —</option>
+            </select>
+          </div>
+          <!-- PASSO 3: Aluno -->
+          <div class="banco-step" id="banco-passo-aluno" style="display:none;">
+            <div class="banco-step-label"><span class="banco-step-num">3</span>Aluno</div>
+            <select id="f-aluno-sel">
+              <option value="">— Selecione o aluno —</option>
+            </select>
+          </div>
         </div>
-     <div id="aluno-modo-manual">
+
+        <!-- MODO MANUAL -->
+        <div id="aluno-modo-manual">
           <input id="f-aluno" type="text" placeholder="Nome completo do aluno">
         </div>
       </div>
@@ -457,7 +489,7 @@ html[data-tema="black"] .toast{background:#222;}
           <select id="f-tipo"><option>Agressão verbal</option><option>Agressão física</option><option>Uso de celular</option><option>Desrespeito ao professor</option><option>Bagunça em sala</option><option>Bullying</option><option>Vandalismo</option><option>Outros</option></select>
         </div>
       </div>
-      <div class="form-group"><label>professor *</label><input id="f-professor" type="text" placeholder="Nome do professor"></div>
+      <div class="form-group"><label style="text-transform:none;">professor(a) *</label><input id="f-professor" type="text" placeholder="Nome do(a) professor(a)"></div>
       <div class="form-group"><label>Descrição *</label><textarea id="f-descricao" placeholder="Descreva o ocorrido..."></textarea></div>
       <button class="btn-salvar" id="btn-salvar" onclick="salvarOcorrencia()">Salvar Ocorrência</button>
     </div></div>
@@ -474,7 +506,7 @@ html[data-tema="black"] .toast{background:#222;}
           <select id="e-tipo"><option>Agressão verbal</option><option>Agressão física</option><option>Uso de celular</option><option>Desrespeito ao professor</option><option>Bagunça em sala</option><option>Bullying</option><option>Vandalismo</option><option>Outros</option></select>
         </div>
       </div>
-      <div class="form-group"><label>professor *</label><input id="e-professor" type="text"></div>
+      <div class="form-group"><label style="text-transform:none;">professor(a) *</label><input id="e-professor" type="text"></div>
       <div class="form-group"><label>Descrição *</label><textarea id="e-descricao"></textarea></div>
       <div id="admin-dt-wrap" style="display:none"><div class="form-group"><label>Data e Hora da Ocorrência (Admin)</label><input type="datetime-local" id="e-datetime"></div></div>
       <button class="btn-salvar btn-vermelho" id="btn-editar-salvar" onclick="salvarEdicao()">Salvar Alterações</button>
@@ -487,6 +519,8 @@ html[data-tema="black"] .toast{background:#222;}
   <!-- CONFIGURAÇÕES -->
   <div class="view" id="view-config">
     <div class="config-wrap">
+
+      <!-- APARÊNCIA -->
       <div class="accordion-item" id="acc-aparencia">
         <div class="accordion-header" onclick="toggleAccordion('acc-aparencia')">
           <div class="accordion-header-left"><div class="accordion-icon">🎨</div><div><div class="accordion-title">Aparência</div><div class="accordion-desc">Tema do app neste dispositivo</div></div></div>
@@ -501,6 +535,32 @@ html[data-tema="black"] .toast{background:#222;}
           </div>
         </div>
       </div>
+
+      <!-- TERMINOLOGIA ANO/SÉRIE (NOVO) -->
+      <div class="accordion-item" id="acc-terminologia">
+        <div class="accordion-header" onclick="toggleAccordion('acc-terminologia')">
+          <div class="accordion-header-left"><div class="accordion-icon">🏷️</div><div><div class="accordion-title">Terminologia Escolar</div><div class="accordion-desc" id="acc-terminologia-desc">Como sua escola chama: Ano ou Série?</div></div></div>
+          <div class="accordion-chevron">▼</div>
+        </div>
+        <div class="accordion-divider"></div>
+        <div class="accordion-body">
+          <p style="font-size:12px;color:var(--sub);margin:8px 0 4px;line-height:1.5;">Escolha o termo usado na sua escola. Isso altera o rótulo no seletor de alunos ao registrar ocorrências.</p>
+          <div class="terminologia-grid">
+            <div class="terminologia-opcao" id="term-op-ano" onclick="selecionarTerminologia('ano')">
+              <span class="terminologia-check">✔</span>
+              <div class="terminologia-opcao-titulo">Ano</div>
+              <div class="terminologia-opcao-ex">Ex: 6º Ano, 7º Ano...</div>
+            </div>
+            <div class="terminologia-opcao" id="term-op-serie" onclick="selecionarTerminologia('serie')">
+              <span class="terminologia-check">✔</span>
+              <div class="terminologia-opcao-titulo">Série</div>
+              <div class="terminologia-opcao-ex">Ex: 6ª Série, 7ª Série...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MEU NOME -->
       <div class="accordion-item" id="acc-nome">
         <div class="accordion-header" onclick="toggleAccordion('acc-nome')">
           <div class="accordion-header-left"><div class="accordion-icon">👤</div><div><div class="accordion-title">Meu Nome</div><div class="accordion-desc">Preenchido automaticamente ao registrar</div></div></div>
@@ -509,11 +569,13 @@ html[data-tema="black"] .toast{background:#222;}
         <div class="accordion-divider"></div>
         <div class="accordion-body">
           <div class="form-group" style="margin-bottom:10px;margin-top:4px;"><label>Prof(a). Nome</label><input type="text" id="cfg-nome-prof" placeholder="Seu nome completo" autocomplete="off"></div>
-         <div class="form-group" style="margin-bottom:10px;margin-top:8px;"><label>Minha Disciplina (opcional)</label><input type="text" id="cfg-disc-prof" placeholder="Ex: Matemática, Português..." autocomplete="off"></div>
+          <div class="form-group" style="margin-bottom:10px;margin-top:8px;"><label>Minha Disciplina (opcional)</label><input type="text" id="cfg-disc-prof" placeholder="Ex: Matemática, Português..." autocomplete="off"></div>
           <div class="sucesso-msg" id="sucesso-nome-prof"></div>
           <button class="btn-salvar" style="font-size:12px;padding:10px;" onclick="salvarNomeProf()">Salvar Meu Nome</button>
         </div>
       </div>
+
+      <!-- ACESSO ADMIN -->
       <div class="accordion-item" id="acc-admin">
         <div class="accordion-header" onclick="toggleAccordion('acc-admin')">
           <div class="accordion-header-left"><div class="accordion-icon">🔐</div><div><div class="accordion-title">Acesso Admin</div><div class="accordion-desc" id="acc-admin-desc">Entre com e-mail e senha de administrador</div></div></div>
@@ -534,6 +596,8 @@ html[data-tema="black"] .toast{background:#222;}
           </div>
         </div>
       </div>
+
+      <!-- BANCO DE ALUNOS (só admin) -->
       <div class="accordion-item" id="acc-alunos" style="display:none">
         <div class="accordion-header" onclick="toggleAccordion('acc-alunos')">
           <div class="accordion-header-left"><div class="accordion-icon">🎒</div><div><div class="accordion-title">Banco de Alunos</div><div class="accordion-desc" id="acc-alunos-desc">Cadastre alunos por série e turma</div></div></div>
@@ -547,8 +611,8 @@ html[data-tema="black"] .toast{background:#222;}
             </div>
             <div class="form-group"><label>Nome do Aluno *</label><input type="text" id="cfg-aluno-nome" placeholder="Nome completo" style="text-transform:capitalize;" autocomplete="off"></div>
             <div class="form-row">
-              <div class="form-group"><label>Série</label><input type="text" id="cfg-aluno-serie" placeholder="Ex: 7º Ano"></div>
-              <div class="form-group"><label>Turma *</label><input type="text" id="cfg-aluno-turma" placeholder="Ex: 3A"></div>
+              <div class="form-group"><label id="label-cfg-serie">Ano *</label><input type="text" id="cfg-aluno-serie" placeholder="Ex: 6º Ano"></div>
+              <div class="form-group"><label>Turma *</label><input type="text" id="cfg-aluno-turma" placeholder="Ex: A"></div>
             </div>
             <div class="erro-msg" id="erro-aluno"></div>
             <div class="sucesso-msg" id="sucesso-aluno"></div>
@@ -562,6 +626,8 @@ html[data-tema="black"] .toast{background:#222;}
           </div>
         </div>
       </div>
+
+      <!-- INSTITUIÇÃO (só admin) -->
       <div class="accordion-item" id="acc-inst" style="display:none">
         <div class="accordion-header" onclick="toggleAccordion('acc-inst')">
           <div class="accordion-header-left"><div class="accordion-icon">🏫</div><div><div class="accordion-title">Instituição</div><div class="accordion-desc">Nome exibido no cabeçalho do app</div></div></div>
@@ -574,6 +640,8 @@ html[data-tema="black"] .toast{background:#222;}
           <button class="btn-salvar btn-vermelho" onclick="alterarInstituicao()" style="font-size:12px;padding:10px">Salvar Nome</button>
         </div>
       </div>
+
+      <!-- ÍCONE (só admin) -->
       <div class="accordion-item" id="acc-icone" style="display:none">
         <div class="accordion-header" onclick="toggleAccordion('acc-icone')">
           <div class="accordion-header-left"><div class="accordion-icon">😀</div><div><div class="accordion-title">Ícone do App</div><div class="accordion-desc">Emoji exibido no cabeçalho</div></div></div>
@@ -585,6 +653,8 @@ html[data-tema="black"] .toast{background:#222;}
           <div class="sucesso-msg" id="sucesso-icone" style="margin-top:8px"></div>
         </div>
       </div>
+
+      <!-- SENHA (só admin) -->
       <div class="accordion-item" id="acc-senha" style="display:none">
         <div class="accordion-header" onclick="toggleAccordion('acc-senha')">
           <div class="accordion-header-left"><div class="accordion-icon">🔑</div><div><div class="accordion-title">Alterar Senha</div><div class="accordion-desc">Redefina a senha de administrador</div></div></div>
@@ -598,6 +668,8 @@ html[data-tema="black"] .toast{background:#222;}
           <button class="btn-salvar btn-vermelho" onclick="alterarSenha()" style="font-size:12px;padding:10px">Salvar Senha</button>
         </div>
       </div>
+
+      <!-- SUPORTE (só admin) -->
       <div class="accordion-item" id="acc-suporte" style="display:none">
         <div class="accordion-header" onclick="toggleAccordion('acc-suporte')">
           <div class="accordion-header-left"><div class="accordion-icon">💬</div><div><div class="accordion-title">Contato de Suporte</div><div class="accordion-desc">Número exibido no banner de suporte</div></div></div>
@@ -614,6 +686,7 @@ html[data-tema="black"] .toast{background:#222;}
           <button class="btn-salvar btn-vermelho" onclick="alterarNumeroSuporte()" style="font-size:12px;padding:10px">Salvar Número</button>
         </div>
       </div>
+
       <a id="banner-suporte-link" class="banner-suporte" href="#" onclick="abrirSuporte(event)">
         <div class="banner-suporte-dev">Desenvolvido por Alfa Store — Soluções e Tecnologia</div>
         <div class="banner-suporte-wa">
@@ -737,6 +810,44 @@ const alunosRef=ref(db,'banco_alunos');
 window._adminAtivo=false;window._adminUsuario='';window._eventos=[];window._alunos=[];
 window._filtroStatus='todos';
 
+// ═══ TERMINOLOGIA ANO/SÉRIE ═══
+var TERM_KEY='ceti_terminologia'; // 'ano' ou 'serie'
+window._terminologia='ano'; // padrão
+
+function carregarTerminologia(){
+  var t=localStorage.getItem(TERM_KEY)||'ano';
+  window._terminologia=t;
+  aplicarTerminologia(t);
+}
+
+function aplicarTerminologia(t){
+  window._terminologia=t;
+  var label=t==='serie'?'Série':'Ano';
+  var labelMin=t==='serie'?'série':'ano';
+  // atualiza opções visuais
+  document.getElementById('term-op-ano').classList.toggle('selecionado',t==='ano');
+  document.getElementById('term-op-serie').classList.toggle('selecionado',t==='serie');
+  // atualiza desc do accordion
+  document.getElementById('acc-terminologia-desc').textContent='Usando: '+label;
+  // atualiza label do passo 1 no formulário
+  var elLabel=document.getElementById('label-passo-serie');
+  if(elLabel)elLabel.textContent=label;
+  // atualiza label no banco de alunos (config)
+  var elCfg=document.getElementById('label-cfg-serie');
+  if(elCfg)elCfg.textContent=label+' *';
+  // atualiza placeholder do select de série
+  var selSerie=document.getElementById('f-serie-sel');
+  if(selSerie&&selSerie.options[0])selSerie.options[0].text='— Selecione o '+labelMin+' —';
+  // repopula o select de série caso já esteja aberto
+  popularSeriesSel();
+}
+
+window.selecionarTerminologia=function(t){
+  localStorage.setItem(TERM_KEY,t);
+  aplicarTerminologia(t);
+  mostrarToast('✓ Terminologia salva: '+(t==='serie'?'Série':'Ano'));
+};
+
 // ═══ AUTH ═══
 onAuthStateChanged(auth,function(user){
   if(user){window._adminAtivo=true;window._adminUsuario=user.email;}
@@ -764,10 +875,12 @@ onValue(ocRef,function(snapshot){
 onValue(alunosRef,function(snapshot){
   var lista=[];
   snapshot.forEach(function(child){lista.push(Object.assign({firebaseKey:child.key},child.val()));});
-  lista.sort(function(a,b){return(a.turma||'').localeCompare(b.turma||'')||(a.nome||'').localeCompare(b.nome||'');});
+  lista.sort(function(a,b){
+    return(a.serie||'').localeCompare(b.serie||'')||(a.turma||'').localeCompare(b.turma||'')||(a.nome||'').localeCompare(b.nome||'');
+  });
   window._alunos=lista;
   renderAlunosConfig();
-  popularTurmasSel();
+  popularSeriesSel();
 });
 
 window.salvarAluno=async function(){
@@ -777,6 +890,7 @@ window.salvarAluno=async function(){
   var erroEl=document.getElementById('erro-aluno');var sucEl=document.getElementById('sucesso-aluno');
   erroEl.classList.remove('show');sucEl.classList.remove('show');
   if(!nome){erroEl.textContent='❌ Informe o nome do aluno.';erroEl.classList.add('show');return;}
+  if(!serie){var t=window._terminologia==='serie'?'série':'ano';erroEl.textContent='❌ Informe o '+t+'.';erroEl.classList.add('show');return;}
   if(!turma){erroEl.textContent='❌ Informe a turma.';erroEl.classList.add('show');return;}
   nome=nome.split(' ').map(function(p){return p.charAt(0).toUpperCase()+p.slice(1).toLowerCase();}).join(' ');
   var btn=document.querySelector('#acc-alunos .btn-salvar');if(btn){btn.disabled=true;btn.textContent='Salvando...';}
@@ -784,6 +898,7 @@ window.salvarAluno=async function(){
     await push(alunosRef,{nome,serie,turma,timestamp:Date.now()});
     document.getElementById('cfg-aluno-nome').value='';
     document.getElementById('cfg-aluno-serie').value='';
+    document.getElementById('cfg-aluno-turma').value='';
     sucEl.textContent='✅ Aluno adicionado!';sucEl.classList.add('show');
     setTimeout(function(){sucEl.classList.remove('show');},2500);
     mostrarToast('✓ '+nome+' cadastrado!');
@@ -858,41 +973,53 @@ function renderAlunosConfig(){
   var infoAdmin=document.getElementById('info-admin-alunos');
   if(infoAdmin)infoAdmin.style.display=isAdmin?'block':'none';
   if(!lista.length){container.innerHTML='<div class="alunos-vazio">Nenhum aluno cadastrado</div>';return;}
-  var turmas={};lista.forEach(function(a){var t=a.turma||'—';if(!turmas[t])turmas[t]=[];turmas[t].push(a);});
+  var labelSerie=window._terminologia==='serie'?'Série':'Ano';
+  // agrupa por série depois por turma
+  var series={};
+  lista.forEach(function(a){
+    var s=a.serie||'—';
+    if(!series[s])series[s]={};
+    var tu=a.turma||'—';
+    if(!series[s][tu])series[s][tu]=[];
+    series[s][tu].push(a);
+  });
   var html='';
-  Object.keys(turmas).sort().forEach(function(t){
-    html+='<div style="font-size:9px;font-weight:700;color:var(--azul2);text-transform:uppercase;letter-spacing:.5px;margin:8px 0 4px;">Turma '+t+'</div>';
-    turmas[t].forEach(function(a){
-      var botoesAdmin=isAdmin?
-        '<div class="aluno-config-acoes">'+
-          '<button class="btn-editar-aluno" onclick="abrirEdicaoAluno(\''+a.firebaseKey+'\')">✏️ Editar</button>'+
-          '<button class="btn-del-aluno" onclick="pedirExclusaoAluno(\''+a.firebaseKey+'\')" title="Remover">✕</button>'+
-        '</div>':'';
-      var formEdicao=isAdmin?
-        '<div class="aluno-config-edit-form" id="edit-form-'+a.firebaseKey+'">'+
-          '<div class="aluno-edit-row">'+
-            '<input class="aluno-edit-input" id="edit-nome-'+a.firebaseKey+'" type="text" value="'+htmlEscape(a.nome)+'" placeholder="Nome" style="grid-column:1/-1">'+
-          '</div>'+
-          '<div class="aluno-edit-row">'+
-            '<input class="aluno-edit-input" id="edit-serie-'+a.firebaseKey+'" type="text" value="'+htmlEscape(a.serie||'')+'" placeholder="Série">'+
-            '<input class="aluno-edit-input" id="edit-turma-'+a.firebaseKey+'" type="text" value="'+htmlEscape(a.turma||'')+'" placeholder="Turma">'+
-          '</div>'+
-          '<div class="aluno-edit-btns">'+
-            '<button class="btn-cancelar-aluno-edit" onclick="cancelarEdicaoAluno(\''+a.firebaseKey+'\')">Cancelar</button>'+
-            '<button class="btn-salvar-aluno-edit" onclick="salvarEdicaoAluno(\''+a.firebaseKey+'\')">💾 Salvar</button>'+
-          '</div>'+
-        '</div>':'';
-      html+=
-        '<div class="aluno-config-item">'+
-          '<div class="aluno-config-main">'+
-            '<div>'+
-              '<div class="aluno-config-nome">'+htmlEscape(a.nome)+'</div>'+
-              '<div class="aluno-config-sub">'+(a.serie?htmlEscape(a.serie)+' · ':'')+'Turma '+htmlEscape(a.turma)+'</div>'+
+  Object.keys(series).sort().forEach(function(s){
+    html+='<div style="font-size:9px;font-weight:700;color:var(--azul2);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 4px;">'+labelSerie+': '+s+'</div>';
+    Object.keys(series[s]).sort().forEach(function(tu){
+      html+='<div style="font-size:9px;font-weight:600;color:var(--sub);margin:4px 0 2px;padding-left:8px;">Turma '+tu+'</div>';
+      series[s][tu].forEach(function(a){
+        var botoesAdmin=isAdmin?
+          '<div class="aluno-config-acoes">'+
+            '<button class="btn-editar-aluno" onclick="abrirEdicaoAluno(\''+a.firebaseKey+'\')">✏️ Editar</button>'+
+            '<button class="btn-del-aluno" onclick="pedirExclusaoAluno(\''+a.firebaseKey+'\')" title="Remover">✕</button>'+
+          '</div>':'';
+        var formEdicao=isAdmin?
+          '<div class="aluno-config-edit-form" id="edit-form-'+a.firebaseKey+'">'+
+            '<div class="aluno-edit-row">'+
+              '<input class="aluno-edit-input" id="edit-nome-'+a.firebaseKey+'" type="text" value="'+htmlEscape(a.nome)+'" placeholder="Nome" style="grid-column:1/-1">'+
             '</div>'+
-            botoesAdmin+
-          '</div>'+
-          formEdicao+
-        '</div>';
+            '<div class="aluno-edit-row">'+
+              '<input class="aluno-edit-input" id="edit-serie-'+a.firebaseKey+'" type="text" value="'+htmlEscape(a.serie||'')+'" placeholder="'+labelSerie+'">'+
+              '<input class="aluno-edit-input" id="edit-turma-'+a.firebaseKey+'" type="text" value="'+htmlEscape(a.turma||'')+'" placeholder="Turma">'+
+            '</div>'+
+            '<div class="aluno-edit-btns">'+
+              '<button class="btn-cancelar-aluno-edit" onclick="cancelarEdicaoAluno(\''+a.firebaseKey+'\')">Cancelar</button>'+
+              '<button class="btn-salvar-aluno-edit" onclick="salvarEdicaoAluno(\''+a.firebaseKey+'\')">💾 Salvar</button>'+
+            '</div>'+
+          '</div>':'';
+        html+=
+          '<div class="aluno-config-item">'+
+            '<div class="aluno-config-main">'+
+              '<div>'+
+                '<div class="aluno-config-nome">'+htmlEscape(a.nome)+'</div>'+
+                '<div class="aluno-config-sub">'+htmlEscape(a.serie||'—')+' · Turma '+htmlEscape(a.turma)+'</div>'+
+              '</div>'+
+              botoesAdmin+
+            '</div>'+
+            formEdicao+
+          '</div>';
+      });
     });
   });
   container.innerHTML=html;
@@ -902,7 +1029,7 @@ function htmlEscape(str){
   return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// ═══ SELETOR TURMA→ALUNO ═══
+// ═══ SELETOR HIERÁRQUICO: SÉRIE → TURMA → ALUNO ═══
 window._modoAluno='manual';
 window.setModoAluno=function(modo){
   window._modoAluno=modo;
@@ -910,27 +1037,59 @@ window.setModoAluno=function(modo){
   document.getElementById('modo-btn-manual').classList.toggle('ativo',modo==='manual');
   document.getElementById('aluno-modo-banco').style.display=modo==='banco'?'':'none';
   document.getElementById('aluno-modo-manual').style.display=modo==='manual'?'':'none';
+  if(modo==='banco')popularSeriesSel();
 };
-function popularTurmasSel(){
+
+// Passo 1: popula séries únicas
+function popularSeriesSel(){
   var alunos=window._alunos||[];
-  var sel=document.getElementById('f-turma-sel');if(!sel)return;
-  var turmasUnicas=[...new Set(alunos.map(function(a){return a.turma||'';}).filter(Boolean))].sort();
-  var valorAtual=sel.value;
-  sel.innerHTML='<option value="">— Selecione a turma —</option>'+
-    turmasUnicas.map(function(t){return '<option value="'+t+'"'+(t===valorAtual?' selected':'')+'>Turma '+t+'</option>';}).join('');
-  popularAlunosSel();
+  var sel=document.getElementById('f-serie-sel');if(!sel)return;
+  var seriesUnicas=[...new Set(alunos.map(function(a){return a.serie||'';}).filter(Boolean))].sort();
+  var labelMin=(window._terminologia==='serie')?'série':'ano';
+  sel.innerHTML='<option value="">— Selecione o '+labelMin+' —</option>'+
+    seriesUnicas.map(function(s){return '<option value="'+htmlEscape(s)+'">'+htmlEscape(s)+'</option>';}).join('');
+  // esconde passos 2 e 3
+  document.getElementById('banco-passo-turma').style.display='none';
+  document.getElementById('banco-passo-aluno').style.display='none';
+  document.getElementById('f-turma').value='';
 }
+
+// Passo 2: ao selecionar série, popula turmas
+window.popularTurmasSel=function(){
+  var serie=document.getElementById('f-serie-sel').value;
+  var passaTurma=document.getElementById('banco-passo-turma');
+  var passaAluno=document.getElementById('banco-passo-aluno');
+  passaTurma.style.display='none';
+  passaAluno.style.display='none';
+  document.getElementById('f-turma').value='';
+  if(!serie)return;
+  var alunos=(window._alunos||[]).filter(function(a){return a.serie===serie;});
+  var turmasUnicas=[...new Set(alunos.map(function(a){return a.turma||'';}).filter(Boolean))].sort();
+  var sel=document.getElementById('f-turma-sel');
+  sel.innerHTML='<option value="">— Selecione a turma —</option>'+
+    turmasUnicas.map(function(t){return '<option value="'+htmlEscape(t)+'">Turma '+htmlEscape(t)+'</option>';}).join('');
+  passaTurma.style.display='';
+};
+
+// Passo 3: ao selecionar turma, popula alunos
 window.popularAlunosSel=function(){
+  var serie=document.getElementById('f-serie-sel').value;
   var turma=document.getElementById('f-turma-sel').value;
-  var alunosSel=document.getElementById('f-aluno-sel');
-  var alunos=(window._alunos||[]).filter(function(a){return a.turma===turma;});
-  alunosSel.innerHTML='<option value="">— Selecione o aluno —</option>'+
-    alunos.map(function(a){return '<option value="'+a.nome+'|'+a.turma+'">'+htmlEscape(a.nome)+'</option>';}).join('');
-  alunosSel.onchange=function(){
-    var val=alunosSel.value;
+  var passaAluno=document.getElementById('banco-passo-aluno');
+  passaAluno.style.display='none';
+  document.getElementById('f-turma').value='';
+  if(!turma)return;
+  var alunos=(window._alunos||[]).filter(function(a){return a.serie===serie&&a.turma===turma;});
+  var selAluno=document.getElementById('f-aluno-sel');
+  selAluno.innerHTML='<option value="">— Selecione o aluno —</option>'+
+    alunos.map(function(a){return '<option value="'+htmlEscape(a.nome)+'|'+htmlEscape(a.turma)+'">'+htmlEscape(a.nome)+'</option>';}).join('');
+  selAluno.onchange=function(){
+    var val=selAluno.value;
     if(val){var parts=val.split('|');document.getElementById('f-turma').value=parts[1]||'';}
     else{document.getElementById('f-turma').value='';}
   };
+  document.getElementById('f-turma').value=turma;
+  passaAluno.style.display='';
 };
 
 // ═══ FILTRO DE STATUS ═══
@@ -1055,7 +1214,7 @@ window.mudarAba=function(aba){
   document.getElementById('btn-novo-global').style.display=(aba==='analytics'||aba==='config')?'none':'';
   if(aba==='lista'){mostrarViewSemTabs('view-lista');}
   else if(aba==='analytics'){mostrarViewSemTabs('view-analytics');renderCalendario();renderChart();}
-  else if(aba==='config'){mostrarViewSemTabs('view-config');atualizarUiAdminConfig();carregarNomeProfConfig();var tema=localStorage.getItem('ceti_tema')||'claro';aplicarTema(tema);}
+  else if(aba==='config'){mostrarViewSemTabs('view-config');atualizarUiAdminConfig();carregarNomeProfConfig();var tema=localStorage.getItem('ceti_tema')||'claro';aplicarTema(tema);carregarTerminologia();}
 };
 function mostrarViewSemTabs(id){
   ['view-lista','view-analytics','view-novo','view-editar','view-detalhe','view-config'].forEach(function(v){document.getElementById(v).classList.remove('active');});
@@ -1137,7 +1296,7 @@ window.salvarOcorrencia=async function(){
   var tipo=document.getElementById('f-tipo').value;var professor=document.getElementById('f-professor').value.trim();
   var descricao=document.getElementById('f-descricao').value.trim();
   if(!aluno||!professor||!descricao){mostrarToast('⚠️ Preencha os campos obrigatórios');return;}
- var disciplina=window._discProfAtual||'';
+  var disciplina=window._discProfAtual||'';
   var dados={aluno,turma,tipo,professor,disciplina,descricao,status:'Pendente',data:new Date().toLocaleDateString('pt-BR'),hora:new Date().toTimeString().slice(0,5),timestamp:Date.now()};
   btn.disabled=true;btn.textContent='Salvando...';
   if(!_online){
@@ -1154,9 +1313,11 @@ window.salvarOcorrencia=async function(){
   btn.disabled=false;btn.textContent='Salvar Ocorrência';
 };
 function limparFormNovo(){
-  document.getElementById('f-aluno-sel').value='';
-  document.getElementById('f-turma-sel').value='';
+  document.getElementById('f-serie-sel').value='';
+  document.getElementById('f-turma-sel').innerHTML='<option value="">— Selecione a turma —</option>';
   document.getElementById('f-aluno-sel').innerHTML='<option value="">— Selecione o aluno —</option>';
+  document.getElementById('banco-passo-turma').style.display='none';
+  document.getElementById('banco-passo-aluno').style.display='none';
   document.getElementById('f-aluno').value='';
   document.getElementById('f-turma').value='';
   document.getElementById('f-professor').value='';
@@ -1195,7 +1356,7 @@ window.atualizarStatus=async function(novoStatus){
   catch(e){mostrarToast('Erro: '+e.message);}
 };
 
-// ═══ RENDER LISTA (COM AGRUPAMENTO POR STATUS) ═══
+// ═══ RENDER LISTA ═══
 window.renderLista=function renderLista(){
   var filaLocal=lerFila();var ocs=window._ocs||[];
   var keysFirebase=ocs.map(function(o){return o.firebaseKey;});
@@ -1220,7 +1381,6 @@ window.renderLista=function renderLista(){
 
   var ICON={"Agressão verbal":"💬","Agressão física":"👊","Uso de celular":"📱","Desrespeito ao professor":"🚫","Bagunça em sala":"🔊","Bullying":"😤","Vandalismo":"🔨","Outros":"📋"};
 
-  // ── agrupamento por status (ordem fixa: Offline → Pendente → Em acompanhamento → Resolvido) ──
   var GRUPOS=[
     {key:'offline',  label:'Offline',            cls:'g-offline',   test:function(o){return!!o._offline;}},
     {key:'pendente', label:'Pendentes',           cls:'g-pendente',  test:function(o){return!o._offline&&o.status==='Pendente';}},
@@ -1228,9 +1388,7 @@ window.renderLista=function renderLista(){
     {key:'resolvido',label:'Resolvidos',          cls:'g-resolvido', test:function(o){return!o._offline&&o.status==='Resolvido';}}
   ];
 
-  // quando há filtro ativo, não agrupa (lista simples)
   var agrupar=filtroStatus==='todos'&&!busca;
-
   var html='';
   if(agrupar){
     GRUPOS.forEach(function(grupo){
@@ -1335,10 +1493,10 @@ window.irParaLista=function(){
 window.irParaNovo=function(){
   _abaAtiva='lista';mostrarView('view-novo');
   var nomeSalvo=localStorage.getItem('ceti_nome_prof')||'';
- var campo=document.getElementById('f-professor');if(campo&&nomeSalvo)campo.value=nomeSalvo;
+  var campo=document.getElementById('f-professor');if(campo&&nomeSalvo)campo.value=nomeSalvo;
   window._discProfAtual=localStorage.getItem('ceti_disc_prof')||'';
   setModoAluno('manual');
-  popularTurmasSel();
+  carregarTerminologia();
 };
 window.salvarNomeProf=function(){
   var nome=(document.getElementById('cfg-nome-prof').value||'').trim();
@@ -1664,7 +1822,10 @@ function renderChart(){
   });
 }
 
-atualizarBannerFila();renderCalendario();
+// ═══ INIT ═══
+atualizarBannerFila();
+renderCalendario();
+carregarTerminologia();
 </script>
 </body>
 </html>

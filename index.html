@@ -491,18 +491,17 @@ html[data-tema="black"] .toast{background:#222;}
         </div>
       </div>
 
-      <!-- MUDANÇA 1: turma só aparece no modo manual -->
+    <!-- MODO MANUAL: Ano/Série + Turma + Tipo -->
+      <div id="serie-manual-wrap" class="form-group" style="display:none;">
+        <label id="label-f-serie-manual">Ano</label>
+        <input id="f-serie-manual" type="text" placeholder="Ex: 6°" inputmode="numeric">
+      </div>
       <div class="form-row">
         <div class="form-group" id="turma-manual-wrap"><label>Turma</label><input id="f-turma" type="text" placeholder="Ex: 3A"></div>
-        <div class="form-group" style="grid-column: var(--tipo-col, 1);" id="tipo-wrap"><label>Tipo *</label>
+        <div class="form-group" id="tipo-wrap"><label>Tipo *</label>
           <select id="f-tipo"><option>Agressão verbal</option><option>Agressão física</option><option>Uso de celular</option><option>Desrespeito ao professor</option><option>Bagunça em sala</option><option>Bullying</option><option>Vandalismo</option><option>Outros</option></select>
         </div>
       </div>
-      <div class="form-group"><label style="text-transform:none;">Professor(a) *</label><input id="f-professor" type="text" placeholder="Nome"></div>
-      <div class="form-group"><label>Descrição *</label><textarea id="f-descricao" placeholder="Descreva o ocorrido..."></textarea></div>
-      <button class="btn-salvar" id="btn-salvar" onclick="salvarOcorrencia()">Salvar Ocorrência</button>
-    </div></div>
-  </div>
 
   <!-- EDITAR -->
   <div class="view" id="view-editar">
@@ -1271,18 +1270,22 @@ window.setModoAluno=function(modo){
   document.getElementById('aluno-modo-banco').style.display=modo==='banco'?'':'none';
   document.getElementById('aluno-modo-manual').style.display=modo==='manual'?'':'none';
 
-  // ── MUDANÇA 1: esconde campo Turma quando no modo banco ──
+  // Mostra/oculta campos de turma e ano/série no modo manual
   var turmaWrap=document.getElementById('turma-manual-wrap');
   if(turmaWrap)turmaWrap.style.display=modo==='manual'?'':'none';
+  var serieManualWrap=document.getElementById('serie-manual-wrap');
+  if(serieManualWrap)serieManualWrap.style.display=modo==='manual'?'':'none';
 
   // Ajusta a grid: quando banco, o campo Tipo ocupa a linha inteira
   var tipoWrap=document.getElementById('tipo-wrap');
   if(tipoWrap){
-    if(modo==='banco'){
-      tipoWrap.style.gridColumn='1 / -1';
-    }else{
-      tipoWrap.style.gridColumn='';
-    }
+    tipoWrap.style.gridColumn=modo==='banco'?'1 / -1':'';
+  }
+
+  // Atualiza o label Ano/Série conforme terminologia
+  if(modo==='manual'){
+    var labelSerieM=document.getElementById('label-f-serie-manual');
+    if(labelSerieM)labelSerieM.textContent=(window._terminologia==='serie'?'Série':'Ano');
   }
 
   if(modo==='banco')popularSeriesSel();
@@ -1296,9 +1299,13 @@ function popularSeriesSel(){
   var labelMin=(window._terminologia==='serie')?'série':'ano';
   sel.innerHTML='<option value="">— Selecione o '+labelMin+' —</option>'+
     seriesUnicas.map(function(s){return '<option value="'+htmlEscape(s)+'">'+htmlEscape(s)+'</option>';}).join('');
+popularSeriesSel();
   document.getElementById('banco-passo-turma').style.display='none';
   document.getElementById('banco-passo-aluno').style.display='none';
   document.getElementById('f-turma').value='';
+  // Atualiza label no campo manual também
+  var labelSerieM=document.getElementById('label-f-serie-manual');
+  if(labelSerieM)labelSerieM.textContent=(window._terminologia==='serie'?'Série':'Ano');
 }
 
 // Passo 2: ao selecionar série, popula turmas

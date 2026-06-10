@@ -622,10 +622,12 @@ html[data-tema="black"] .toast{background:#222;}
             <div style="font-size:10px;font-weight:700;color:var(--azul2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;padding:7px 10px;background:var(--azulc);border-radius:8px;border:1px solid var(--azul2);">➕ Adicionar Aluno</div>
             <div class="form-group"><label>Nome do Aluno *</label><input type="text" id="cfg-aluno-nome" placeholder="Nome completo" style="text-transform:capitalize;" autocomplete="off"></div>
             <div class="form-row">
-              <div class="form-group">
-                <label id="label-cfg-serie">Ano *</label>
-                <input type="text" id="cfg-aluno-serie" placeholder="Ex: 6" autocomplete="off" inputmode="numeric">
-              </div>
+  <div class="form-group">
+    <label id="label-cfg-serie">Ano *</label>
+   <select id="cfg-aluno-serie" onchange="filtrarTurmasPorSerie()">
+      <option value="">— Selecione —</option>
+    </select>
+  </div>
               <div class="form-group">
                 <label>Turma *</label>
                 <select id="cfg-aluno-turma-sel">
@@ -1057,7 +1059,6 @@ function renderTurmasConfig(){
 function popularTurmasSelectAluno(){
   var sel=document.getElementById('cfg-aluno-turma-sel');if(!sel)return;
   var turmas=window._turmas||[];
-  // Agrupar por série para optgroup
   var series={};
   turmas.forEach(function(tu){var s=tu.serie||'—';if(!series[s])series[s]=[];series[s].push(tu);});
   var html='<option value="">— Selecione —</option>';
@@ -1069,6 +1070,27 @@ function popularTurmasSelectAluno(){
     html+='</optgroup>';
   });
   sel.innerHTML=html;
+
+  window.filtrarTurmasPorSerie=function(){
+  var serie=document.getElementById('cfg-aluno-serie').value;
+  var sel=document.getElementById('cfg-aluno-turma-sel');if(!sel)return;
+  var turmas=(window._turmas||[]).filter(function(tu){return !serie||tu.serie===serie;});
+  var html='<option value="">— Selecione —</option>';
+  turmas.forEach(function(tu){
+    html+='<option value="'+htmlEscape(tu.nome)+'">Turma '+htmlEscape(tu.nome)+'</option>';
+  });
+  sel.innerHTML=html;
+};
+
+  // Popula também o select de série do formulário de aluno
+  var selSerie=document.getElementById('cfg-aluno-serie');if(!selSerie)return;
+  var labelSerie=window._terminologia==='serie'?'Série':'Ano';
+  var seriesUnicas=Object.keys(series).sort();
+  var htmlSerie='<option value="">— Selecione o '+labelSerie.toLowerCase()+' —</option>';
+  seriesUnicas.forEach(function(s){
+    htmlSerie+='<option value="'+htmlEscape(s)+'">'+htmlEscape(s)+'</option>';
+  });
+  selSerie.innerHTML=htmlSerie;
 }
 
 // ═══ BANCO DE ALUNOS ═══
@@ -2047,7 +2069,6 @@ renderCalendario();
 carregarTerminologia();
 
 // Bind auto-° nos campos de série
-bindAutoGrau('cfg-aluno-serie');
 bindAutoGrau('cfg-turma-serie');
 
 </script>

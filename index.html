@@ -1299,7 +1299,6 @@ function popularSeriesSel(){
   var labelMin=(window._terminologia==='serie')?'série':'ano';
   sel.innerHTML='<option value="">— Selecione o '+labelMin+' —</option>'+
     seriesUnicas.map(function(s){return '<option value="'+htmlEscape(s)+'">'+htmlEscape(s)+'</option>';}).join('');
-popularSeriesSel();
   document.getElementById('banco-passo-turma').style.display='none';
   document.getElementById('banco-passo-aluno').style.display='none';
   document.getElementById('f-turma').value='';

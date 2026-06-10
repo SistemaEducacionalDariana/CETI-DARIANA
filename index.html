@@ -1147,11 +1147,12 @@ window.salvarAluno=async function(){
 window.abrirEdicaoAluno=function(key){
   if(!window._adminAtivo){mostrarToast('⚠️ Apenas admin pode editar');return;}
   document.querySelectorAll('.aluno-config-edit-form.aberto').forEach(function(f){f.classList.remove('aberto');});
-  var formEl=document.getElementById('edit-form-'+key);
+  var formEl=document.querySelector('[data-edit-key="'+key+'"]');
   if(formEl)formEl.classList.add('aberto');
+  else mostrarToast('⚠️ Formulário não encontrado');
 };
 window.cancelarEdicaoAluno=function(key){
-  var formEl=document.getElementById('edit-form-'+key);
+  var formEl=document.querySelector('[data-edit-key="'+key+'"]');
   if(formEl)formEl.classList.remove('aberto');
 };
 window.salvarEdicaoAluno=async function(key){
@@ -1227,7 +1228,7 @@ function renderAlunosConfig(){
             '<button class="btn-del-aluno" onclick="pedirExclusaoAluno(\''+a.firebaseKey+'\')" title="Remover">✕</button>'+
           '</div>':'';
         var formEdicao=isAdmin?
-          '<div class="aluno-config-edit-form" id="edit-form-'+a.firebaseKey+'">'+
+         '<div class="aluno-config-edit-form" data-edit-key="'+a.firebaseKey+'">'+
             '<div class="aluno-edit-row">'+
               '<input class="aluno-edit-input" id="edit-nome-'+a.firebaseKey+'" type="text" value="'+htmlEscape(a.nome)+'" placeholder="Nome" style="grid-column:1/-1">'+
             '</div>'+

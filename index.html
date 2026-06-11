@@ -1475,7 +1475,7 @@ window.salvarOcorrencia=async function(){
     aluno=(document.getElementById('f-aluno').value||'').trim();
     turma=(document.getElementById('f-turma').value||'').trim();
   }
-  var serie=(document.getElementById('f-serie-manual').value||'').trim();
+  var serie=window._modoAluno==='banco'?(document.getElementById('f-serie-sel').value||'').trim():(document.getElementById('f-serie-manual').value||'').trim();
   var tipo=document.getElementById('f-tipo').value;var professor=document.getElementById('f-professor').value.trim();
   var descricao=document.getElementById('f-descricao').value.trim();
   if(!aluno||!professor||!descricao){mostrarToast('⚠️ Preencha os campos obrigatórios');return;}
@@ -1619,7 +1619,7 @@ window.verDetalhe=function(key){
     '<div class="detalhe-nome">'+htmlEscape(o.aluno)+'</div>'+
     '<span class="badge badge-'+cls+'"><span class="badge-dot"></span>'+o.status+'</span>'+offlineAviso+
     '<div class="detalhe-info">'+
-      '<div class="info-item"><div class="info-label">Turma</div><div class="info-val">'+(o.turma||'—')+'</div></div>'+
+     '<div class="info-item"><div class="info-label">Turma</div><div class="info-val">'+(o.turma||'—')+(o.serie?' · '+o.serie:'')+'</div></div>'+
       '<div class="info-item"><div class="info-label">Tipo</div><div class="info-val">'+(ICON[o.tipo]||'📋')+' '+o.tipo+'</div></div>'+
       '<div class="info-item"><div class="info-label">Data</div><div class="info-val">'+o.data+'</div></div>'+
       '<div class="info-item"><div class="info-label">Hora</div><div class="info-val">'+o.hora+'</div></div>'+

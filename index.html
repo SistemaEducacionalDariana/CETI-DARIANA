@@ -1384,7 +1384,7 @@ window.verDetalhe=function(key){
     '<div class="detalhe-nome">'+he(o.aluno)+'</div>'+
     '<span class="badge badge-'+cls+'"><span class="badge-dot"></span>'+o.status+'</span>'+offAviso+
     '<div class="detalhe-info">'+
-      '<div class="info-item"><div class="info-label">Turma</div><div class="info-val">'+(o.turma||'—')+(o.serie?' &nbsp;·&nbsp; <span style="font-size:11px;font-weight:700;background:var(--azulc);color:var(--azul2);border-radius:4px;padding:1px 6px;">'+he(o.serie)+'</span>':'')+'</div></div>'+
+     '<div class="info-item"><div class="info-label">Turma</div><div class="info-val">'+(o.serie?'<span style="font-size:11px;font-weight:700;background:var(--azulc);color:var(--azul2);border-radius:4px;padding:1px 6px;">'+he(o.serie)+'</span>&nbsp;·&nbsp;':'')+( o.turma||'—')+'</div></div>'+
       '<div class="info-item"><div class="info-label">Tipo</div><div class="info-val">'+(ICON_MAP[o.tipo]||'📋')+' '+o.tipo+'</div></div>'+
       '<div class="info-item"><div class="info-label">Data</div><div class="info-val">'+o.data+'</div></div>'+
       '<div class="info-item"><div class="info-label">Hora</div><div class="info-val">'+o.hora+'</div></div>'+

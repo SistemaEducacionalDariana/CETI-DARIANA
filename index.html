@@ -484,7 +484,7 @@ html[data-tema="black"] .toast{background:#222;}
             <option>Agressão verbal</option><option>Agressão física</option>
             <option>Uso de celular</option><option>Desrespeito ao professor</option>
             <option>Bagunça em sala</option><option>Bullying</option>
-            <option>Vandalismo</option><option>Outros</option>
+            <option>Vandalismo</option><option>Faltou à aula (Gazetou)</option><option>Outros</option>
           </select>
         </div>
       </div>
@@ -509,7 +509,7 @@ html[data-tema="black"] .toast{background:#222;}
             <option>Agressão verbal</option><option>Agressão física</option>
             <option>Uso de celular</option><option>Desrespeito ao professor</option>
             <option>Bagunça em sala</option><option>Bullying</option>
-            <option>Vandalismo</option><option>Outros</option>
+            <option>Vandalismo</option><option>Faltou à aula (Gazetou)</option><option>Outros</option>
           </select>
         </div>
       </div>
@@ -1727,7 +1727,7 @@ function renderChart(){
 }
 
   // ═══ CATEGORIAS DE OCORRÊNCIA ═══
-var CATS_PADRAO=['Agressão verbal','Agressão física','Uso de celular','Desrespeito ao professor','Bagunça em sala','Bullying','Vandalismo','Outros'];
+var CATS_PADRAO=['Agressão verbal','Agressão física','Uso de celular','Desrespeito ao professor','Bagunça em sala','Bullying','Vandalismo','Faltou à aula (Gazetou)','Outros'];
 window._categorias=[];
 
 onValue(ref(db,'admin_config/categorias_ocorrencia'),function(snap){

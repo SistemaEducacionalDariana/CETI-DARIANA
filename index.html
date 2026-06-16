@@ -1736,13 +1736,28 @@ onValue(ref(db,'admin_config/categorias_ocorrencia'),function(snap){
     var l=[];Object.keys(val).forEach(function(k){l.push({firebaseKey:k,nome:val[k].nome,ordem:val[k].ordem??999});});
     l.sort(function(a,b){return a.ordem-b.ordem;});
     window._categorias=l;
+    // verifica se padrões já foram migradas
+    var nomesSalvos=l.map(function(c){return c.nome.toLowerCase();});
+    var faltam=CATS_PADRAO.filter(function(n){return nomesSalvos.indexOf(n.toLowerCase())===-1;});
+    if(faltam.length>0&&window._adminAtivo){
+      migrarCategoriasPadrao(faltam,l.length);
+    }
   }else{
     window._categorias=[];
+    if(window._adminAtivo)migrarCategoriasPadrao(CATS_PADRAO,0);
   }
   renderCategoriasConfig();
   popularSelectsTipo();
 });
 
+  async function migrarCategoriasPadrao(lista,ordemInicial){
+  for(var i=0;i<lista.length;i++){
+    try{
+      await push(ref(db,'admin_config/categorias_ocorrencia'),{nome:lista[i],ordem:ordemInicial+i,timestamp:Date.now()});
+    }catch(e){break;}
+  }
+}
+  
 function popularSelectsTipo(){
   var extras=(window._categorias||[]).map(function(c){return c.nome;});
   var todas=CATS_PADRAO.concat(extras.filter(function(n){return CATS_PADRAO.indexOf(n)===-1;}));

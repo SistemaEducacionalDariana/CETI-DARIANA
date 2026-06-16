@@ -666,6 +666,25 @@ html[data-tema="black"] .toast{background:#222;}
         </div>
       </div>
 
+     <div class="accordion-item" id="acc-categorias" style="display:none">
+        <div class="accordion-header" onclick="toggleAccordion('acc-categorias')">
+          <div class="accordion-header-left"><div class="accordion-icon">📋</div><div><div class="accordion-title">Categorias de Ocorrência</div><div class="accordion-desc" id="acc-categorias-desc">Gerencie os tipos de ocorrência</div></div></div>
+          <div class="accordion-chevron">▼</div>
+        </div>
+        <div class="accordion-divider"></div>
+        <div class="accordion-body">
+          <div style="margin-top:4px;">
+            <div style="font-size:10px;font-weight:700;color:var(--azul2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;padding:7px 10px;background:var(--azulc);border-radius:8px;border:1px solid var(--azul2);">➕ Nova Categoria</div>
+            <div class="form-group"><label>Nome da categoria *</label><input type="text" id="cfg-cat-nome" placeholder="Ex: Uso de drogas, Fuga de aula..." autocomplete="off"></div>
+            <div class="erro-msg" id="erro-cat"></div>
+            <div class="sucesso-msg" id="sucesso-cat"></div>
+            <button class="btn-salvar" style="font-size:12px;padding:10px;margin-bottom:16px;" onclick="salvarCategoria()">+ Adicionar Categoria</button>
+            <div style="font-size:10px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;padding:7px 10px;background:var(--cinza);border-radius:8px;border:1px solid var(--borda);">📋 Categorias Cadastradas</div>
+            <div id="cats-lista-config" style="display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto;"><div class="alunos-vazio">Carregando...</div></div>
+          </div>
+        </div>
+      </div>
+
       <div class="accordion-item" id="acc-senha" style="display:none">
         <div class="accordion-header" onclick="toggleAccordion('acc-senha')">
           <div class="accordion-header-left"><div class="accordion-icon">🔑</div><div><div class="accordion-title">Alterar Senha</div><div class="accordion-desc">Redefina a senha de administrador</div></div></div>
@@ -771,7 +790,7 @@ html[data-tema="black"] .toast{background:#222;}
 <div class="modal-bg" id="modal-excluir-turma">
   <div class="modal"><div class="modal-handle"></div>
     <h3>Remover Turma</h3><p>Tem certeza que deseja remover esta turma?</p>
-    <div class="modal-btns"><button class="btn-cancelar" onclick="document.getElementById('modal-excluir-turma').classList.remove('show')">Cancelar</button><button class="btn-confirmar" onclick="confirmarExclusaoTurma()">Remover</button></div>
+    <div class="modal-btns"><button class="btn-cancelar" onclick="cancelarModalTurma()">Cancelar</button><button class="btn-confirmar" onclick="confirmarExclusaoTurma()">Remover</button></div>
   </div>
 </div>
 
@@ -1193,7 +1212,7 @@ function atualizarUiAdminConfig(){
   document.getElementById('config-admin-deslogado').style.display=logado?'none':'block';
   document.getElementById('config-admin-logado').style.display=logado?'block':'none';
   document.getElementById('acc-admin-desc').textContent=logado?('Admin: '+(window._adminUsuario||'—')):'Entre com e-mail e senha de administrador';
-  ['acc-inst','acc-icone','acc-senha','acc-suporte','acc-alunos','acc-turmas'].forEach(function(id){document.getElementById(id).style.display=logado?'':'none';});
+  ['acc-inst','acc-icone','acc-senha','acc-suporte','acc-alunos','acc-turmas','acc-categorias'].forEach(function(id){document.getElementById(id).style.display=logado?'':'none';});
   if(logado){
     document.getElementById('cfg-admin-nome').textContent=window._adminUsuario||'—';
     popularEmojiGrid('emoji-grid-painel');
@@ -1706,6 +1725,112 @@ function renderChart(){
     }
   });
 }
+
+  // ═══ CATEGORIAS DE OCORRÊNCIA ═══
+var CATS_PADRAO=['Agressão verbal','Agressão física','Uso de celular','Desrespeito ao professor','Bagunça em sala','Bullying','Vandalismo','Outros'];
+window._categorias=[];
+
+onValue(ref(db,'admin_config/categorias_ocorrencia'),function(snap){
+  var val=snap.val();
+  if(val&&typeof val==='object'){
+    var l=[];Object.keys(val).forEach(function(k){l.push({firebaseKey:k,nome:val[k].nome,padrao:false});});
+    l.sort(function(a,b){return a.nome.localeCompare(b.nome);});
+    window._categorias=l;
+  }else{
+    window._categorias=[];
+  }
+  renderCategoriasConfig();
+  popularSelectsTipo();
+});
+
+function popularSelectsTipo(){
+  var extras=(window._categorias||[]).map(function(c){return c.nome;});
+  var todas=CATS_PADRAO.concat(extras.filter(function(n){return CATS_PADRAO.indexOf(n)===-1;}));
+  ['f-tipo','e-tipo'].forEach(function(id){
+    var sel=document.getElementById(id);if(!sel)return;
+    var valAtual=sel.value;
+    sel.innerHTML=todas.map(function(c){return'<option value="'+he(c)+'">'+he(c)+'</option>';}).join('');
+    if(valAtual)sel.value=valAtual;
+  });
+}
+
+function renderCategoriasConfig(){
+  var lista=window._categorias||[];var isAdmin=window._adminAtivo;
+  var c=document.getElementById('cats-lista-config');if(!c)return;
+  var desc=document.getElementById('acc-categorias-desc');
+  var totalExtra=lista.length;
+  if(desc)desc.textContent=(totalExtra>0?totalExtra+' extra(s) cadastrada(s)':'')+' ('+CATS_PADRAO.length+' padrões)';
+  var htmlPadrao='<div style="font-size:9px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin:0 0 4px;">Padrões do sistema</div>'+
+    CATS_PADRAO.map(function(n){
+      return'<div class="turma-config-item"><div><div class="turma-config-nome">'+he(n)+'</div></div><span style="font-size:9px;color:var(--sub);font-weight:600;">padrão</span></div>';
+    }).join('');
+  var htmlExtras='';
+  if(lista.length){
+    htmlExtras='<div style="font-size:9px;font-weight:700;color:var(--azul2);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 4px;">Categorias adicionadas</div>'+
+      lista.map(function(cat){
+        var btnDel=isAdmin?'<button class="btn-del-turma" onclick="pedirExclusaoCategoria(\''+cat.firebaseKey+'\')" title="Remover">✕</button>':'';
+        return'<div class="turma-config-item"><div class="turma-config-nome">'+he(cat.nome)+'</div>'+btnDel+'</div>';
+      }).join('');
+  }
+  c.innerHTML=htmlPadrao+htmlExtras;
+}
+
+window.salvarCategoria=async function(){
+  var nome=(document.getElementById('cfg-cat-nome').value||'').trim();
+  var erEl=document.getElementById('erro-cat');var suEl=document.getElementById('sucesso-cat');
+  erEl.classList.remove('show');suEl.classList.remove('show');
+  if(!nome){erEl.textContent='❌ Informe o nome da categoria.';erEl.classList.add('show');return;}
+  var jaExiste=CATS_PADRAO.some(function(p){return p.toLowerCase()===nome.toLowerCase();})||
+    (window._categorias||[]).some(function(c){return c.nome.toLowerCase()===nome.toLowerCase();});
+  if(jaExiste){erEl.textContent='❌ Esta categoria já existe.';erEl.classList.add('show');return;}
+  var btn=document.querySelector('#acc-categorias .btn-salvar');if(btn){btn.disabled=true;btn.textContent='Salvando...';}
+  try{
+    await push(ref(db,'admin_config/categorias_ocorrencia'),{nome:nome,timestamp:Date.now()});
+    document.getElementById('cfg-cat-nome').value='';
+    suEl.textContent='✅ Categoria adicionada!';suEl.classList.add('show');
+    setTimeout(function(){suEl.classList.remove('show');},2500);
+    mostrarToast('✓ Categoria "'+nome+'" cadastrada!');
+  }catch(e){erEl.textContent='❌ '+e.message;erEl.classList.add('show');}
+  if(btn){btn.disabled=false;btn.textContent='+ Adicionar Categoria';}
+};
+
+  window.cancelarModalTurma=function(){
+  document.getElementById('modal-excluir-turma').classList.remove('show');
+  if(window._excluindoCategoria){
+    window._catParaExcluir=null;window._excluindoCategoria=false;
+    document.getElementById('modal-excluir-turma').querySelector('h3').textContent='Remover Turma';
+    document.getElementById('modal-excluir-turma').querySelector('p').textContent='Tem certeza que deseja remover esta turma?';
+  }
+};
+
+window._catParaExcluir=null;
+window.pedirExclusaoCategoria=function(key){
+  if(!window._adminAtivo){mostrarToast('⚠️ Apenas admin pode excluir');return;}
+  window._catParaExcluir=key;
+  // reutiliza modal de turma
+  document.getElementById('modal-excluir-turma').querySelector('h3').textContent='Remover Categoria';
+  document.getElementById('modal-excluir-turma').querySelector('p').textContent='Tem certeza? Ocorrências existentes não serão afetadas.';
+  document.getElementById('modal-excluir-turma').classList.add('show');
+  // sobrescreve o confirmar
+  window._excluindoCategoria=true;
+};
+
+// Patch no confirmarExclusaoTurma para suportar categoria
+var _origConfirmarTurma=window.confirmarExclusaoTurma;
+window.confirmarExclusaoTurma=async function(){
+  if(window._excluindoCategoria){
+    var key=window._catParaExcluir;if(!key)return;
+    document.getElementById('modal-excluir-turma').classList.remove('show');
+    try{await remove(ref(db,'admin_config/categorias_ocorrencia/'+key));mostrarToast('🗑️ Categoria removida!');}
+    catch(e){mostrarToast(e.message.includes('PERMISSION_DENIED')?'❌ Acesso negado.':'❌ Erro: '+e.message);}
+    window._catParaExcluir=null;window._excluindoCategoria=false;
+    // restaura textos do modal
+    document.getElementById('modal-excluir-turma').querySelector('h3').textContent='Remover Turma';
+    document.getElementById('modal-excluir-turma').querySelector('p').textContent='Tem certeza que deseja remover esta turma?';
+    return;
+  }
+  _origConfirmarTurma();
+};
 
 // ═══ INIT ═══
 atualizarBannerFila();

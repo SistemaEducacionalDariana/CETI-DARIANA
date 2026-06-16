@@ -1733,8 +1733,8 @@ window._categorias=[];
 onValue(ref(db,'admin_config/categorias_ocorrencia'),function(snap){
   var val=snap.val();
   if(val&&typeof val==='object'){
-    var l=[];Object.keys(val).forEach(function(k){l.push({firebaseKey:k,nome:val[k].nome,padrao:false});});
-    l.sort(function(a,b){return a.nome.localeCompare(b.nome);});
+    var l=[];Object.keys(val).forEach(function(k){l.push({firebaseKey:k,nome:val[k].nome,ordem:val[k].ordem??999});});
+    l.sort(function(a,b){return a.ordem-b.ordem;});
     window._categorias=l;
   }else{
     window._categorias=[];
@@ -1767,13 +1767,31 @@ function renderCategoriasConfig(){
   var htmlExtras='';
   if(lista.length){
     htmlExtras='<div style="font-size:9px;font-weight:700;color:var(--azul2);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 4px;">Categorias adicionadas</div>'+
-      lista.map(function(cat){
+      lista.map(function(cat,idx){
         var btnDel=isAdmin?'<button class="btn-del-turma" onclick="pedirExclusaoCategoria(\''+cat.firebaseKey+'\')" title="Remover">✕</button>':'';
-        return'<div class="turma-config-item"><div class="turma-config-nome">'+he(cat.nome)+'</div>'+btnDel+'</div>';
+        var btnOrdem=isAdmin?
+          '<div style="display:flex;flex-direction:column;gap:2px;margin-right:4px;">'+
+            '<button onclick="moverCategoria('+idx+',-1)" style="background:var(--cinza);border:1px solid var(--borda);border-radius:4px;width:22px;height:22px;cursor:pointer;font-size:11px;line-height:1;color:var(--sub);"'+(idx===0?' disabled style="opacity:.3;background:var(--cinza);border:1px solid var(--borda);border-radius:4px;width:22px;height:22px;cursor:not-allowed;font-size:11px;"':'')+'>▲</button>'+
+            '<button onclick="moverCategoria('+idx+',1)" style="background:var(--cinza);border:1px solid var(--borda);border-radius:4px;width:22px;height:22px;cursor:pointer;font-size:11px;line-height:1;color:var(--sub);"'+(idx===lista.length-1?' disabled style="opacity:.3;background:var(--cinza);border:1px solid var(--borda);border-radius:4px;width:22px;height:22px;cursor:not-allowed;font-size:11px;"':'')+'>▼</button>'+
+          '</div>':'';
+        return'<div class="turma-config-item"><div style="display:flex;align-items:center;gap:0;flex:1;min-width:0;">'+btnOrdem+'<div class="turma-config-nome" style="flex:1;">'+he(cat.nome)+'</div></div>'+btnDel+'</div>';
       }).join('');
   }
   c.innerHTML=htmlPadrao+htmlExtras;
 }
+
+  window.moverCategoria=async function(idx,dir){
+  var lista=window._categorias||[];
+  var idxAlvo=idx+dir;
+  if(idxAlvo<0||idxAlvo>=lista.length)return;
+  // troca ordens entre os dois
+  var catA=lista[idx];var catB=lista[idxAlvo];
+  var ordemA=catA.ordem;var ordemB=catB.ordem;
+  try{
+    await update(ref(db,'admin_config/categorias_ocorrencia/'+catA.firebaseKey),{ordem:ordemB});
+    await update(ref(db,'admin_config/categorias_ocorrencia/'+catB.firebaseKey),{ordem:ordemA});
+  }catch(e){mostrarToast('❌ Erro ao reordenar: '+e.message);}
+};
 
 window.salvarCategoria=async function(){
   var nome=(document.getElementById('cfg-cat-nome').value||'').trim();
@@ -1785,7 +1803,8 @@ window.salvarCategoria=async function(){
   if(jaExiste){erEl.textContent='❌ Esta categoria já existe.';erEl.classList.add('show');return;}
   var btn=document.querySelector('#acc-categorias .btn-salvar');if(btn){btn.disabled=true;btn.textContent='Salvando...';}
   try{
-    await push(ref(db,'admin_config/categorias_ocorrencia'),{nome:nome,timestamp:Date.now()});
+    var proximaOrdem=(window._categorias||[]).length;
+await push(ref(db,'admin_config/categorias_ocorrencia'),{nome:nome,ordem:proximaOrdem,timestamp:Date.now()});
     document.getElementById('cfg-cat-nome').value='';
     suEl.textContent='✅ Categoria adicionada!';suEl.classList.add('show');
     setTimeout(function(){suEl.classList.remove('show');},2500);

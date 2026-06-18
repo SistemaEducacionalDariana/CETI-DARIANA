@@ -474,8 +474,8 @@ html[data-tema="black"] .toast{background:#222;}
         <input id="f-serie-manual" type="text" placeholder="Ex: 6°" inputmode="numeric">
       </div>
       <div class="form-row">
-        <div class="form-group" id="turma-manual-wrap">
-          <label>Turma</label>
+       <div class="form-group" id="turma-manual-wrap">
+          <label>Turma *</label>
           <input id="f-turma" type="text" placeholder="Ex: A">
         </div>
         <div class="form-group" id="tipo-wrap">
@@ -489,7 +489,7 @@ html[data-tema="black"] .toast{background:#222;}
         </div>
       </div>
       <div class="form-group"><label style="text-transform:none;">Professor(a) *</label><input id="f-professor" type="text" placeholder="Nome"></div>
-      <div class="form-group"><label>Descrição *</label><textarea id="f-descricao" placeholder="Descreva o ocorrido..."></textarea></div>
+      <div class="form-group"><label>Descrição (opcional)</label><textarea id="f-descricao" placeholder="Descreva o ocorrido... (opcional)"></textarea></div>
       <button class="btn-salvar" id="btn-salvar" onclick="salvarOcorrencia()">Salvar Ocorrência</button>
     </div></div>
   </div>
@@ -840,7 +840,7 @@ function aplicarTerminologia(t){
   el=document.getElementById('label-passo-serie');if(el)el.textContent=lbl;
   el=document.getElementById('label-cfg-serie');if(el)el.textContent=lbl+' *';
   el=document.getElementById('label-cfg-serie-turma');if(el)el.textContent=lbl+'/Série *';
-  el=document.getElementById('label-f-serie-manual');if(el)el.textContent=lbl;
+  el=document.getElementById('label-f-serie-manual');if(el)el.textContent=lbl+' *';
   var sel=document.getElementById('f-serie-sel');
   if(sel&&sel.options[0])sel.options[0].text='— Selecione o '+lblMin+' —';
   popularSeriesSel();
@@ -1048,7 +1048,7 @@ window.setModoAluno=function(modo){
   var tw=document.getElementById('turma-manual-wrap');if(tw)tw.style.display=modo==='manual'?'':'none';
   var sw=document.getElementById('serie-manual-wrap');if(sw)sw.style.display=modo==='manual'?'':'none';
   var tw2=document.getElementById('tipo-wrap');if(tw2)tw2.style.gridColumn=modo==='banco'?'1 / -1':'';
-  var lm=document.getElementById('label-f-serie-manual');if(lm)lm.textContent=(window._terminologia==='serie'?'Série':'Ano');
+ var lm=document.getElementById('label-f-serie-manual');if(lm)lm.textContent=(window._terminologia==='serie'?'Série':'Ano')+' *';
   if(modo==='banco')popularSeriesSel();
 };
 function popularSeriesSel(){
@@ -1060,7 +1060,7 @@ function popularSeriesSel(){
   document.getElementById('banco-passo-turma').style.display='none';
   document.getElementById('banco-passo-aluno').style.display='none';
   document.getElementById('f-turma').value='';
-  var lm=document.getElementById('label-f-serie-manual');if(lm)lm.textContent=(window._terminologia==='serie'?'Série':'Ano');
+ var lm=document.getElementById('label-f-serie-manual');if(lm)lm.textContent=(window._terminologia==='serie'?'Série':'Ano')+' *';
 }
 window.popularTurmasSel=function(){
   var serie=document.getElementById('f-serie-sel').value;
@@ -1276,10 +1276,14 @@ window.salvarOcorrencia=async function(){
     turma=(document.getElementById('f-turma').value||'').trim();
     serie=(document.getElementById('f-serie-manual').value||'').trim();
   }
-  var tipo=document.getElementById('f-tipo').value;
+ var tipo=document.getElementById('f-tipo').value;
   var professor=document.getElementById('f-professor').value.trim();
   var descricao=document.getElementById('f-descricao').value.trim();
-  if(!aluno||!professor||!descricao){mostrarToast('⚠️ Preencha os campos obrigatórios');return;}
+  if(!aluno||!professor||!turma||!serie){
+    var t=window._terminologia==='serie'?'Série':'Ano';
+    mostrarToast('⚠️ Preencha Aluno, '+t+', Turma e Professor(a)');
+    return;
+  }
   var disciplina=window._discProfAtual||'';
   var dados={aluno,turma,serie,tipo,professor,disciplina,descricao,status:'Pendente',data:new Date().toLocaleDateString('pt-BR'),hora:new Date().toTimeString().slice(0,5),timestamp:Date.now()};
   btn.disabled=true;btn.textContent='Salvando...';
